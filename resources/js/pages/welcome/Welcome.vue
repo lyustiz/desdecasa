@@ -6,15 +6,14 @@
     <!--Contenido-->
     <v-content >
         <v-container fluid>
-            <transition name="fade" mode="out-in" >
+            <!-- <transition name="fade" mode="out-in" > -->
                 <router-view></router-view>
 
-                <v-container  fluid>
                     <v-row no-gutters >
-                 <!--        <v-col md="3" sm="12" xs="12">  
+                        <v-col md="3" sm="12" xs="12">  
                             <v-img :src="logo" aspect-ratio="2" height="280"></v-img>
-                        </v-col> -->
-                        <v-col md="12" sm="12" xs="12" class="py-1">  
+                        </v-col>
+                        <v-col md="9" sm="12" xs="12" class="py-1">  
                             <v-carousel
                                 cycle
                                 height="320"
@@ -40,10 +39,9 @@
                             <v-img :src="publicidad" height="260"></v-img> 
                         </v-col>
                     </v-row>
-                </v-container>
 
-            </transition>
-
+<!--             </transition>
+ -->
         </v-container>
     </v-content>
 
@@ -58,13 +56,6 @@
 
     </v-navigation-drawer>
 
-
-    <!--Footer-->
-    <v-footer :fixed="fixed" app>
-        <span>&copy; {{ $App.title }}  {{ new Date().getFullYear() }}</span>
-        <v-spacer></v-spacer>
-        <span></span>
-    </v-footer>
 
     <!--Mensaje Snack Bar-->
     <app-message></app-message>

@@ -1,6 +1,6 @@
 window.axios = require('axios');
 
-// let auth = `Bearer ${localStorage.getItem("auth")}`
+let auth = `Bearer ${localStorage.getItem("auth")}`
             
 window.axios.defaults.headers.common['Authorization']= auth
 
