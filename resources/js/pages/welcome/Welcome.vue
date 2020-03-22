@@ -11,13 +11,13 @@
 
                 <v-container  fluid>
                     <v-row no-gutters >
-                        <v-col md="3" sm="12" xs="12">  
-                            <v-img :src="logo" aspect-ratio="2" height="270"></v-img>
-                        </v-col>
-                        <v-col md="9" sm="12" xs="12" class="py-1">  
+                 <!--        <v-col md="3" sm="12" xs="12">  
+                            <v-img :src="logo" aspect-ratio="2" height="280"></v-img>
+                        </v-col> -->
+                        <v-col md="12" sm="12" xs="12" class="py-1">  
                             <v-carousel
                                 cycle
-                                height="270"
+                                height="320"
                                 hide-delimiter-background
                                 show-arrows-on-hover
                             >
@@ -25,6 +25,7 @@
                                     v-for="(slide, i) in slides"
                                     :key="i"
                                     :src="slide"
+                                    cover
                                 >
                                 </v-carousel-item>
                             </v-carousel>
