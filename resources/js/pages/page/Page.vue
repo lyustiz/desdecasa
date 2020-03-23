@@ -3,8 +3,8 @@
 <div>
 
     <!-- App Toolbar -->
-    <app-toolbar></app-toolbar>
-
+   <app-toolbar></app-toolbar>
+ 
     <v-content>
 
         <v-container fluid mt-2>
@@ -15,7 +15,6 @@
                 <v-col md="3">
                     <v-card class="ma-3"> 
                     <v-img class="blue--text align-end" height="220px" :src="logo">
-                                <v-card-title> Comercio </v-card-title>
                             </v-img>
                     </v-card>
                 </v-col>
@@ -87,7 +86,7 @@ export default {
         return {
 
             clipped:     false,
-            drawer:      true,
+            drawer:      false,
             drawerRight: true,
             fixed:       false,
             items:       [],

@@ -4,16 +4,18 @@
 
         <v-divider></v-divider>
 
-        <v-subheader>Filtros</v-subheader>
+        <v-subheader><v-icon>mdi-storefront</v-icon> Comercios</v-subheader>
 
         <v-flex md12>
             <v-text-field   
                 dense
                 outlined
-                append-icon="search"
-                label="Buscar"
+                append-icon="mdi-home-search-outline"
+                label="Buscar Comercios"
                 v-model="form.buscar"
-                hint="Indique Local ">
+                hint="Indique Nombre del Comercio"
+                color="purple darken-1">
+                
             </v-text-field>
         </v-flex>
 
@@ -27,6 +29,7 @@
                 :items="selects.zona"
                 item-value="id"
                 item-text="nb_zona"
+                append-icon="mdi-map-search"
             ></v-select>
         </v-flex>
 
@@ -40,21 +43,23 @@
                 :items="selects.barrio"
                 item-value="id"
                 item-text="nb_barrio"
+                append-icon="mdi-home-city"
             ></v-select>
         </v-flex>
 
         <v-divider></v-divider>
 
-        <v-subheader>Filtros</v-subheader>
+        <v-subheader></v-subheader>
+        <v-subheader> </v-subheader>
 
         <v-flex md12>
             <v-text-field 
                 dense
                 outlined
-                append-icon="search"
-                label="Buscar2"
+                append-icon="mdi-home-search-outline"
+                label="Buscar Comercio"
                 v-model="form.buscar"
-                hint="Indique Ubicacion ">
+                hint="Indique Comercio">
             </v-text-field>
         </v-flex>
 
@@ -63,11 +68,12 @@
                 dense
                 outlined
                 clearable
-                label="Categoria"
+                label="Categorias"
                 v-model="form.categoria"    
                 :items="selects.categoria"
                 item-value="id"
                 item-text="nb_categoria"
+                append-icon="category"
             ></v-select>
         </v-flex>
 
