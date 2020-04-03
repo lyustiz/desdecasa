@@ -39,6 +39,6 @@ export default
 		setNbUsuario(state, username)
 		{
 			state.username = username
-		}
+		},
 	}
 }

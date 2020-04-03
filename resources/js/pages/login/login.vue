@@ -1,96 +1,128 @@
 <template>
-  <v-app class="back">
-    <v-content>
-      <v-container fluid fill-height>
-            <v-layout align-center justify-center>
-                <v-flex xs12 sm6>
-                        <v-form @submit.prevent="login()">
-                            <v-card class="elevation-12">
 
-                            <v-img :src="ImgPanoramica"></v-img>
+    <div  class="grey lighten-4 holder">
 
-                            <v-card-text>
+    <v-row class="fill-height" >
+    
+    <v-col md="12">
+        
+        <v-card class="mx-auto elevation-8 mt-5" max-width="320" :loading="loading">
+            
+            <v-card-title primary-title class="cyan darken-3 white--text">
+               <h4>Ingreso</h4><v-icon class="mx-2" color="white">mdi-login-variant</v-icon>
+            </v-card-title>
 
-                                <v-text-field
-                                    prepend-icon="person"
-                                    name="nb_usuario"
-                                    label="Usuario"
-                                    type="text"
-                                    v-model="form.nb_usuario" >
-                                </v-text-field>
+            <v-divider></v-divider>
+        
+            <v-card-text class="px-6">
 
-                                <v-text-field
-                                    :append-icon="mostrar ? 'visibility_off' : 'visibility'"
-                                    :type="mostrar ? 'text' : 'password'"
-                                    @click:append="mostrar = !mostrar"
-                                    prepend-icon="lock"
-                                    name="password"
-                                    label="Contraseña"
-                                    id="password"
-                                    v-model="form.password">
-                                </v-text-field>
-
-                            </v-card-text>
-
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn type="submit" dark color="red" >Ingresar </v-btn>
-                                <v-spacer></v-spacer>
-                            </v-card-actions>
-
-                        </v-card>
-                    </v-form>
+                <v-flex xs12 class="mt-4">
+                    <v-text-field
+                        color="cyan darken-3"
+                        prepend-inner-icon="mdi-email"
+                        label="Correo"
+                        hint="Indique cuenta de correo afiliada"
+                        type="text"
+                        v-model="data"
+                        dense
+                        rounded
+                        filled  >
+                    </v-text-field>
                 </v-flex>
-            </v-layout>
-    </v-container>
-    </v-content>
-    <pre>
-    {{$data.test}}
-</pre>
-</v-app>
+
+                <v-flex xs12>
+                    <v-text-field
+                        color="cyan darken-3"
+                        prepend-inner-icon="mdi-lock"
+                        :append-icon="show ? 'visibility_off' : 'visibility'"
+                        @click:append="show = !show"
+                        label="Password"
+                        hint="Debe contener letras y numeros y una longitud minima de 8 caracteres"
+                        :type="show ? 'text' : 'password'"
+                        v-model="data"
+                        dense
+                        rounded
+                        filled  >
+                    </v-text-field>
+                </v-flex>
+
+
+                <v-flex class="mx-0 d-flex justify-space-between>"> 
+                   <v-btn text x-small color="cyan darken-3" @click="$router.push('registro')">
+                       Registro<v-icon class="mx-1">mdi-account-plus-outline</v-icon>
+                    </v-btn>
+                    <v-btn text x-small color="cyan darken-3" @click="$router.push('recuperar-password')">
+                            Recuperar Password<v-icon class="mx-1">mdi-email-send-outline</v-icon>
+                    </v-btn>
+                </v-flex>
+
+            </v-card-text>
+
+            <v-card-actions class="white px-6 pb-4">
+
+                        <v-btn dark small color="cyan darken-3" :loading="loading" @click="loading = !loading">Ingresar</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-tooltip top >
+                            <template v-slot:activator="{ on }">
+                                <v-btn fab dark x-small color="red" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-google</v-icon></v-btn>
+                            </template>
+                            <span>Ingresar con Google</span>
+                        </v-tooltip>
+
+                        <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                                <v-btn fab dark x-small color="primary" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-facebook</v-icon></v-btn>
+                            </template>
+                            <span>Ingresar con Facebook</span>
+                        </v-tooltip>
+
+                        <v-tooltip top>
+                            <template v-slot:activator="{ on }"> 
+                                <v-btn fab dark x-small color="info" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-twitter</v-icon></v-btn>
+                            </template>
+                            <span>Ingresar con Twitter</span>
+                        </v-tooltip>     
+
+<!-- 
+                    <v-col>ddd</v-col> -->
+                    
+                <!-- <div class="col-12">
+                    <v-flex xl-12 class="mx-2">
+                        
+                    </v-flex>  
+                </div>       -->
+            </v-card-actions>
+           
+
+        </v-card>
+
+    </v-col>
+    
+
+</v-row>
+</div>
 
 </template>
+
 <script>
-module.exports = {
-    data()
-    {
-        return{
-            mostrar: false,
-            test:[],
-            form:
-            {
-                nb_usuario:null,
-                password:null
-            },
-            error:
-            {
-                nb_usuario:null,
-                password:null
-            },
-            ImgPanoramica: require('../../img/panoramica.png'),
+export default {
+
+    data () 
+	{
+        return {
+            data: '',
+            show: false,
+            loading: false,
+            logo: require('~/assets/img/servicios.jpg'),
         }
     },
-    methods:{
-        login()
-        {
-            urlBase='login';
-            axios.post(urlBase, this.form)
-            .then(respuesta =>
-            {
-                if (respuesta.status == 200)
-                {
-                    window.location='/home'
-                }
-                else
-                {
-                    alert('eroor'.respuesta.status)
-                }
-            })
-            .catch(error =>
-            {
-                this.test = error
-            })
-        }
-    }
+
 }
 </script>
+
+<style>
+#register-container{
+    height: 92.8vh;
+}
+
+</style>

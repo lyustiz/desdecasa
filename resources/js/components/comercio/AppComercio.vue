@@ -9,6 +9,7 @@
         </v-card-title>
         
         <v-card-text>
+            
             <p class="caption"> 
                 <v-icon>mdi-map-marker</v-icon>  {{ comercio.tx_direccion }}
             </p>
@@ -29,7 +30,6 @@
                 <v-btn link  :href="`https://wa.me/${comercio.tx_telefono}`" target="_blank" icon >
                     <v-icon color="green">mdi-whatsapp</v-icon>
                 </v-btn>
-
             </p>
             
         </v-card-text>

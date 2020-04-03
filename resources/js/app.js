@@ -6,17 +6,28 @@ import store    from './store';
 import './plugins/axios';
 import vuetify from './plugins/vuetify';
 
+let isMobile = {
+    Android:    () => navigator.userAgent.match(/Android/i),
+    BlackBerry: () => navigator.userAgent.match(/BlackBerry/i),
+    iOS:        () => navigator.userAgent.match(/iPhone|iPad|iPod/i),
+    Opera:      () => navigator.userAgent.match(/Opera Mini/i),
+    Windows:    () => navigator.userAgent.match(/IEMobile/i),
+    any:        () => (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows())
+}
+
 /** Componente Ppal   **/
-import App from './layouts/App.vue'
+import App from './App.vue'
 Vue.component('app', App)
  
 /** Config **/
 Vue.prototype.$App = Object.freeze({
-    title:    'Desdecasa.com',
+    title:    'DesdecasaWeb',
     version:  '0.1',
     baseUrl:  '/api/',
     ApiUrl:   '127.0.0.1:8000/api/v1',
     debug:    true,
+    isMobile: (isMobile.any()) ? true : false,
+    device:   isMobile.any(), 
     theme:{
             headApp:   'cyan darken-2',
             textTitle: 'white--text',
@@ -42,7 +53,7 @@ Vue.prototype.$App = Object.freeze({
 import './components/components'
 
 /** Minxins Autoload **/
-import AppMessage from './mixins/AppMessage'
+import AppMessage from '@mixins/AppMessage'
 Vue.mixin(AppMessage)
 
 /** Componente Principal */

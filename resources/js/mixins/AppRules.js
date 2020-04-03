@@ -27,6 +27,10 @@ export default
                     v => !!v || 'El Correo es Requerido',
                     v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'indicar un email válido'
                 ],
+                image:[
+                    v => !v || v.size < 2000000 || 'Imagen debe tener menos de 2 MB!',
+                ],
+        
                 password: [
                     v => !!v || 'La Contraseña es Requerida',
                     v => v.length > 5 || 'La contraseña debe tener almenos 6 caracteres'
