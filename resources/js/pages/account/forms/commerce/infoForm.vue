@@ -133,9 +133,9 @@ export default {
                     { id: 1, nb_tipo_pago: 'Visa'},
                     { id: 2, nb_tipo_pago: 'Mastercard'},
                     { id: 3, nb_tipo_pago: 'Efectivo'},
-                    { id: 3, nb_tipo_pago: 'Debito'},
-                    { id: 3, nb_tipo_pago: 'Criptomoneda'},
-                    { id: 3, nb_tipo_pago: 'Paypal'}
+                    { id: 4, nb_tipo_pago: 'Debito'},
+                    { id: 5, nb_tipo_pago: 'Criptomoneda'},
+                    { id: 6, nb_tipo_pago: 'Paypal'}
                 ]
             },
             

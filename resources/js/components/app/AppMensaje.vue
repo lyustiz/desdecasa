@@ -4,6 +4,7 @@
 		:color="colorMsj"
 		v-model="showMsj"
 		:multi-line="false"
+    
     >
         {{ txtMsj }}
         {{ subTxtMsj }}

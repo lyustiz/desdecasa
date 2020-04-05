@@ -11,6 +11,8 @@ class ComercioSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(App\Models\Comercio::class, 100)->create();
+
+        //// php artisan db:seed --class=ComercioSeeder
     }
 }

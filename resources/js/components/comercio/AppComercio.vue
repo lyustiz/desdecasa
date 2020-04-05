@@ -2,10 +2,10 @@
 
    <v-card class="ma-3">
 
-        <v-img class="white--text align-end" height="200px" :src="`images/${comercio.tx_foto}.jpg`"></v-img>
+        <v-img class="white--text align-end" height="200px" :src="`images/comercios/${comercio.foto[0].tx_src}`"></v-img>
         
         <v-card-title> 
-            <v-icon>mdi-storefront</v-icon> {{ comercio.tx_nombre }}  
+            <v-icon>mdi-storefront</v-icon> {{ comercio.nb_cliente }}  
         </v-card-title>
         
         <v-card-text>

@@ -11,6 +11,8 @@ class FotoSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(App\Models\Foto::class, 100)->create();
+
+        //// php artisan db:seed --class=FotoSeeder
     }
 }

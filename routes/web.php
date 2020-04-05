@@ -13,14 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('app');
-});
+Route::view('/', 'app');
 
+Route::get('/usuario/verify/{hash}', 'UsuarioController@verify');
 
+Route::view('{path}', 'app')->where('path', '(.*)');
 
-Route::get('{path}', function () {
-    return view('app');
-})->where('path', '(.*)');
+/* 
+    Route::fallback(function () {
+        //
+    }); 
+*/
 
-Auth::routes();
+Auth::routes(['verify' => true]);

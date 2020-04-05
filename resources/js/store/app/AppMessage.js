@@ -6,7 +6,7 @@ export default
 			color: 		'error',
 			text: 		'Ha ocurrido un error',
 			subText: 	'',
-			timeout: 	3500
+			timeout: 	5000
 		}
 	},
 

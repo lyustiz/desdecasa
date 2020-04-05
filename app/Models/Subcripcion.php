@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subcripcion extends Model
 {
+    protected $table 	= 'subcripcion';
+    
     protected $fillable =   [
                             'tx_observaciones',
                             'bo_activo',
@@ -14,7 +16,7 @@ class Subcripcion extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id', 'created_at', 'updated_at'];
+    protected $hidden   = [ 'created_at', 'updated_at'];
 
     public function comercio(){
 

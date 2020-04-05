@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comercio;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class ComercioController extends Controller
 {
@@ -14,12 +15,66 @@ class ComercioController extends Controller
      */
     public function index()
     {
-        $comercios = Comercio::with(['status'])
+        $comercios = Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio:id,nb_barrio'])
+                              ->select('id', 'nb_cliente', 'tx_descripcion', 'id_zona', 'tx_direccion' )
+                              ->where('id_status', 1)
                               ->get();
         
         return $comercios;
 
     }
+
+    /**
+     * Listar Comercio por Categoria     
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function comercioCategoria($id_categoria)
+    {
+        $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio'])
+                    ->select('id', 'nb_cliente', 'tx_descripcion', 'id_zona', 'tx_direccion' )
+                    ->whereHas('comercioCategoria', function (Builder $query) use ( $id_categoria ){
+                        $query->where('id_categoria', $id_categoria);
+                    })
+                    ->where('id_status', 1)
+                    ->get();
+        
+        return $barrios;
+    }
+
+    /**
+     * Listar Comercio por Categoria     
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function comercioBarrio($id_barrio)
+    {
+        $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio:id,nb_barrio'])
+                    ->select('id', 'nb_cliente', 'tx_descripcion', 'id_zona', 'tx_direccion' )
+                    ->where('id_barrio', $id_barrio)
+                    ->where('id_status', 1)
+                    ->get();
+        
+        return $barrios;
+    }
+
+    /**
+     * Listar Comercio por Categoria     
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function comercioFilters( array $filters)
+    {
+        $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio:id,nb_barrio'])
+                    ->select('id', 'nb_cliente', 'tx_descripcion', 'id_zona', 'tx_direccion' )
+                    ->where('id_barrio', $id_barrio)
+                    ->where('id_status', 1)
+                    ->get();
+        
+        return $barrios;
+    }
+
+
 
     /**
      * Store a newly created resource in storage.

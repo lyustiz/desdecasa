@@ -4,32 +4,29 @@
     <v-card color="rgba(0,0,0,0.3) " dark class="mx-auto mt-5 pa-3"  max-width="1000">
 
       <v-card-title class="mb-4 display-1">
-        <h3>Conocenos</h3>
+        Conocenos
       </v-card-title>
 
       <v-card-subtitle >
-        <h4>Mision</h4>
+        <h3>Mision</h3>
       </v-card-subtitle>
 
-      <p class="mx-4 mt-4">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa, 
-          voluptates natus neque cumque architecto ipsam impedit excepturi pariatur ducimus, 
-          aliquam soluta eius ipsa reiciendis libero labore debitis est, officia quidem!
+      <p class="mx-4 mt-4 text-justify">
+        Mediante el compromiso, la ética y el profesionalismo “Desde Casa web” se enfocará en
+        entregar a la sociedad una herramienta que permita acercar a los pequeños comercios de barrio, 
+        un servicio comunitario dispuesto a apoyarse en estos tiempos donde la economía en el mundo está cambiando. 
+        Implementando el marketing solidario podremos apoyar a los pequeños comerciantes.
       </p>
 
       <v-card-subtitle >
-        <h4>Vision</h4>
+        <h3>Vision</h3>
       </v-card-subtitle>
 
-      <p class="mx-4 mt-4">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa, 
-          voluptates natus neque cumque architecto ipsam impedit excepturi pariatur ducimus, 
-          aliquam soluta eius ipsa reiciendis libero labore debitis est, officia quidem!
-      </p>
-      <p class="mx-4 mt-4">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa, 
-          voluptates natus neque cumque architecto ipsam impedit excepturi pariatur ducimus, 
-          aliquam soluta eius ipsa reiciendis libero labore debitis est, officia quidem!
+      <p class="mx-4 mt-4 text-justify">
+          Ser, para el 2021, la red social de comercios de barrios más influyente, 
+          permitiéndole a cada uno de sus miembros surgir y crecer en medio de la crisis, 
+          convirtiéndonos en la principal opción para la resolución de las necesidades básicas de consumo, 
+          a través de las diferentes herramientas que ofrece el universo digital
       </p>
 
   </v-card>

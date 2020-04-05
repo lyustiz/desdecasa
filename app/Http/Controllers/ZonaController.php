@@ -14,7 +14,12 @@ class ZonaController extends Controller
      */
     public function index()
     {
-        //
+        $zonas = Zona::with(['status'])
+                     ->select('id', 'nb_zona') 
+                     ->where('id_status', 1)      
+                     ->get();
+        
+        return $zonas;
     }
 
     /**
@@ -25,7 +30,22 @@ class ZonaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'co_zona'           => 'required',
+            'nb_zona'           => 'required',
+            'id_ciudad'         => 'required',
+            'nu_latitud'        => 'required',
+            'nu_longitud'       => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+
+        $zona = Zona::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('zona') ];    
     }
 
     /**
@@ -36,7 +56,8 @@ class ZonaController extends Controller
      */
     public function show(Zona $zona)
     {
-        //
+        return $zona;
+
     }
 
     /**
@@ -48,7 +69,22 @@ class ZonaController extends Controller
      */
     public function update(Request $request, Zona $zona)
     {
-        //
+        $validate = request()->validate([
+            
+            'co_zona'           => 'required',
+            'nb_zona'           => 'required',
+            'id_ciudad'         => 'required',
+            'nu_latitud'        => 'required',
+            'nu_longitud'       => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+
+        ]);
+        
+        $zona = $zona->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('zona')];    
     }
 
     /**
@@ -59,6 +95,8 @@ class ZonaController extends Controller
      */
     public function destroy(Zona $zona)
     {
-        //
+        $zona = $zona->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('zona')];
     }
 }

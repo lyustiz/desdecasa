@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pais extends Model
 {
+    
+    protected $table 	= 'pais';
+    
     protected $fillable =   [
                             'nb_pais',
                             'co_pais',
@@ -17,7 +20,7 @@ class Pais extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id', 'created_at', 'updated_at'];
+    protected $hidden   = [ 'created_at', 'updated_at'];
 
     public function status(){
     

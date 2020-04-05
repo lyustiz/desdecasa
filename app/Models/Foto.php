@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Foto extends Model
 {
+    protected $table 	= 'foto';
+
     protected $fillable =   [
                             'nb_foto',
                             'tx_src',
@@ -18,7 +20,7 @@ class Foto extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id', 'created_at', 'updated_at'];
+    protected $hidden   = [ 'created_at', 'updated_at'];
 
     public function tipoFoto(){
 

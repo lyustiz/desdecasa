@@ -15,7 +15,7 @@ class CreateFotoTable extends Migration
     {
         Schema::create('foto', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('nb_foto', 20);
+			$table->string('nb_foto', 100);
 			$table->string('tx_src', 100);
 			$table->integer('id_tipo_foto');
 			$table->integer('id_comercio');

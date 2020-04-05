@@ -4,7 +4,7 @@
 
         <v-slide-group v-model="categoria" class="pa-4" show-arrows center-active>
         
-            <v-slide-item v-for="(categotia, i) in getCategorias" :key="i"  v-slot:default="{ active, toggle }" :value="categotia.id">
+            <v-slide-item v-for="(categoria, i) in getCategorias" :key="i"  v-slot:default="{ active, toggle }" :value="categoria.id">
                 
                 <v-card
                 :color="active ? 'primary' : 'grey lighten-1'"
@@ -12,13 +12,13 @@
                 height="200"
                 width="200"
                 @click="toggle">
-
-                    <v-img class="white--text align-end" height="200px" :src="categotia.src" align="center" justify="center">
+                
+                    <v-img class="white--text align-end" height="200px" :src="fotoUrl+categoria.tx_foto" align="center" justify="center">
                         <v-scale-transition>
                         <v-icon v-if="active" color="white" size="48">mdi-close-circle-outline</v-icon>
+                        
                         </v-scale-transition>
                     </v-img> 
-
                 </v-card>
 
             </v-slide-item>
@@ -61,11 +61,14 @@ export default {
             },
             set(categoria) {
                 this.$store.commit('setCategoria', categoria )
+                this.$store.dispatch('apiComerciosCategoria',  categoria )
             }
         }
     },
     data(){
-        return {  }
+        return { 
+            fotoUrl: '/images/'
+        }
     },
 
 }

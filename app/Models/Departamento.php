@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Departamento extends Model
 {
+    protected $table 	= 'departamento';
+    
     protected $fillable =   [
                             'co_departamento',
                             'nb_departamento',
@@ -19,7 +21,7 @@ class Departamento extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id','created_at','updated_at'];
+    protected $hidden   = ['created_at','updated_at'];
 
     public function pais(){
 

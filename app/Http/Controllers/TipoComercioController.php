@@ -14,7 +14,11 @@ class TipoComercioController extends Controller
      */
     public function index()
     {
-        //
+        $tipoComercios = TipoComercio::with(['status'])
+                                     ->get();
+        
+        return $tipoComercios;
+
     }
 
     /**
@@ -25,7 +29,20 @@ class TipoComercioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'nb_tipo_comercio'  => 'required',
+            'tx_icono'          => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+
+        $tipoComercio = TipoComercio::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('tipoComercio') ];
+    
     }
 
     /**
@@ -36,7 +53,8 @@ class TipoComercioController extends Controller
      */
     public function show(TipoComercio $tipoComercio)
     {
-        //
+        return $tipoComercio;
+
     }
 
     /**
@@ -48,7 +66,20 @@ class TipoComercioController extends Controller
      */
     public function update(Request $request, TipoComercio $tipoComercio)
     {
-        //
+        $validate = request()->validate([
+
+            'nb_tipo_comercio'  => 'required',
+            'tx_icono'          => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+        
+        $tipoComercio = $tipoComercio->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('tipoComercio')];
+    
     }
 
     /**
@@ -59,6 +90,9 @@ class TipoComercioController extends Controller
      */
     public function destroy(TipoComercio $tipoComercio)
     {
-        //
+        $tipoComercio = $tipoComercio->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('tipoComercio')];
+
     }
 }

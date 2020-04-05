@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categoria extends Model
 {
+    protected $table 	= 'categoria';
+    
     protected $fillable =   [
                             'nb_categoria',
                             'tx_icono',
@@ -17,7 +19,7 @@ class Categoria extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id','created_at','updated_at'];
+    protected $hidden   = ['created_at','updated_at'];
 
     public function status(){
     

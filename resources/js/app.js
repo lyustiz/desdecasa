@@ -24,7 +24,7 @@ Vue.prototype.$App = Object.freeze({
     title:    'DesdecasaWeb',
     version:  '0.1',
     baseUrl:  '/api/',
-    ApiUrl:   '127.0.0.1:8000/api/v1',
+    ApiUrl:   '/api/v1/',
     debug:    true,
     isMobile: (isMobile.any()) ? true : false,
     device:   isMobile.any(), 

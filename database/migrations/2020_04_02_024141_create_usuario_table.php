@@ -21,10 +21,13 @@ class CreateUsuarioTable extends Migration
 			$table->string('password', 64);
 			$table->string('tx_email')->unique();
 			$table->string('tx_nuip')->nullable();
-			$table->string('tx_observaciones', 100)->nullable();
-			$table->rememberToken();
+            $table->string('tx_observaciones', 100)->nullable();
+            $table->string('verification', 64)->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
+            $table->string('api_token', 64)->nullable();
 			$table->integer('id_status');
-			$table->integer('id_usuarioe');
+			$table->integer('id_usuarioe')->nullable();
 			$table->timestamps();
         });
     }

@@ -14,7 +14,11 @@ class TipoFotoController extends Controller
      */
     public function index()
     {
-        //
+        $tipoFotos = TipoFoto::with(['status'])
+                             ->get();
+        
+        return $tipoFotos;
+
     }
 
     /**
@@ -25,7 +29,21 @@ class TipoFotoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+            
+            'nb_tipo_foto'     => 'required',
+            'tx_icono'         => 'required',
+            'tx_path'          => 'required',
+            'tx_observaciones' => 'required',
+            'id_status'        => 'required',
+            'id_usuario'       => 'required',
+            
+        ]);
+
+        $tipoFoto = TipoFoto::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('tipoFoto') ];
+    
     }
 
     /**
@@ -36,7 +54,8 @@ class TipoFotoController extends Controller
      */
     public function show(TipoFoto $tipoFoto)
     {
-        //
+        return $tipoFoto;
+
     }
 
     /**
@@ -48,7 +67,21 @@ class TipoFotoController extends Controller
      */
     public function update(Request $request, TipoFoto $tipoFoto)
     {
-        //
+        $validate = request()->validate([
+            
+            'nb_tipo_foto'     => 'required',
+            'tx_icono'         => 'required',
+            'tx_path'          => 'required',
+            'tx_observaciones' => 'required',
+            'id_status'        => 'required',
+            'id_usuario'       => 'required',
+
+        ]);
+        
+        $tipoFoto = $tipoFoto->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('tipoFoto')];
+    
     }
 
     /**
@@ -59,6 +92,9 @@ class TipoFotoController extends Controller
      */
     public function destroy(TipoFoto $tipoFoto)
     {
-        //
+        $tipoFoto = $tipoFoto->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('tipoFoto')];
+
     }
 }

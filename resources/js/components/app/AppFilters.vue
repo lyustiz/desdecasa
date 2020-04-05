@@ -40,8 +40,8 @@
                                 outlined
                                 clearable
                                 label="Zona"
-                                v-model="zona" 
-                                :items="selects.zona"
+                                v-model="filterZona" 
+                                :items="getZonas"
                                 item-value="id"
                                 item-text="nb_zona"
                                 append-icon="mdi-map-search"
@@ -54,8 +54,9 @@
                                 outlined
                                 clearable
                                 label="Barrio"
-                                v-model="barrio" 
-                                :items="selects.barrio"
+                                v-model="filterBarrio" 
+                                :items="selects.barrios"
+                                :loading="barriosLoad"
                                 item-value="id"
                                 item-text="nb_barrio"
                                 append-icon="mdi-home-city"
@@ -85,7 +86,7 @@
                                 outlined
                                 append-icon="mdi-home-search-outline"
                                 label="Buscar Comercio"
-                                v-model="nombre"
+                                v-model="filterNombre"
                                 hint="Indique Comercio">
                             </v-text-field>
                         </v-flex>
@@ -96,8 +97,8 @@
                                 outlined
                                 clearable
                                 label="Categorias"
-                                v-model="categoria"    
-                                :items="selects.categorias"
+                                v-model="filterCategoria"    
+                                :items="getCategorias"
                                 item-value="id"
                                 item-text="nb_categoria"
                                 append-icon="category"
@@ -120,21 +121,20 @@
 
 <script>
 
-import AppRules from "~/mixins/AppRules";
+import AppRules from "@mixins/AppRules";
 import { mapGetters, mapMutations } from 'vuex';
-import { zonas as zonasJSON } from '~/assets/data/zonas.json';
-import { barrios as barriosJSON } from '~/assets/data/barrios.json'
 
 export default {
     mixins: [ AppRules ],
 
     computed:
     {
+        ...mapGetters(['getCategorias','getZonas']),
         resize()
         {
             return this.$store.getters['getResize']
         },
-        nombre:
+        filterNombre:
         {
             get() {
                 return this.$store.getters['getNombre']
@@ -143,7 +143,7 @@ export default {
                 this.$store.commit('setNombre', nombre)
             }
         },
-        zona:
+        filterZona:
         {
             get() {
                 return this.$store.getters['getZona']
@@ -153,7 +153,7 @@ export default {
                 this.getBarrios(zona);
             }
         },
-        barrio:
+        filterBarrio:
         {
             get() {
                 return this.$store.getters['getBarrio']
@@ -162,64 +162,54 @@ export default {
                 this.$store.commit('setBarrio', barrio)
             }
         },
-        categoria:
+        filterCategoria:
         {
             get() {
                 return this.$store.getters['getCategoria']
             },
             set(categoria) {
                 this.$store.commit('setCategoria', categoria)
+                this.getComerciosCategoria(categoria);
             }
         },
+
     },
     data()
     {
         return {
                 buscar: null,
+                barriosLoad: false,
                 selects: {
 
-                    zona: zonasJSON,
+                    barrios: [], 
 
-                    barrio: [], 
-                    categorias: [
-                        { id: 1 , nb_categoria: 'Ropa', icon: 'mdi-tshirt-crew' , src: 'ropa.jpg' },
-                        { id: 2 , nb_categoria: 'Calzado', icon: 'mdi-shoe-formal' , src: 'calzado.jpg' },
-                        { id: 3 , nb_categoria: 'Comida', icon: 'mdi-food' , src: 'comida.jpg' },
-                        { id: 4 , nb_categoria: 'Belleza', icon: 'mdi-hair-dryer' , src: 'belleza.jpg' },
-                        { id: 5 , nb_categoria: 'Mercado', icon: 'mdi-cart' , src: 'aseo-personal.jpg' },
-                        { id: 6 , nb_categoria: 'Mensajeria', icon: 'mdi-motorbike' , src: 'ferreteria.jpg' },
-                        { id: 7 , nb_categoria: 'Medicinas', icon: 'mdi-needle' , src: 'mercado.jpg' },
-                        { id: 8 , nb_categoria: 'Ferreteria', icon: 'mdi-hammer-screwdriver' , src: 'mensajeria.jpg' }
-                    ],
                 }
         }
     }, 
     methods: 
     {
         ...mapMutations(['toggleFilter']),
-        filterNombre()
-        {
-            if( this.form.nombre.length > 3 )
-            {
-                this.$store.commit('setNombre', this.form.nombre);
-            }
-            
-        },
+
         getBarrios(zona){
 
-            this.barrio = null;
+            this.selects.barrios = [];
+            this.barriosLoad = true;
 
-            if(this.zona)
+            axios.get('/api/v1/' + 'barrio/zona/' + zona)
+			.then( response =>
+			{
+                this.selects.barrios = response.data;
+                this.barriosLoad = false;
+			})
+            .catch( error =>
             {
-                for (const barrio of barriosJSON) 
-                {
-                   
-                   if(barrio.id_zona == zona)
-                    {
-                        this.selects.barrio.push(barrio);
-                    }
-                }
-            }
+              console.log(error)
+            })
+        },
+
+        getComerciosCategoria(categoria)
+        {
+            this.$store.dispatch('apiComerciosCategoria',  categoria )
         }
     }
 }

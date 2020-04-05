@@ -5,6 +5,8 @@
     <v-row class="fill-height" >
     
     <v-col md="12">
+
+        <v-form v-model="valid" ref="registerForm" >
         
         <v-card class="mx-auto elevation-8 mt-5" max-width="320" :loading="loading">
             
@@ -21,9 +23,10 @@
                     <v-text-field
                         color="cyan darken-3"
                         prepend-inner-icon="mdi-account"
-                        label="Nombre"
+                        label="Nombre Usuario"
                         type="text"
-                        v-model="data"
+                        v-model="form.user"
+                        :rules="rules.required"
                         dense
                         rounded
                         filled >
@@ -37,7 +40,8 @@
                         label="Correo"
                         hint="Indique cuenta de correo para activar la cuenta"
                         type="text"
-                        v-model="data"
+                        v-model="form.email"
+                        :rules="rules.email"
                         dense
                         rounded
                         filled  >
@@ -53,7 +57,8 @@
                         label="Password"
                         hint="Debe contener letras y numeros y una longitud minima de 8 caracteres"
                         :type="show ? 'text' : 'password'"
-                        v-model="data"
+                        v-model="form.password"
+                        :rules="rules.password"
                         dense
                         rounded
                         filled  >
@@ -65,9 +70,10 @@
                         color="cyan darken-3"
                         prepend-inner-icon="mdi-lock"
                         label="Reescribir password"
-                        type="text"
-                        v-model="data"
-                        disabled
+                        :type="show ? 'text' : 'password'"
+                        v-model="form.passwordRew"
+                        :rules="rules.password_confirmation"
+                        :disabled="passwordValid"
                         dense
                         rounded
                         filled  >
@@ -83,7 +89,7 @@
             </v-card-text>
 
             <v-card-actions class="white px-6 pb-4">
-                    <v-btn dark color="cyan darken-3" :loading="loading" @click="loading = !loading">Registro</v-btn>
+                    <v-btn dark color="cyan darken-3" :loading="loading" @click="register">Registro</v-btn>
                     <v-spacer></v-spacer>
               
                      <v-tooltip top >
@@ -106,8 +112,9 @@
                      </v-tooltip>                
             </v-card-actions>
            
-
         </v-card>
+
+        </v-form>
 
     </v-col>
     
@@ -118,17 +125,63 @@
 </template>
 
 <script>
-export default {
+import AppRules from '@mixins/AppRules'
 
+export default {
+    mixins: [ AppRules ],
+    computed: {
+        passwordValid()
+        {
+            if(this.form.password)
+            {
+                return (!this.form.password.length > 7);
+            }
+
+            return true;
+        }
+    },
     data () 
 	{
         return {
-            data: '',
+            form:{
+                user:        '',
+                email:       '',
+                password:    '',
+                passwordRew: ''
+            },
             show: false,
             loading: false,
-            logo: require('~/assets/img/servicios.jpg'),
+            valid: ''
         }
     },
+    methods: {
+        register()
+        {
+            if (!this.$refs.registerForm.validate())  return 
+            
+            this.loading = true
+            
+            this.$store.dispatch('register', this.form)
+            .then(response => {
+              
+                if(response.status == 201 && response.statusText == "Created")
+                {
+                    this.$refs.registerForm.reset();
+                    this.showMessage(`Se ha registrado Corectamente. Ingrese en su correo para activar el usuario `);
+                    this.$router.push('login');
+                }
+
+            }).catch(error =>
+            {
+                this.showError(error);
+            })
+            .then(() => 
+            {
+                this.loading = false
+            })
+
+        }
+    }
 
 }
 </script>

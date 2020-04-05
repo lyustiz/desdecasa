@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoComercio extends Model
 {
+    protected $table 	= 'tipo_comercio';
+    
     protected $fillable =   [
                             'nb_tipo_comercio',
                             'tx_icono',
@@ -16,7 +18,7 @@ class TipoComercio extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id', 'created_at', 'updated_at'];
+    protected $hidden   = [ 'created_at', 'updated_at'];
 
     public function status(){
     

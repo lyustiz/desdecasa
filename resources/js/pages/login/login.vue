@@ -5,6 +5,8 @@
     <v-row class="fill-height" >
     
     <v-col md="12">
+
+        <v-form v-model="valid" ref="registerForm" >
         
         <v-card class="mx-auto elevation-8 mt-5" max-width="320" :loading="loading">
             
@@ -19,11 +21,12 @@
                 <v-flex xs12 class="mt-4">
                     <v-text-field
                         color="cyan darken-3"
-                        prepend-inner-icon="mdi-email"
-                        label="Correo"
-                        hint="Indique cuenta de correo afiliada"
+                        prepend-inner-icon="mdi-account"
+                        label="Usuario"
+                        hint="Indique el usuario Registrado"
                         type="text"
-                        v-model="data"
+                        v-model="form.user"
+                        :rules="rules.required"
                         dense
                         rounded
                         filled  >
@@ -39,7 +42,8 @@
                         label="Password"
                         hint="Debe contener letras y numeros y una longitud minima de 8 caracteres"
                         :type="show ? 'text' : 'password'"
-                        v-model="data"
+                        v-model="form.password"
+                        :rules="rules.password"
                         dense
                         rounded
                         filled  >
@@ -60,7 +64,7 @@
 
             <v-card-actions class="white px-6 pb-4">
 
-                        <v-btn dark small color="cyan darken-3" :loading="loading" @click="loading = !loading">Ingresar</v-btn>
+                        <v-btn dark small color="cyan darken-3" :loading="loading" @click="login()">Ingresar</v-btn>
                         <v-spacer></v-spacer>
                         <v-tooltip top >
                             <template v-slot:activator="{ on }">
@@ -93,8 +97,9 @@
                 </div>       -->
             </v-card-actions>
            
-
         </v-card>
+
+        </v-form>
 
     </v-col>
     
@@ -105,17 +110,51 @@
 </template>
 
 <script>
-export default {
+import AppRules from '@mixins/AppRules'
 
+export default {
+    mixins: [ AppRules ],
     data () 
 	{
         return {
-            data: '',
+            form:{
+                user:        '',
+                password:    '',
+            },
             show: false,
             loading: false,
-            logo: require('~/assets/img/servicios.jpg'),
+            valid: ''
         }
     },
+    methods: {
+
+        login()
+        {
+            if (!this.$refs.registerForm.validate())  return 
+            
+            this.loading = true
+            
+            this.$store.dispatch('login', this.form)
+            .then(response => {
+              
+                if(response.status == 201 && response.statusText == "Created")
+                {
+                    this.$refs.registerForm.reset();
+                    this.showMessage(`Se ha registrado Corectamente. Ingrese en su correo para activar el usuario `);
+                    this.$router.push('account');
+                }
+
+            }).catch(error =>
+            {
+                this.showError(error);
+            })
+            .then(() => 
+            {
+                this.loading = false
+            })
+
+        }
+    }
 
 }
 </script>

@@ -16,8 +16,8 @@ class CreateCategoriaTable extends Migration
         Schema::create('categoria', function (Blueprint $table) {
             $table->increments('id');
 			$table->string('nb_categoria', 30);
-			$table->string('tx_icono', 20)->nullable();
-			$table->string('tx_foto', 20)->nullable();
+			$table->string('tx_icono', 30)->nullable();
+			$table->string('tx_foto', 30)->nullable();
 			$table->string('tx_observaciones', 100)->nullable();
 			$table->integer('id_status');
 			$table->integer('id_usuario');

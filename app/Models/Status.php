@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
+    protected $table 	= 'status';
+    
     protected $fillable =   [
                             'nb_status',
                             'nb_secundario',
@@ -19,7 +21,7 @@ class Status extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id', 'created_at', 'updated_at'];
+    protected $hidden   = [ 'created_at', 'updated_at'];
 
 
     public function usuario(){

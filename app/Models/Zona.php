@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Zona extends Model
 {
+    protected $table 	= 'zona';
+    
     protected $fillable =   [
                             'co_zona',
                             'nb_zona',
@@ -19,7 +21,7 @@ class Zona extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id', 'created_at', 'updated_at'];
+    protected $hidden   = [ 'created_at', 'updated_at'];
 
     public function ciudad(){
 

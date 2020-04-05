@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\User;
+use App\Models\Usuario;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -50,10 +51,15 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+            'user'       => 'required|max:255|unique:usuario,nb_usuario',
+            'email'      => 'required|email|max:255|unique:usuario,tx_email',
+            'password'   => 'required|min:8'
+        ],
+        [
+            'user.unique' => 'El usuario ya está en uso.',
+            'email.unique'      => 'El correo ya está en uso.',
+        ]);    
+    
     }
 
     /**
@@ -64,10 +70,30 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        $data['co_confirmacion'] = Str::random(64);
+        
+        $usuario = Usuario::create([
+            'nb_usuario'        => $data['user'],
+            'tx_email'          => $data['email'],
+            'password'          => Hash::make($data['password']),
+            'id_status'         => 2,
+            'id_usuario_e'      => 0,
+            'co_confirmacion'   => $data['co_confirmacion']
         ]);
+
+         // Enviar codigo de confirmacion
+         \Mail::send('auth.mail.mail_confirm', $data, function($message) use ($data) {
+            $message->to($data['email'], $data['user'])->subject('"DesdeCasaWeb.com", Por favor confirma tu correo');
+        });
+
+        /*$rolUsuario = RolUsuario::create([
+            'id_rol'        => 1,
+            'id_usuario'    => $usuario->id_usuario,
+            'id_status'     => 1, 
+        ]);*/
+
+
+        return $usuario;
+        
     }
 }

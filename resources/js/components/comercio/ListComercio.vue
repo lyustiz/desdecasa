@@ -13,7 +13,7 @@
         <v-col xs="10" >
             <v-chip class="my-1" close small dark color="purple" @click:close="categoria = null">
                 <v-avatar left>
-                    <v-icon class="mx-2">{{ getCategoriaById(categoria).icon }}</v-icon>
+                    <v-icon class="mx-2">{{ getCategoriaById(categoria).tx_icono }}</v-icon>
                 </v-avatar>
                  {{ getCategoriaById(categoria).nb_categoria }} 
             </v-chip> 
@@ -24,9 +24,8 @@
     <v-divider></v-divider>
 
     <v-row no-gutters> 
-        
-        <v-col :lg="cols.lg" :md="cols.md" :sm="cols.sm" :xs="cols.xs" v-for="(comercio, i) in comerciosFiltered" :key="i" >
-                
+        <v-col :lg="cols.lg" :md="cols.md" :sm="cols.sm" :xs="cols.xs" v-for="(comercio, i) in getComercios" :key="i" >
+            
             <app-comercio :comercio="comercio"></app-comercio>
 
         </v-col>
@@ -61,7 +60,9 @@ export default
     mounted()
     {
         this.$vuetify.goTo('#listComercios', { duration: 2000, offset: 5 } )
+
     },
+  
     computed: 
     {
         ...mapGetters(['getCategoriaById']),
@@ -76,38 +77,14 @@ export default
             }
         },
 
-        comerciosFiltered()
+        getComercios()
         {
-            const comercios = [];
-
-            if ( this.filtros.nombre || this.filtros.categoria  )
-            {
-                if (this.filtros.categoria)
-                {
-                    for (const comercio of this.comercios) {
-
-                        if(comercio.categoria_id == this.filtros.categoria)
-                        {
-                            if(this.filtros.nombre) 
-                            {
-                               if(comercio.tx_nombre.toLowerCase().includes(this.filtros.nombre.toLowerCase()) >= 0) {
-                                    comercios.push(comercio); 
-                               }
-                               
-                            }else
-                            {
-                               comercios.push(comercio);
-                            }
-                        }
-                    }
-                }
-            }
-            return comercios;
+            return this.$store.getters['getComercios'];
         },
 
-        countComercios()
+        countComercios()  
         {
-            return this.comerciosFiltered.length
+            return this.$store.getters['countComercios'];
         }
     },
     data () 

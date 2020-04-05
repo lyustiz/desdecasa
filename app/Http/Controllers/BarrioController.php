@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barrio;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class BarrioController extends Controller
 {
@@ -20,6 +21,24 @@ class BarrioController extends Controller
         return $barrio;
 
     }
+
+    /**
+     * Listar Barrio por Zona     
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function barrioZona($id_zona)
+    {
+        $barrios =  Barrio::whereHas('comuna', function (Builder $query) use ( $id_zona ){
+                        $query->where('id_zona', $id_zona);
+                    })
+                    ->select('id', 'nb_barrio')
+                    ->where('id_status', 1)
+                    ->get();
+
+        return $barrios;
+    }
+
 
     /**
      * Store a newly created resource in storage.

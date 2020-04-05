@@ -14,7 +14,11 @@ class StatusController extends Controller
      */
     public function index()
     {
-        //
+        $statuss = Status::with(['usuario:id,nb_usuario'])
+                        ->get();
+        
+        return $statuss;
+
     }
 
     /**
@@ -25,7 +29,23 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'nb_status'         => 'required',
+            'nb_secundario'     => 'required',
+            'co_status'         => 'required',
+            'co_grupo'          => 'required',
+            'id_padre'          => 'required',
+            'tx_observaciones'  => 'required',
+            'bo_activo'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+
+        $status = Status::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('status') ];
+    
     }
 
     /**
@@ -36,7 +56,8 @@ class StatusController extends Controller
      */
     public function show(Status $status)
     {
-        //
+        return $status;
+
     }
 
     /**
@@ -48,7 +69,23 @@ class StatusController extends Controller
      */
     public function update(Request $request, Status $status)
     {
-        //
+        $validate = request()->validate([
+            
+            'nb_status'         => 'required',
+            'nb_secundario'     => 'required',
+            'co_status'         => 'required',
+            'co_grupo'          => 'required',
+            'id_padre'          => 'required',
+            'tx_observaciones'  => 'required',
+            'bo_activo'         => 'required',
+            'id_usuario'        => 'required',
+
+        ]);
+        
+        $status = $status->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('status')];
+    
     }
 
     /**
@@ -59,6 +96,9 @@ class StatusController extends Controller
      */
     public function destroy(Status $status)
     {
-        //
+        $status = $status->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('status')];
+
     }
 }

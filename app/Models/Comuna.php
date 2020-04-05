@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comuna extends Model
 {
+    protected $table 	= 'comuna';
+    
     protected $fillable =   [
                             'co_comuna',
                             'nb_comuna',
@@ -19,7 +21,7 @@ class Comuna extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id','created_at','updated_at'];
+    protected $hidden   = ['created_at','updated_at'];
     
     public function zona(){
 

@@ -14,7 +14,11 @@ class HorarioController extends Controller
      */
     public function index()
     {
-        //
+        $horarios = Horario::with(['status'])
+                           ->get();
+        
+        return $horarios;
+
     }
 
     /**
@@ -25,7 +29,22 @@ class HorarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'nb_horario'        => 'required',
+            'id_comercio'       => 'required',
+            'tx_entrada'        => 'required',
+            'tx_salida'         => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+
+        $horario = Horario::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('horario') ];
+    
     }
 
     /**
@@ -36,7 +55,8 @@ class HorarioController extends Controller
      */
     public function show(Horario $horario)
     {
-        //
+        return $horario;
+
     }
 
     /**
@@ -48,7 +68,22 @@ class HorarioController extends Controller
      */
     public function update(Request $request, Horario $horario)
     {
-        //
+        $validate = request()->validate([
+
+            'nb_horario'        => 'required',
+            'id_comercio'       => 'required',
+            'tx_entrada'        => 'required',
+            'tx_salida'         => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+        
+        $horario = $horario->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('horario')];
+    
     }
 
     /**
@@ -59,6 +94,9 @@ class HorarioController extends Controller
      */
     public function destroy(Horario $horario)
     {
-        //
+        $horario = $horario->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('horario')];
+
     }
 }

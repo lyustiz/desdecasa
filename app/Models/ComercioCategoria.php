@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ComercioCategoria extends Pivot
 {
+    protected $table 	= 'comercio_categoria';
+    
     protected $fillable =   [
                             'id_comercio',
                             'id_categoria',
@@ -16,7 +18,7 @@ class ComercioCategoria extends Pivot
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id','created_at','updated_at'];
+    protected $hidden   = ['created_at','updated_at'];
 
     public function categoria(){
 

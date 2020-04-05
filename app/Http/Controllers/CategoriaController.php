@@ -14,7 +14,8 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        $categorias = Categoria::with(['status'])
+        $categorias = Categoria::select(['id', 'nb_categoria', 'tx_icono', 'tx_foto', 'id_status'])  
+                                ->where('id_status', 1)    
                                 ->get();
         
         return $categorias;

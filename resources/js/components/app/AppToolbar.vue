@@ -10,7 +10,7 @@
         <!--Titulo-->
 
         <v-avatar size="36" v-if="resize">
-            <img :src="logo" :alt="$App.title" @click="$router.push('/')" >
+            <img :src="logo" :alt="$App.title" @click="navegateTo('/')" >
         </v-avatar>
         
         <v-toolbar-title v-else>
@@ -18,7 +18,7 @@
                 text 
                 :color="$App.theme.textTitle" 
                 v-text="$App.title" 
-                @click="$router.push('/')">
+                @click="navegateTo('/')">
             </v-btn>
         </v-toolbar-title>
 
@@ -77,8 +77,8 @@
 
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" @click="$router.push('/registro')">
-                    <v-icon>mdi-account-plus</v-icon>
+                <v-btn small text v-on="on" @click="navegateTo('/registro')">
+                    <v-icon>mdi-account-plus</v-icon> Registro
                 </v-btn>
             </template>
             <span>Registro</span>
@@ -86,8 +86,8 @@
 
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" @click="$router.push('/login')">
-                    <v-icon>mdi-login-variant</v-icon>
+                <v-btn small text v-on="on" @click="navegateTo('/login')">
+                    <v-icon>mdi-login-variant</v-icon> Ingresar
                 </v-btn>
             </template>
             <span>Ingresar</span>
@@ -144,7 +144,7 @@
 
             navegateTo(route)
             {
-                this.$router.push(route)
+                this.$router.push(route).catch(err => {})
             }
         }
     }

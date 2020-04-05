@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Telefono extends Model
 {
+    protected $table 	= 'telefono';
+    
     protected $fillable =   [
                             'tx_telefono',
                             'id_comercio',
@@ -18,7 +20,7 @@ class Telefono extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id', 'created_at', 'updated_at'];
+    protected $hidden   = [ 'created_at', 'updated_at'];
 
     public function comercio(){
 

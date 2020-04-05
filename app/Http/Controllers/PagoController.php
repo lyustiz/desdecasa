@@ -14,7 +14,11 @@ class PagoController extends Controller
      */
     public function index()
     {
-        //
+        $pagos = Pago::with(['status'])
+                     ->get();
+        
+        return $pagos;
+
     }
 
     /**
@@ -25,7 +29,18 @@ class PagoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'tx_observaciones' => 'required',
+            'id_status'        => 'required',
+            'id_usuario'       => 'required',
+            
+        ]);
+
+        $pago = Pago::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('pago') ];
+    
     }
 
     /**
@@ -36,7 +51,8 @@ class PagoController extends Controller
      */
     public function show(Pago $pago)
     {
-        //
+        return $pago;
+
     }
 
     /**
@@ -48,7 +64,18 @@ class PagoController extends Controller
      */
     public function update(Request $request, Pago $pago)
     {
-        //
+        $validate = request()->validate([
+
+            'tx_observaciones' => 'required',
+            'id_status'        => 'required',
+            'id_usuario'       => 'required',
+                        
+        ]);
+        
+        $pago = $pago->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('pago')];
+    
     }
 
     /**
@@ -59,6 +86,9 @@ class PagoController extends Controller
      */
     public function destroy(Pago $pago)
     {
-        //
+        $pago = $pago->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('pago')];
+
     }
 }

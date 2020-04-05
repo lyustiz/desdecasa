@@ -18,8 +18,8 @@ class CreateZonaTable extends Migration
 			$table->integer('co_zona')->unique();
 			$table->string('nb_zona', 30);
 			$table->integer('id_ciudad');
-			$table->integer('nu_latitud')->nullable();
-			$table->integer('nu_longitud')->nullable();
+			$table->float('nu_latitud', 2, 7)->nullable();
+			$table->float('nu_longitud', 2, 7)->nullable();
 			$table->string('tx_observaciones', 100)->nullable();
 			$table->integer('id_status');
 			$table->integer('id_usuario');

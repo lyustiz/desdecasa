@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comercio extends Model
 {
+    protected $table 	= 'comercio';
+    
     protected $fillable =   [
                             'nb_cliente',
                             'nb_fiscal',
@@ -28,7 +30,7 @@ class Comercio extends Model
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id','created_at','updated_at'];
+    protected $hidden   = ['created_at','updated_at'];
 
     
 
@@ -103,7 +105,7 @@ class Comercio extends Model
 
     public function foto(){
 
-        return $this->HasMany('App\Models\Foto', 'id_foto');
+        return $this->HasMany('App\Models\Foto', 'id');
 
     }
 
@@ -127,7 +129,7 @@ class Comercio extends Model
 
     public function comercioCategoria(){
 
-        return $this->HasMany('App\Models\ComercioCategoria', 'id_comercio_categoria');
+        return $this->HasMany('App\Models\ComercioCategoria', 'id');
 
     }
 }

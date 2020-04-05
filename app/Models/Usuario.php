@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Usuario extends Model
+class Usuario extends Authenticatable implements MustVerifyEmail
 {
+    use Notifiable;
+
+    protected $table 	= 'usuario';
+    
     protected $fillable =   [
                             'nb_nombres',
                             'nb_apellidos',
@@ -14,16 +20,26 @@ class Usuario extends Model
                             'tx_email',
                             'tx_nuip',
                             'tx_observaciones',
-                            'token',
+                            'remember_token',
+                            'api_token',
                             'id_status',
                             'id_usuarioe',
                             'created_at',
                             'updated_at'
                             ];
 
-    protected $hidden   = ['id', 'created_at', 'updated_at'];
+    protected $hidden   = [ 'password', 'remember_token', 'created_at', 'updated_at'];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
     
+
     public function status(){
     
         return $this->BelongsTo('App\Models\Status', 'id_status');

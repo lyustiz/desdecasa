@@ -14,7 +14,11 @@ class PaisController extends Controller
      */
     public function index()
     {
-        //
+        $paises = Pais::with(['status'])
+                      ->get();
+        
+        return $paises;
+
     }
 
     /**
@@ -25,7 +29,21 @@ class PaisController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+           'nb_pais'            => 'required',
+           'co_pais'            => 'required',
+           'tx_iso'             => 'required',
+           'tx_observaciones'   => 'required',
+           'id_status'          => 'required',
+           'id_usuario'         => 'required',
+            
+        ]);
+
+        $pais = Pais::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('pais') ];
+    
     }
 
     /**
@@ -36,7 +54,8 @@ class PaisController extends Controller
      */
     public function show(Pais $pais)
     {
-        //
+        return $pais;
+
     }
 
     /**
@@ -48,7 +67,21 @@ class PaisController extends Controller
      */
     public function update(Request $request, Pais $pais)
     {
-        //
+        $validate = request()->validate([
+
+           'nb_pais'            => 'required',
+           'co_pais'            => 'required',
+           'tx_iso'             => 'required',
+           'tx_observaciones'   => 'required',
+           'id_status'          => 'required',
+           'id_usuario'         => 'required',
+
+        ]);
+        
+        $pais = $pais->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('pais')];
+    
     }
 
     /**
@@ -59,6 +92,9 @@ class PaisController extends Controller
      */
     public function destroy(Pais $pais)
     {
-        //
+        $pais = $pais->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('pais')];
+
     }
 }

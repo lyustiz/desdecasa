@@ -9,19 +9,19 @@ export default {
     methods:
     {
         validResponse(response){
-            this.showMensaje(response.data.msj)
+            this.showMessage(response.data.msj)
             this.modal = false;
             this.servicios=response  
             console.log('valid response')   
             this.$emit('closeModal')    
         },
-		showMensaje (message)
+		showMessage (message)
         {
             this.showMsjBar(message, 'success')
         },
         showError (error)
         {
-            console.log('error', error.response)
+            console.log('error', error, error.response)
 
             if(error.hasOwnProperty('response'))
             {
@@ -80,7 +80,7 @@ export default {
                 case 422:
                 for (var idx in error.response.data.errors)
                 {
-                    msj = msj + error.response.data.errors[idx];
+                    msj = msj + ' ' + error.response.data.errors[idx];
                 }
                 break;
 

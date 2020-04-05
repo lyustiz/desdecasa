@@ -33,7 +33,7 @@ export default
         
                 password: [
                     v => !!v || 'La Contraseña es Requerida',
-                    v => v.length > 5 || 'La contraseña debe tener almenos 6 caracteres'
+                    v => !!v && v.length > 7 || 'La contraseña debe tener almenos 6 caracteres'
                 ],
                 password_confirmation: [
                     v => this.form.password === v || 'Las contraseñas no coinciden'

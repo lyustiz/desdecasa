@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Barrio extends Model
 {
+    protected $table 	= 'barrio';
+    
     protected $fillable = [
                             'co_barrio',
                             'nb_barrio',
@@ -19,27 +21,34 @@ class Barrio extends Model
                             'updated_at'
                            ];
     
-    protected $hidden   = ['id','created_at','updated_at'];
+    protected $hidden   = ['created_at','updated_at'];
     
-    public function comuna(){
+    public function scopeComuna($query, $comuna) {
+
+        return $query->where('id_comuna', $comuna);
+
+    }
+    
+    
+    public function comuna() {
 
         return $this->BelongsTo('App\Models\Comuna', 'id_comuna');
 
     }
 
-    public function status(){
+    public function status() {
     
         return $this->BelongsTo('App\Models\Status', 'id_status');
     
     }
 
-    public function usuario(){
+    public function usuario() {
     
         return $this->BelongsTo('App\Models\Usuario', 'id_usuario');
     
     }
 
-    public function comercio(){
+    public function comercio() {
 
         return $this->HasMany('App\Models\Comercio', 'id_comercio');
 

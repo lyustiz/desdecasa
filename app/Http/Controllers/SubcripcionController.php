@@ -14,7 +14,11 @@ class SubcripcionController extends Controller
      */
     public function index()
     {
-        //
+        $subcripcions = Subcripcion::with(['status'])
+                                   ->get();
+        
+        return $subcripcions;
+
     }
 
     /**
@@ -25,7 +29,18 @@ class SubcripcionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'tx_observaciones' => 'required',
+            'id_status' => 'required',
+            'id_usuario' => 'required',
+            
+        ]);
+
+        $subcripcion = Subcripcion::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('subcripcion') ];
+    
     }
 
     /**
@@ -36,7 +51,8 @@ class SubcripcionController extends Controller
      */
     public function show(Subcripcion $subcripcion)
     {
-        //
+        return $subcripcion;
+
     }
 
     /**
@@ -48,7 +64,18 @@ class SubcripcionController extends Controller
      */
     public function update(Request $request, Subcripcion $subcripcion)
     {
-        //
+        $validate = request()->validate([
+            
+            'tx_observaciones' => 'required',
+            'id_status' => 'required',
+            'id_usuario' => 'required',
+
+        ]);
+        
+        $subcripcion = $subcripcion->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('subcripcion')];
+    
     }
 
     /**
@@ -59,6 +86,9 @@ class SubcripcionController extends Controller
      */
     public function destroy(Subcripcion $subcripcion)
     {
-        //
+        $subcripcion = $subcripcion->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('subcripcion')];
+
     }
 }

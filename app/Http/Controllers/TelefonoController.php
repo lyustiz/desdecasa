@@ -14,7 +14,11 @@ class TelefonoController extends Controller
      */
     public function index()
     {
-        //
+        $telefonos = Telefono::with(['status'])
+                        ->get();
+        
+        return $telefonos;
+
     }
 
     /**
@@ -25,7 +29,22 @@ class TelefonoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'tx_telefono'       => 'required',
+            'id_comercio'       => 'required',
+            'id_tipo_telefono'  => 'required',
+            'bo_principal'      => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+
+        $telefono = Telefono::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('telefono') ];
+    
     }
 
     /**
@@ -36,7 +55,8 @@ class TelefonoController extends Controller
      */
     public function show(Telefono $telefono)
     {
-        //
+        return $telefono;
+
     }
 
     /**
@@ -48,7 +68,22 @@ class TelefonoController extends Controller
      */
     public function update(Request $request, Telefono $telefono)
     {
-        //
+        $validate = request()->validate([
+
+            'tx_telefono'       => 'required',
+            'id_comercio'       => 'required',
+            'id_tipo_telefono'  => 'required',
+            'bo_principal'      => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required'
+            
+        ]);
+        
+        $telefono = $telefono->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('telefono')];
+    
     }
 
     /**
@@ -59,6 +94,9 @@ class TelefonoController extends Controller
      */
     public function destroy(Telefono $telefono)
     {
-        //
+        $telefono = $telefono->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('telefono')];
+
     }
 }

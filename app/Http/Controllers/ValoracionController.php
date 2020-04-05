@@ -14,7 +14,11 @@ class ValoracionController extends Controller
      */
     public function index()
     {
-        //
+        $valoraciones = Valoracion::with(['status'])
+                                  ->get();
+        
+        return $valoraciones;
+
     }
 
     /**
@@ -25,7 +29,20 @@ class ValoracionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'id_comercio'      => 'required',
+            'nu_valoracion'    => 'required',
+            'tx_observaciones' => 'required',
+            'id_status'        => 'required',
+            'id_usuario'       => 'required',
+            
+        ]);
+
+        $valoracion = Valoracion::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('valoracion') ];
+    
     }
 
     /**
@@ -36,7 +53,8 @@ class ValoracionController extends Controller
      */
     public function show(Valoracion $valoracion)
     {
-        //
+        return $valoracion;
+
     }
 
     /**
@@ -48,7 +66,20 @@ class ValoracionController extends Controller
      */
     public function update(Request $request, Valoracion $valoracion)
     {
-        //
+        $validate = request()->validate([
+
+            'id_comercio'      => 'required',
+            'nu_valoracion'    => 'required',
+            'tx_observaciones' => 'required',
+            'id_status'        => 'required',
+            'id_usuario'       => 'required',
+            
+        ]);
+        
+        $valoracion = $valoracion->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('valoracion')];
+    
     }
 
     /**
@@ -59,6 +90,9 @@ class ValoracionController extends Controller
      */
     public function destroy(Valoracion $valoracion)
     {
-        //
+        $valoracion = $valoracion->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('valoracion')];
+
     }
 }

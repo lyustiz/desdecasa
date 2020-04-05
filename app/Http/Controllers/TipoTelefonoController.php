@@ -14,7 +14,11 @@ class TipoTelefonoController extends Controller
      */
     public function index()
     {
-        //
+        $tipoTelefonos = TipoTelefono::with(['status'])
+                        ->get();
+        
+        return $tipoTelefonos;
+
     }
 
     /**
@@ -25,7 +29,20 @@ class TipoTelefonoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'nb_tipo_telefono'  => 'required',
+            'tx_icono'          => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+
+        $tipoTelefono = TipoTelefono::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('tipoTelefono') ];
+    
     }
 
     /**
@@ -36,7 +53,8 @@ class TipoTelefonoController extends Controller
      */
     public function show(TipoTelefono $tipoTelefono)
     {
-        //
+        return $tipoTelefono;
+
     }
 
     /**
@@ -48,7 +66,20 @@ class TipoTelefonoController extends Controller
      */
     public function update(Request $request, TipoTelefono $tipoTelefono)
     {
-        //
+        $validate = request()->validate([
+
+            'nb_tipo_telefono'  => 'required',
+            'tx_icono'          => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+
+        ]);
+        
+        $tipoTelefono = $tipoTelefono->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('tipoTelefono')];
+    
     }
 
     /**
@@ -59,6 +90,9 @@ class TipoTelefonoController extends Controller
      */
     public function destroy(TipoTelefono $tipoTelefono)
     {
-        //
+        $tipoTelefono = $tipoTelefono->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('tipoTelefono')];
+
     }
 }

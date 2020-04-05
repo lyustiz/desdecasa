@@ -45,30 +45,41 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
+import { mapGetters, mapActions } from 'vuex';
 import ListCategoria from '@components/categoria/ListCategoria';
 import ListPublicidad from '@components/publicidad/ListPublicidad';
 
+import AppData from '@mixins/AppData';
+
 export default {
-    components: { 
+    mixins: [AppData],
+    components: 
+    { 
         'list-categoria': ListCategoria,
         'list-publicidad': ListPublicidad,
     },
-    computed: {
+    created()
+    {
+        this.apiCategorias();
+        this.apiZonas();
+    },
+    computed: 
+    {
         ...mapGetters(['showFilter']),
         small()
         {
             return this.$vuetify.breakpoint.xsOnly
         },
-
     },
     data () 
 	{
         return {
-            logo: require('~/assets/img/logo.jpg'),
+            logo: require('@images/logo.jpg'),
         }
     },
+    methods: {
+        ...mapActions(['apiCategorias', 'apiZonas'])
+    }
 }
 </script>
 
@@ -77,7 +88,7 @@ export default {
 .title-banner {
     background-repeat: no-repeat;
     background-color: white;
-    background-size: contain; 
+    background-size: 100% 100%; 
     min-height: 10vh;
 }
 

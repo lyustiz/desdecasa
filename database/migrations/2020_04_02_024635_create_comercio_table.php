@@ -15,8 +15,8 @@ class CreateComercioTable extends Migration
     {
         Schema::create('comercio', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('nb_cliente', 30);
-			$table->string('nb_fiscal', 30);
+			$table->string('nb_cliente', 100);
+			$table->string('nb_fiscal', 100);
 			$table->string('tx_nit', 12)->nullable();
 			$table->string('tx_descripcion', 200)->nullable();
 			$table->integer('id_departamento');
@@ -27,8 +27,8 @@ class CreateComercioTable extends Migration
 			$table->string('tx_direccion', 100)->nullable();
 			$table->integer('id_tipo_comercio');
 			$table->integer('id_tipo_pago');
-			$table->integer('nu_latitud')->nullable();
-			$table->integer('nu_longitud')->nullable();
+			$table->float('nu_latitud', 2, 7)->nullable();
+			$table->float('nu_longitud', 2, 7)->nullable();
 			$table->string('tx_observaciones', 100)->nullable();
 			$table->integer('id_status');
 			$table->integer('id_usuario');

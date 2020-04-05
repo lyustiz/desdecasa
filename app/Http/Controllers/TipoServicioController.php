@@ -14,7 +14,11 @@ class TipoServicioController extends Controller
      */
     public function index()
     {
-        //
+        $tipoServicios = TipoServicio::with(['status'])
+                        ->get();
+        
+        return $tipoServicios;
+
     }
 
     /**
@@ -25,7 +29,19 @@ class TipoServicioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+
+            'nb_tipo_servicio'  => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+
+        $tipoServicio = TipoServicio::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('tipoServicio') ];
+    
     }
 
     /**
@@ -36,7 +52,8 @@ class TipoServicioController extends Controller
      */
     public function show(TipoServicio $tipoServicio)
     {
-        //
+        return $tipoServicio;
+
     }
 
     /**
@@ -48,7 +65,19 @@ class TipoServicioController extends Controller
      */
     public function update(Request $request, TipoServicio $tipoServicio)
     {
-        //
+        $validate = request()->validate([
+
+            'nb_tipo_servicio'  => 'required',
+            'tx_observaciones'  => 'required',
+            'id_status'         => 'required',
+            'id_usuario'        => 'required',
+            
+        ]);
+        
+        $tipoServicio = $tipoServicio->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('tipoServicio')];
+    
     }
 
     /**
@@ -59,6 +88,9 @@ class TipoServicioController extends Controller
      */
     public function destroy(TipoServicio $tipoServicio)
     {
-        //
+        $tipoServicio = $tipoServicio->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('tipoServicio')];
+
     }
 }

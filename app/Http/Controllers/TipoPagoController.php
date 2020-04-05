@@ -14,7 +14,11 @@ class TipoPagoController extends Controller
      */
     public function index()
     {
-        //
+        $tipoPagos = TipoPago::with(['status'])
+                               ->get();
+        
+        return $tipoPagos;
+
     }
 
     /**
@@ -25,7 +29,21 @@ class TipoPagoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = request()->validate([
+            
+            'nb_tipo_pago'     => 'required',
+            'id_comercio'      => 'required',
+            'tx_icono'         => 'required',
+            'tx_observaciones' => 'required',
+            'id_status'        => 'required',
+            'id_usuario'       => 'required',
+            
+        ]);
+
+        $tipoPago = TipoPago::create($request->all());
+
+        return [ 'msj' => 'Registro Agregado Correctamente', compact('tipoPago') ];
+    
     }
 
     /**
@@ -36,7 +54,8 @@ class TipoPagoController extends Controller
      */
     public function show(TipoPago $tipoPago)
     {
-        //
+        return $tipoPago;
+
     }
 
     /**
@@ -48,7 +67,21 @@ class TipoPagoController extends Controller
      */
     public function update(Request $request, TipoPago $tipoPago)
     {
-        //
+        $validate = request()->validate([
+            
+            'nb_tipo_pago'     => 'required',
+            'id_comercio'      => 'required',
+            'tx_icono'         => 'required',
+            'tx_observaciones' => 'required',
+            'id_status'        => 'required',
+            'id_usuario'       => 'required',
+            
+        ]);
+        
+        $tipoPago = $tipoPago->update($request->all());
+
+        return [ 'msj' => 'Registro Editado' , compact('tipoPago')];
+    
     }
 
     /**
@@ -59,6 +92,9 @@ class TipoPagoController extends Controller
      */
     public function destroy(TipoPago $tipoPago)
     {
-        //
+        $tipoPago = $tipoPago->delete();
+ 
+        return [ 'msj' => 'Registro Eliminado' , compact('tipoPago')];
+
     }
 }
