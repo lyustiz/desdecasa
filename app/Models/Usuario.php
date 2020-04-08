@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Usuario extends Authenticatable implements MustVerifyEmail
+class Usuario extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
     use Notifiable;
 
@@ -14,21 +15,21 @@ class Usuario extends Authenticatable implements MustVerifyEmail
     
     protected $fillable =   [
                             'nb_nombres',
-                            'nb_apellidos',
                             'nb_usuario',
                             'password',
                             'tx_email',
-                            'tx_nuip',
+                            'tx_sexo',
+                            'tx_foto',
                             'tx_observaciones',
                             'remember_token',
                             'api_token',
                             'id_status',
-                            'id_usuarioe',
+                            'id_usuario',
                             'created_at',
                             'updated_at'
                             ];
 
-    protected $hidden   = [ 'password', 'remember_token', 'created_at', 'updated_at'];
+    protected $hidden   = [ 'password', 'verification', 'remember_token', 'id_usuario', 'api_token', 'created_at', 'updated_at'];
 
     /**
      * The attributes that should be cast to native types.
@@ -38,7 +39,16 @@ class Usuario extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     public function status(){
     

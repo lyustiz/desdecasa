@@ -25,7 +25,7 @@
 
         <!--Menu -->
         <!--Menu Responsive -->
-        <div v-if="resize">
+        <template v-if="resize">
             <v-menu bottom left>
 
                 <template v-slot:activator="{ on }">
@@ -41,57 +41,65 @@
                 </v-list>
 
             </v-menu>
-        </div>
+        </template>
         
         <!--Menu Desktop -->
-        <div v-else>
+        <template v-else>
             <v-btn text v-for="(menu, i) in menus" :key="i" @click="navegateTo(menu.route)">
                 {{ menu.name }}
             </v-btn>
-        </div>
+        </template>
 
         <div class="flex-grow-1"></div>
 
-        <!--Usuario
-        <app-user></app-user>
-       
-        Ayuda
-        <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on">
-                    <v-icon>help</v-icon>
-                </v-btn>
-            </template>
-            <span>Ayuda</span>
-        </v-tooltip>
+        <!-- Logged -->
+        <template v-if="auth">
+            
+        
+            <!-- Ayuda -->
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn small icon v-on="on">
+                        <v-icon>help</v-icon>
+                    </v-btn>
+                </template>
+                <span>Ayuda</span>
+            </v-tooltip>
 
-        -Notificaciones 
-        <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on">
-                    <v-icon>notification_important</v-icon>
-                </v-btn>
-            </template>
-            <span>Notificaciones</span>
-        </v-tooltip>-->
+            <!-- Notificaciones -->
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn small icon v-on="on">
+                        <v-icon>notification_important</v-icon>
+                    </v-btn>
+                </template>
+                <span>Notificaciones</span>
+            </v-tooltip>
 
-        <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-                <v-btn small text v-on="on" @click="navegateTo('/registro')">
-                    <v-icon>mdi-account-plus</v-icon> Registro
-                </v-btn>
-            </template>
-            <span>Registro</span>
-        </v-tooltip>
+            <!-- User -->
+            <app-user></app-user>
+        </template>
 
-        <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-                <v-btn small text v-on="on" @click="navegateTo('/login')">
-                    <v-icon>mdi-login-variant</v-icon> Ingresar
-                </v-btn>
-            </template>
-            <span>Ingresar</span>
-        </v-tooltip>
+        <!-- UnLogged -->
+        <template v-else>
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn small text v-on="on" @click="navegateTo('/registro')">
+                        <v-icon>mdi-account-plus</v-icon> Registro
+                    </v-btn>
+                </template>
+                <span>Registro</span>
+            </v-tooltip>
+
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn small text v-on="on" @click="navegateTo('/login')">
+                        <v-icon>mdi-login-variant</v-icon> Ingresar
+                    </v-btn>
+                </template>
+                <span>Ingresar</span>
+            </v-tooltip>
+        </template>
 
          <v-app-bar-nav-icon @click="toggleFilter()" v-show="resize && isWelcome" ></v-app-bar-nav-icon>
 
@@ -103,26 +111,43 @@
     export default {
         props: ['drawer','miniVariant'],
         computed: {
+            auth()
+            {
+                return this.$store.getters['getAuth']
+            },
+            
             resize()
             {
                 return this.$store.getters['getResize']
             },
+
             isWelcome()
             {
                 return this.$route.name  == 'welcome'
+            },
+            menus()
+            {
+                let menus = [
+                    { name: 'Conocenos', route: '/conocenos'},
+                    { name: 'Servicios', route: '/servicios'},
+                ];
+                
+                if (this.$store.getters['getAuth'])
+                {
+                    menus.push({ name: 'Cuenta', route: '/cuenta'})
+                    // administrator menus.push({ name: 'Admin', route: '/home'})
+                }
+                return menus;
             }
+        },
+        created(){
+
+            
         },
         data(){
             return {
                 loading : false,
                 logo: require('~/assets/img/logo.jpg'),
-                menus: [
-                    { name: 'Conocenos', route: '/conocenos'},
-                    { name: 'Pagina', route: '/page'},
-                    { name: 'Servicios', route: '/servicios'},
-                    { name: 'Cuenta', route: '/cuenta'},
-                    { name: 'Admin', route: '/home'},
-                ]
             }
         },
         methods:{
@@ -135,7 +160,7 @@
                 axios.post('logout')
                 .then(response =>{
                     localStorage.clear()
-                    window.location.href = response.request.responseURL;
+                    navegateTo('/');
                 })
                 .catch(error =>{
                     console.log('error', error)

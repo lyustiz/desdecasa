@@ -40,8 +40,8 @@ export default {
 
 components:{
     'password-form': PasswordForm,
-    'info-form': InfoForm,
-    'email-form': EmailForm
+    'info-form':     InfoForm,
+    'email-form':    EmailForm
 },
 props:
 {
@@ -53,7 +53,7 @@ props:
 data(){
     return {
         data: null,
-        tab: null
+        tab: 2
     }
 }
 }

@@ -9,7 +9,7 @@ class Comercio extends Model
     protected $table 	= 'comercio';
     
     protected $fillable =   [
-                            'nb_cliente',
+                            'nb_comercio',
                             'nb_fiscal',
                             'tx_nit',
                             'tx_descripcion',
@@ -87,19 +87,19 @@ class Comercio extends Model
 
     public function telefono(){
 
-        return $this->HasMany('App\Models\Telefono', 'id_telefono');
+        return $this->HasMany('App\Models\Telefono', 'id');
 
     }
 
     public function horario(){
 
-        return $this->HasMany('App\Models\Horario', 'id_horario');
+        return $this->HasMany('App\Models\Horario', 'id');
 
     }
 
     public function contacto(){
 
-        return $this->HasMany('App\Models\Contacto', 'id_contacto');
+        return $this->HasMany('App\Models\Contacto', 'id');
 
     }
 
@@ -111,19 +111,19 @@ class Comercio extends Model
 
     public function pago(){
 
-        return $this->HasMany('App\Models\Pago', 'id_pago');
+        return $this->HasMany('App\Models\Pago', 'id');
 
     }
 
     public function subcripcion(){
 
-        return $this->HasMany('App\Models\Subcripcion', 'id_subcripcion');
+        return $this->HasMany('App\Models\Subcripcion', 'id');
 
     }
 
     public function valoracion(){
 
-        return $this->HasMany('App\Models\Valoracion', 'id_valoracion');
+        return $this->HasMany('App\Models\Valoracion', 'id');
 
     }
 

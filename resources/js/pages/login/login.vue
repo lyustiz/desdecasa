@@ -25,7 +25,7 @@
                         label="Usuario"
                         hint="Indique el usuario Registrado"
                         type="text"
-                        v-model="form.user"
+                        v-model="form.nb_usuario"
                         :rules="rules.required"
                         dense
                         rounded
@@ -87,14 +87,6 @@
                             <span>Ingresar con Twitter</span>
                         </v-tooltip>     
 
-<!-- 
-                    <v-col>ddd</v-col> -->
-                    
-                <!-- <div class="col-12">
-                    <v-flex xl-12 class="mx-2">
-                        
-                    </v-flex>  
-                </div>       -->
             </v-card-actions>
            
         </v-card>
@@ -118,7 +110,7 @@ export default {
 	{
         return {
             form:{
-                user:        '',
+                nb_usuario:        '',
                 password:    '',
             },
             show: false,
@@ -137,11 +129,10 @@ export default {
             this.$store.dispatch('login', this.form)
             .then(response => {
               
-                if(response.status == 201 && response.statusText == "Created")
+                if(response.status == 200)
                 {
                     this.$refs.registerForm.reset();
-                    this.showMessage(`Se ha registrado Corectamente. Ingrese en su correo para activar el usuario `);
-                    this.$router.push('account');
+                    this.$router.push('/');
                 }
 
             }).catch(error =>

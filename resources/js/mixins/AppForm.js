@@ -1,30 +1,10 @@
 import AppFormat  from './AppFormat';
 import AppRules   from './AppRules'
-import AppSelect  from './AppSelect'
 import AppMessage from './AppMessage'
 
 export default 
 {
-    mixins: [AppFormat, AppRules, AppSelect, AppMessage],
-
-    props: {
-        item: {
-            type: Object,
-            default: null
-        },
-        action: {
-            type: String,
-            default: null
-        },
-		title: {
-            type: String,
-            default: null
-        },
-        clear:{
-            type: Boolean,
-            default: false
-        },
-	},
+    mixins: [AppFormat, AppRules, AppMessage],
 
     data() 
     {
@@ -33,35 +13,28 @@ export default
             valid:      true,
             calendar:   false,
             dates:      {},
-            loading:    true
+            picker:     false,
+            loading:    true,
+            item:       null
         }
     },
 
     created()
     {
-        this.fillSelects()
-
-        this.setDataForm(this.action)
-    },
-
-    watch: 
-    {
-        action (value)
-        {
-            this.setDataForm(value)
-        },
+        //this.fillSelects()
+       // this.mapForm();
     },
 
 	computed: 
 	{
         fullUrl() 
 		{
-            return this.$App.baseUrl + this.resource;
+            return this.$App.baseUrl + 'v1/' + this.resource;
         },
 		
         fullUrlId() 
 		{
-            return this.fullUrl + '/' + this.item['id_' + this.resource]
+            return this.fullUrl + '/' + this.item['id']
         },
     },
 
@@ -89,20 +62,13 @@ export default
                 }
             }else
             {
-               this.reset()
+               this.clear()
             }
         },
-        
-        setDataForm(action)
+
+        fetch()
         {
-            if(this.action == 'upd')
-            {
-                this.mapForm()
-            }
-            else if(this.action == 'ins')
-            {
-                this.reset()
-            }
+
         },
 
 		store() 
@@ -131,6 +97,7 @@ export default
             if (!this.$refs.form.validate())  return 
 
             this.loading = true;
+            this.form.id_usuario = 0;
             
             axios.put(this.fullUrlId, this.form)
             .then(response => 
@@ -149,35 +116,37 @@ export default
         
         reset()
         {
-            if(this.action == 'upd')
-            {
-                this.mapForm()
-            }
-            else
-            {
-                for(var key in this.form)
-                {
-                    this.form[key] = null;
-                }
 
-                for(var key in this.dates)
-                {
-                    this.dates[key] = null;
-                }
-                
-                if(this.$refs.form)
-                {
-                    this.$refs.form.reset();
-                }
+            for(var key in this.dates)
+            {
+                this.dates[key] = '';
             }
-            this.form.id_usuario = this.idUser
             
+            if(this.$refs.form)
+            {
+                this.$refs.form.reset();
+            }
+            
+            this.mapForm();
+
+            this.form.id_usuario = this.idUser
         },
 		
-        cancel()
+        clear()
         {
-            this.$emit('closeModal');
-            this.reset();
+            for(var key in this.dates)
+            {
+                this.dates[key] = '';
+            }
+
+            for(var key in this.form)
+            {
+                this.form[key] = '';
+            }
+
+            this.$refs.form.resetValidation();
+
+            this.form.id_usuario = this.idUser
         },
     }
 }

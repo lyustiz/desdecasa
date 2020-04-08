@@ -1,4 +1,5 @@
 <template>
+    <v-form v-model="valid" ref="form" >
     <v-card class="mx-auto" max-width="400">
         <v-card-title >
             Informacion del Comercio
@@ -10,9 +11,9 @@
                     color="cyan darken-3"
                     prepend-inner-icon="mdi-gavel"
                     label="Nit"
-                    type="text"
+                    hint=""
                     :rules="rules.required"
-                    v-model="data"
+                    v-model="form.tx_nit"
                     dense
                     outlined
                     filled >
@@ -26,7 +27,7 @@
                     label="Nombre Fiscal"
                     type="text"
                     :rules="rules.required"
-                    v-model="data"
+                    v-model="form.nb_fiscal"
                     dense
                     outlined
                     filled >
@@ -40,7 +41,7 @@
                     label="Nombre Comercial"
                     type="text"
                     :rules="rules.required"
-                    v-model="data"
+                    v-model="form.nb_comercio"
                     dense
                     outlined
                     filled >
@@ -51,8 +52,8 @@
                 <v-select
                     label="Tipo Comercio*"
                     prepend-inner-icon="mdi-storefront-outline"
-                    :rules="rules.required"
-                    v-model="select" 
+                    :rules="rules.select"
+                    v-model="form.id_tipo_comercio" 
                     :items="selects.tipoComercio"
                     item-value="id"
                     item-text="nb_tipo_comercio"
@@ -66,8 +67,8 @@
                 <v-select
                     prepend-inner-icon="credit_card"
                     label="Medios de Pago*"
-                    v-model="pago" 
-                    :rules="rules.required"
+                    v-model="form.id_tipo_pago" 
+                    :rules="rules.select"
                     :items="selects.tipoPago"
                     item-value="id"
                     item-text="nb_tipo_pago"
@@ -83,6 +84,8 @@
                     prepend-inner-icon="mdi-calendar-clock"
                     label="Horarios"
                     hint="Indique horarios de entrada y salida"
+                    v-model="form.tx_horarios"
+                    :rules="rules.required"
                     dense
                     outlined
                     filled
@@ -95,6 +98,7 @@
                     prepend-inner-icon="mdi-wallet-travel"
                     label="Actividad Comercial"
                     hint="Detalle la Actvidad Comercial de la Empresa"
+                    v-model="form.tx_horarios"
                     dense
                     outlined
                     filled
@@ -105,24 +109,49 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn small fab color="amber" dark> <v-icon>mdi-restore</v-icon></v-btn>
-                <v-btn small fab color="primary" dark> <v-icon>mdi-content-save</v-icon></v-btn>
+                <v-btn small dark fab color="amber" @click="cancel()"> <v-icon>mdi-restore</v-icon></v-btn>
+                <v-btn small dark fab color="primary" @click="store()"> <v-icon>mdi-content-save</v-icon></v-btn>
           </v-card-actions>
-        </v-card>
-
+          <pre>{{$data}}</pre>  
+    </v-card>
+    </v-form>
 </template>
 
 <script>
 
-import AppRules from "~/mixins/AppRules"; 
+import AppForm from '@mixins/AppForm'
+import AppData from '@mixins/AppData'
 
 export default {
-     mixins:[AppRules],
+    
+    mixins: [ AppForm, AppData ],
+
+    created() 
+    {
+        this.fetch()
+        
+    },
+    computed: 
+    {
+        getIduser()
+        {
+            return 20 // this.$store.getters['getUserid']
+        }
+    },
+
     data(){
         return{
-            data: null,
-            pago: null,
-            select: null,
+            resource: 'comercio', 
+            form: {
+                nb_comercio:       '',
+                nb_fiscal:        '',
+                tx_nit:           '',
+                tx_descripcion:   '',
+                id_tipo_comercio: '',
+                id_tipo_pago:     '',
+                tx_horarios:      '',
+                id_usuario:       '',
+            },
             selects: {
                 tipoComercio: [
                     { id: 1, nb_tipo_comercio: 'Sede Física'},
@@ -140,7 +169,59 @@ export default {
             },
             
         }
+    },
+    methods:
+    {
+        fetch()
+        {
+            this.form.id_usuario = this.getIduser;
+
+            axios.get('/api/v1/' + this.resource + '/usuario/' + this.getIduser)
+			.then( response =>
+			{
+                this.item = response.data;
+                this.mapForm()
+                this.setRelations()
+			})
+            .catch( error =>
+            {
+              console.log(error)
+            })
+            
+        },
+
+        store()
+        {
+            if (!this.$refs.form.validate())  return 
+
+            this.loading = true;
+            this.form.id_usuario = this.getIduser;
+            
+            axios.post('/api/v1/' + this.resource, this.form)
+			.then( response =>
+			{
+                this.showMessage(response.data.msj)
+			})
+            .catch( error =>
+            {
+                this.showError(error);
+            })
+            .finally( () =>
+            {
+                this.loading = false
+            }); 
+    
+        },
+
+        setRelations()
+        {
+            if(this.item)
+            {
+                this.form.tx_horarios = this.item.horario
+            }
+        }
     }
+    
 }
 </script>
 

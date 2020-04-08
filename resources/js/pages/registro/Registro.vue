@@ -25,7 +25,7 @@
                         prepend-inner-icon="mdi-account"
                         label="Nombre Usuario"
                         type="text"
-                        v-model="form.user"
+                        v-model="form.nb_usuario"
                         :rules="rules.required"
                         dense
                         rounded
@@ -144,7 +144,7 @@ export default {
 	{
         return {
             form:{
-                user:        '',
+                user:  '',
                 email:       '',
                 password:    '',
                 passwordRew: ''

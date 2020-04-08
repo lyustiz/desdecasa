@@ -21,7 +21,15 @@ export default {
         },
         showError (error)
         {
-            console.log('error', error, error.response)
+            
+            if(!error)
+            {
+                this.showMsjBar( 'Ha ocurrido un error, Consulte al administrador')
+                return false
+            }
+            
+            console.log('error', error, error ? error.response : 'no response'   )
+
 
             if(error.hasOwnProperty('response'))
             {

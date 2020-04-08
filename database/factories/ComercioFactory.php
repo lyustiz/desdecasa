@@ -10,7 +10,7 @@ use Faker\Generator as Faker;
 $factory->define(Comercio::class, function (Faker $faker) {
     $company = $faker->Company;
     return [
-        'nb_cliente'       => $company,
+        'nb_comercio'      => $company,
         'nb_fiscal'        => $company,
         'tx_nit'           => $faker->bothify('########-#'),
         'tx_descripcion'   => $faker->realText($maxNbChars = 50, $indexSize = 2),

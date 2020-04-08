@@ -65,11 +65,18 @@ Route::group(['prefix'=>'v1'], function() {
     Route::apiResource('/subcripcion',      'SubcripcionController');
     Route::apiResource('/valoracion',       'ValoracionController');
 
-    Route::get('/barrio/zona/{id_zona}', 'BarrioController@barrioZona');
+    Route::get('/barrio/zona/{id_zona}',             'BarrioController@barrioZona');
 
     Route::get('/comercio/categoria/{id_categoria}', 'ComercioController@comercioCategoria');
-    Route::get('/comercio/barrio/{id_barrio}', 'ComercioController@comercioBarrio');
-    Route::get('/comercio/filters/{filters}', 'ComercioController@comercioFilters');
+    Route::get('/comercio/barrio/{id_barrio}',       'ComercioController@comercioBarrio');
+    Route::get('/comercio/filters/{filters}',        'ComercioController@comercioFilters');
+    Route::get('/comercio/usuario/{id_usuario}',     'ComercioController@comercioUsuario');
+
+    Route::post('/comercio/info',                   'ComercioController@comercioInfo');
+
+    Route::put('/usuario/email/{usuario}',           'UsuarioController@updateEmail');
+    Route::put('/usuario/password/{usuario}',        'UsuarioController@updatePassword');
+
     
 
 });

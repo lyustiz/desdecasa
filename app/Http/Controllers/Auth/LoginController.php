@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Symfony\Component\HttpFoundation\Request;
+use \Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTFactory;
+
+use JWTAuth;
+use Cookie;
 
 class LoginController extends Controller
 {
@@ -42,4 +48,62 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+        try {
+            if (! $token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'invalid_credentials'], 400);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'could_not_create_token'], 500);
+        }
+        return response()->json(compact('token'));
+    }
+
+    public function login(Request $request)
+    {
+        
+        if (Auth::attempt([
+                'nb_usuario' => $request->get('nb_usuario'),
+                'password'   => $request->get('password')
+            ])) 
+        {
+            
+            $user    = Auth::user();
+            
+            $payload = JWTFactory::sub($user->id_usuario)->make();
+            
+            $token   = JWTAuth::encode($payload);
+            
+            $m       = Cookie::queue('AUTH-TOKEN', $token->get(), 15);
+
+            return [ 
+                'auth' => $token->get(),
+                'user' => $user,
+                'expires_in' => JWTFactory::getTTL() * 60
+            ];
+        }
+        else
+        {
+            return response('Usuario o Contraseña Invalida', 403) ;
+        }
+
+    }
+
+    public function logout(Request $request)
+    {
+        auth()->logout();
+
+        JWTAuth::parseToken()->refresh();
+        
+        return redirect('/');
+    }
+
+    public function refresh()
+    {
+        return $this->respondWithToken(auth()->refresh());
+    }
+
 }

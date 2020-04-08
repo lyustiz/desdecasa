@@ -56,17 +56,12 @@ export default {
     },
     created()
     {
-        // this.expand(3)
+         this.expand(2)
     },
     data()
     {
         return {
-            items: [
-                        { title: 'Expand' },
-                        { title: 'Click Me' },
-                        { title: 'Click Me' },
-                        { title: 'Click Me 2' },
-                    ],
+
             cardCols: 3,
             cardHeight: 180,
             display: 'd-block',

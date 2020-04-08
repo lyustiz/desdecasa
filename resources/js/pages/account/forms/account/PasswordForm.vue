@@ -1,4 +1,5 @@
 <template>
+    <v-form v-model="valid" ref="form" >
     <v-card class="mx-auto" max-width="400">
          <v-card-title >
             Actualizar Password 
@@ -12,7 +13,8 @@
                         @click:append="show = !show"
                         label="Password Actual"
                         :type="show ? 'text' : 'password'"
-                        v-model="data"
+                        v-model="form.tx_password"
+                        :rules="rules.password"
                         dense
                         outlined 
                         filled >
@@ -24,10 +26,10 @@
                         color="cyan darken-3"
                         prepend-inner-icon="mdi-lock"
                         label="Nuevo password"
-                        type="text"
+                        :type="show ? 'text' : 'password'"
                         hint="Debe contener letras y numeros y una longitud minima de 8 caracteres"
-                        v-model="data"
-                        disabled
+                        v-model="form.tx_new_pass"
+                        :rules="rules.new_password"
                         dense
                         outlined
                         filled  >
@@ -39,9 +41,9 @@
                         color="cyan darken-3"
                         prepend-inner-icon="mdi-lock"
                         label="Reescribir password"
-                        type="text"
-                        v-model="data"
-                        disabled
+                        :type="show ? 'text' : 'password'"
+                        v-model="form.tx_ret_pass"
+                        :rules="rules.ret_password"
                         dense
                         outlined 
                         filled >
@@ -51,18 +53,89 @@
           <v-card-actions>
               <v-spacer></v-spacer>
               
-              <v-btn small fab color="amber" dark> <v-icon>mdi-restore</v-icon></v-btn>
-              <v-btn small fab color="primary" dark> <v-icon>mdi-content-save</v-icon></v-btn>
+              <v-btn small dark fab color="amber" @click="cancel()"> <v-icon>mdi-restore</v-icon></v-btn>
+              <v-btn small dark fab color="primary" @click="update()"> <v-icon>mdi-content-save</v-icon></v-btn>
           </v-card-actions>
         </v-card>
+    </v-form>
 </template>
 
 <script>
+import AppForm from '@mixins/AppForm'
+import AppData from '@mixins/AppData'
+
 export default {
-    data(){
+
+    mixins: [ AppForm, AppData ],
+
+    computed: 
+    {
+        getIduser()
+        {
+            return 20 // this.$store.getters['getUserid']
+        },
+    },
+
+    data()
+    {
         return{
+            resource: 'usuario', 
+            form: {
+                tx_password:  '',
+                tx_new_pass:  '',
+                tx_ret_pass:  '',
+                id_usuario:   ''
+            },
+            rules: {
+                new_password: [
+                    v => !!v || 'La Contraseña es Requerida',
+                    v => !!v && v.length > 7 || 'La contraseña debe tener almenos 6 caracteres'
+                ],
+                ret_password: [
+                    v => this.form.tx_new_pass === v || 'Las contraseñas no coinciden'
+                ],
+            },
             show: false,
-            data: ''
+        }
+    },
+
+    methods: 
+    {
+        update()
+        {
+            if (!this.$refs.form.validate())  return 
+
+            this.loading = true;
+            this.form.id_usuario = this.getIduser;
+            
+            axios.put('/api/v1/' + this.resource + '/password/' + this.getIduser, this.form)
+			.then( response =>
+			{
+                this.showMessage(response.data.msj)
+                this.cancel();
+			})
+            .catch( error =>
+            {
+                this.showError(error);
+            })
+            .finally( () =>
+            {
+                this.loading = false
+            }); 
+    
+        },
+
+        cancel()
+        {
+
+            for(var key in this.form)
+            {
+                this.form[key] = '';
+            }
+            
+            this.$refs.form.resetValidation();
+
+   
         }
     }
 }

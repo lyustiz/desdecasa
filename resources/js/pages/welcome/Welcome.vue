@@ -50,9 +50,10 @@ import ListCategoria from '@components/categoria/ListCategoria';
 import ListPublicidad from '@components/publicidad/ListPublicidad';
 
 import AppData from '@mixins/AppData';
+import AppMessage from '@mixins/AppMessage';
 
 export default {
-    mixins: [AppData],
+    mixins: [AppData, AppMessage],
     components: 
     { 
         'list-categoria': ListCategoria,

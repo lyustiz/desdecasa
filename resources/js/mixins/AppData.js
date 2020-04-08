@@ -1,9 +1,5 @@
-import AppMessage from './AppMessage';
-
 export default 
 {
-    mixins: [ AppMessage ],
-
     methods:
     { 
         getDataList(dataList)

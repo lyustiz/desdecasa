@@ -21,7 +21,7 @@ Vue.component('app', App)
  
 /** Config **/
 Vue.prototype.$App = Object.freeze({
-    title:    'DesdecasaWeb',
+    title:    process.env.MIX_APP_NAME,
     version:  '0.1',
     baseUrl:  '/api/',
     ApiUrl:   '/api/v1/',

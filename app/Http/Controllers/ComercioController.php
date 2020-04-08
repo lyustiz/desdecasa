@@ -16,7 +16,7 @@ class ComercioController extends Controller
     public function index()
     {
         $comercios = Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio:id,nb_barrio'])
-                              ->select('id', 'nb_cliente', 'tx_descripcion', 'id_zona', 'tx_direccion' )
+                              ->select('id', 'nb_comercio', 'tx_descripcion', 'id_zona', 'tx_direccion' )
                               ->where('id_status', 1)
                               ->get();
         
@@ -32,7 +32,7 @@ class ComercioController extends Controller
     public function comercioCategoria($id_categoria)
     {
         $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio'])
-                    ->select('id', 'nb_cliente', 'tx_descripcion', 'id_zona', 'tx_direccion' )
+                    ->select('id', 'nb_comercio', 'tx_descripcion', 'id_zona', 'tx_direccion' )
                     ->whereHas('comercioCategoria', function (Builder $query) use ( $id_categoria ){
                         $query->where('id_categoria', $id_categoria);
                     })
@@ -50,7 +50,7 @@ class ComercioController extends Controller
     public function comercioBarrio($id_barrio)
     {
         $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio:id,nb_barrio'])
-                    ->select('id', 'nb_cliente', 'tx_descripcion', 'id_zona', 'tx_direccion' )
+                    ->select('id', 'nb_comercio', 'tx_descripcion', 'id_zona', 'tx_direccion' )
                     ->where('id_barrio', $id_barrio)
                     ->where('id_status', 1)
                     ->get();
@@ -66,7 +66,7 @@ class ComercioController extends Controller
     public function comercioFilters( array $filters)
     {
         $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio:id,nb_barrio'])
-                    ->select('id', 'nb_cliente', 'tx_descripcion', 'id_zona', 'tx_direccion' )
+                    ->select('id', 'nb_comercio', 'tx_descripcion', 'id_zona', 'tx_direccion' )
                     ->where('id_barrio', $id_barrio)
                     ->where('id_status', 1)
                     ->get();
@@ -74,6 +74,20 @@ class ComercioController extends Controller
         return $barrios;
     }
 
+    /**
+     * Listar Comercio por Categoria     
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function comercioUsuario($id_usuario)
+    {
+        $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio:id,nb_barrio', 'horario:id,nb_horario'])
+                    ->where('id_usuario', $id_usuario)
+                    ->where('id_status', 1)
+                    ->first();
+
+        return $barrios;
+    }
 
 
     /**
@@ -86,7 +100,7 @@ class ComercioController extends Controller
     {
         $validate = request()->validate([
 
-            'nb_cliente'       => 'required',
+            'nb_comercio'       => 'required',
             'nb_fiscal'        => 'required',
             'tx_nit'           => 'required',
             'tx_descripcion'   => 'required',
@@ -113,6 +127,33 @@ class ComercioController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function comercioInfo(Request $request)
+    {
+        $validate = request()->validate([
+
+            'nb_comercio'      => 'required',
+            'nb_fiscal'        => 'required',
+            'tx_nit'           => 'required',
+            'tx_descripcion'   => 'required',
+            'id_tipo_comercio' => 'required',
+            'id_tipo_pago'     => 'required',
+            'id_usuario'       => 'required',
+            
+        ]);
+
+        $comercio = Comercio::create($request->all());
+
+        return [ 'msj' => 'Informacion de Comercio actualizada', compact('comercio') ];
+    
+    }
+
+
+    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Comercio  $comercio
@@ -134,7 +175,7 @@ class ComercioController extends Controller
     {
         $validate = request()->validate([
 
-            'nb_cliente'       => 'required',
+            'nb_comercio'       => 'required',
             'nb_fiscal'        => 'required',
             'tx_nit'           => 'required',
             'tx_descripcion'   => 'required',

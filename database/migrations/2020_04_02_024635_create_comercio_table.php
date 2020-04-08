@@ -15,7 +15,7 @@ class CreateComercioTable extends Migration
     {
         Schema::create('comercio', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('nb_cliente', 100);
+			$table->string('nb_comercio', 100);
 			$table->string('nb_fiscal', 100);
 			$table->string('tx_nit', 12)->nullable();
 			$table->string('tx_descripcion', 200)->nullable();

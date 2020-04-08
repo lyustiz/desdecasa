@@ -27,6 +27,9 @@ export default
                     v => !!v || 'El Correo es Requerido',
                     v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'indicar un email válido'
                 ],
+                email_confirmation: [
+                    v => this.form.tx_new_email === v || 'Los correos no coinciden'
+                ],
                 image:[
                     v => !v || v.size < 2000000 || 'Imagen debe tener menos de 2 MB!',
                 ],
