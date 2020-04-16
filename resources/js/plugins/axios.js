@@ -1,8 +1,8 @@
 window.axios = require('axios');
 
-let auth = `Bearer ${localStorage.getItem("auth")}`
+let apiToken = `Bearer ${localStorage.getItem("token")}`
             
-window.axios.defaults.headers.common['Authorization']= auth
+window.axios.defaults.headers.common['Authorization']= apiToken
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 

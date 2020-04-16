@@ -38,7 +38,7 @@
 <script>
 
 import { mapGetters } from 'vuex';
-import AppComercio from '~/components/comercio/AppComercio';
+import AppComercio from '@components/comercio/AppComercio';
 import { comercios as comerciosJSON }  from '~/assets/data/comercios.json'
 
 export default 

@@ -22,6 +22,7 @@ class CreateUsuarioTable extends Migration
             $table->string('fe_nacimiento')->nullable();
             $table->string('tx_sexo')->nullable();
             $table->string('tx_foto')->nullable();
+            $table->integer('id_tipo_usuario');
             $table->string('tx_observaciones', 100)->nullable();
             $table->string('verification', 64)->nullable();
             $table->timestamp('email_verified_at')->nullable();

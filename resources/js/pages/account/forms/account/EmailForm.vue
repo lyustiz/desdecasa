@@ -79,7 +79,7 @@ export default {
     {
         getIduser()
         {
-            return 20 // this.$store.getters['getUserid']
+            this.$store.getters['getUserid']
         }
     },
 

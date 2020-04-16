@@ -2,23 +2,23 @@ import Vue    from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
-import Welcome from  '@pages/welcome/Welcome.vue';
-import Page from  '@pages/page/Page.vue';
+import Welcome          from  '@pages/welcome/Welcome.vue';
+import Conocenos        from  '@pages/conocenos/Conocenos.vue';
+import Servicios        from  '@pages/servicios/Servicios.vue';
+import AccountDasboard  from  '@pages/account/AccountDasboard.vue';
+import Home             from  '@pages/home';
+import MapView          from  '@pages/map/Mapview';
 
+import SelectCuenta     from  '@pages/registro/SelectCuenta.vue';
+import RegistroComercio from  '@pages/registro/RegistroComercio.vue';
+import RegistroUsuario  from  '@pages/registro/RegistroUsuario.vue';
+import Verify           from  '@pages/registro/Verify.vue';
+import Login            from  '@pages/login/Login.vue';
+import RecoverPassword  from  '@pages/login/RecoverPassword.vue';
 
-import Conocenos    from  '@pages/conocenos/Conocenos.vue';
-import Servicios    from  '@pages/servicios/Servicios.vue';
+import PageNotFound     from  '@pages/404/NotFound.vue'
 
-import Registro     from  '@pages/registro/Registro.vue';
-import Login        from     '@pages/login/Login.vue';
-
-import AdminAccount from  '@pages/account/AdminAccount.vue';
-import Home         from  '@pages/home';
-
-import PageNotFound from  '@pages/404/NotFound.vue'
-
-
-
+let isAuthenticated = true;
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -28,12 +28,6 @@ export default new Router({
           name: 'welcome',
           icon: 'bubble_chart',
           component: Welcome,
-        },
-        {
-          path: '/page',
-          name: 'page',
-          icon: 'bubble_chart',
-          component: Page,
         },
         {
           path: '/conocenos',
@@ -48,10 +42,28 @@ export default new Router({
           component: Servicios,
         },
         {
-          path: '/registro',
+          path: '/tipocuenta',
           name: 'registro',
           icon: 'bubble_chart',
-          component: Registro,
+          component: SelectCuenta,
+        },
+        {
+          path: '/registro-comercio',
+          name: 'registro',
+          icon: 'bubble_chart',
+          component: RegistroComercio,
+        },
+        {
+          path: '/registro-usuario',
+          name: 'registro',
+          icon: 'bubble_chart',
+          component: RegistroUsuario,
+        },
+        {
+          path: '/verify/:hash',
+          name: 'registro',
+          icon: 'bubble_chart',
+          component: Verify,
         },
         {
           path: '/login',
@@ -59,12 +71,21 @@ export default new Router({
           icon: 'bubble_chart',
           component: Login,
         },
-
+        {
+          path: '/recover-password',
+          name: 'login',
+          icon: 'bubble_chart',
+          component: RecoverPassword,
+        },
         {
           path: '/cuenta',
           name: 'cuenta',
           icon: 'bubble_chart',
-          component: AdminAccount,
+          component: AccountDasboard,
+          beforeEnter: (to, from, next) => {
+            if (to.name == 'cuenta' && !isAuthenticated) next({ name: 'login' })
+            next()
+          }
         },
         {
           path: '/home',
@@ -72,13 +93,17 @@ export default new Router({
           icon: 'bubble_chart',
           component: Home,
         },
+        {
+          path: '/map',
+          name: 'map',
+          icon: 'bubble_chart',
+          component: MapView,
+        },
         { 
           path: "*", 
           name: 'notfound',
           component: PageNotFound 
         }
-
-
     ]
 })
 

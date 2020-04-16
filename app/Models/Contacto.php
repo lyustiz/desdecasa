@@ -10,7 +10,7 @@ class Contacto extends Model
     
     protected $fillable =   [
                             'id_comercio',
-                            'tx_comercio',
+                            'tx_email',
                             'tx_sitio_web',
                             'tx_facebook',
                             'tx_twitter',

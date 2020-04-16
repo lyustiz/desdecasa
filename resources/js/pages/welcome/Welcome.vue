@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-cloak>
 
     <!-- Contenido -->
     <v-container fluid>
@@ -59,11 +59,6 @@ export default {
         'list-categoria': ListCategoria,
         'list-publicidad': ListPublicidad,
     },
-    created()
-    {
-        this.apiCategorias();
-        this.apiZonas();
-    },
     computed: 
     {
         ...mapGetters(['showFilter']),
@@ -78,9 +73,7 @@ export default {
             logo: require('@images/logo.jpg'),
         }
     },
-    methods: {
-        ...mapActions(['apiCategorias', 'apiZonas'])
-    }
+    
 }
 </script>
 

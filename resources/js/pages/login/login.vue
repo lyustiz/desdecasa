@@ -52,11 +52,11 @@
 
 
                 <v-flex class="mx-0 d-flex justify-space-between>"> 
-                   <v-btn text x-small color="cyan darken-3" @click="$router.push('registro')">
+                   <v-btn text x-small color="cyan darken-3" @click="$router.push('tipocuenta')">
                        Registro<v-icon class="mx-1">mdi-account-plus-outline</v-icon>
                     </v-btn>
-                    <v-btn text x-small color="cyan darken-3" @click="$router.push('recuperar-password')">
-                            Recuperar Password<v-icon class="mx-1">mdi-email-send-outline</v-icon>
+                    <v-btn text x-small color="cyan darken-3" @click="$router.push('recover-password')">
+                            Recuperar Password<v-icon class="mx-1">mdi-account-key</v-icon>
                     </v-btn>
                 </v-flex>
 
@@ -64,28 +64,28 @@
 
             <v-card-actions class="white px-6 pb-4">
 
-                        <v-btn dark small color="cyan darken-3" :loading="loading" @click="login()">Ingresar</v-btn>
-                        <v-spacer></v-spacer>
-                        <v-tooltip top >
-                            <template v-slot:activator="{ on }">
-                                <v-btn fab dark x-small color="red" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-google</v-icon></v-btn>
-                            </template>
-                            <span>Ingresar con Google</span>
-                        </v-tooltip>
+                <v-btn block dark small color="cyan darken-3" :loading="loading" @click="login()">Ingresar</v-btn>
+                <!-- <v-spacer></v-spacer>
+                <v-tooltip top >
+                    <template v-slot:activator="{ on }">
+                        <v-btn fab dark x-small color="red" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-google</v-icon></v-btn>
+                    </template>
+                    <span>Ingresar con Google</span>
+                </v-tooltip>
 
-                        <v-tooltip top>
-                            <template v-slot:activator="{ on }">
-                                <v-btn fab dark x-small color="primary" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-facebook</v-icon></v-btn>
-                            </template>
-                            <span>Ingresar con Facebook</span>
-                        </v-tooltip>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                        <v-btn fab dark x-small color="primary" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-facebook</v-icon></v-btn>
+                    </template>
+                    <span>Ingresar con Facebook</span>
+                </v-tooltip>
 
-                        <v-tooltip top>
-                            <template v-slot:activator="{ on }"> 
-                                <v-btn fab dark x-small color="info" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-twitter</v-icon></v-btn>
-                            </template>
-                            <span>Ingresar con Twitter</span>
-                        </v-tooltip>     
+                <v-tooltip top>
+                    <template v-slot:activator="{ on }"> 
+                        <v-btn fab dark x-small color="info" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-twitter</v-icon></v-btn>
+                    </template>
+                    <span>Ingresar con Twitter</span>
+                </v-tooltip>      -->
 
             </v-card-actions>
            
@@ -110,8 +110,8 @@ export default {
 	{
         return {
             form:{
-                nb_usuario:        '',
-                password:    '',
+                nb_usuario: '',
+                password:   '',
             },
             show: false,
             loading: false,

@@ -23,6 +23,21 @@ class BarrioController extends Controller
     }
 
     /**
+     * Listar Barrio por COmuna     
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function barrioComuna($id_comuna)
+    {
+        $barrios =  Barrio::select('id', 'nb_barrio', 'tx_latitud', 'tx_longitud')
+                          ->where('id_comuna', $id_comuna)
+                          ->where('id_status', 1)
+                          ->get();
+
+        return $barrios;
+    }
+
+    /**
      * Listar Barrio por Zona     
      *
      * @return \Illuminate\Http\Response
@@ -52,8 +67,8 @@ class BarrioController extends Controller
             'co_barrio'         => 'required',
             'nb_barrio'         => 'required',
             'id_comuna'         => 'required',
-            'nu_latitud'        => 'required',
-            'nu_longitud'       => 'required',
+            'tx_latitud'        => 'required',
+            'tx_longitud'       => 'required',
             'tx_observaciones'  => 'required',
             'id_status'         => 'required',
             'id_usuario'        => 'required',
@@ -91,8 +106,8 @@ class BarrioController extends Controller
             'co_barrio'         => 'required',
             'nb_barrio'         => 'required',
             'id_comuna'         => 'required',
-            'nu_latitud'        => 'required',
-            'nu_longitud'       => 'required',
+            'tx_latitud'        => 'required',
+            'tx_longitud'       => 'required',
             'tx_observaciones'  => 'required',
             'id_status'         => 'required',
             'id_usuario'        => 'required',

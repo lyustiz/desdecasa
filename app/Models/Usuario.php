@@ -20,7 +20,9 @@ class Usuario extends Authenticatable implements MustVerifyEmail, JWTSubject
                             'tx_email',
                             'tx_sexo',
                             'tx_foto',
+                            'id_tipo_usuario',
                             'tx_observaciones',
+                            'verification',
                             'remember_token',
                             'api_token',
                             'id_status',
@@ -53,6 +55,12 @@ class Usuario extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function status(){
     
         return $this->BelongsTo('App\Models\Status', 'id_status');
+    
+    }
+
+    public function tipoUsuario(){
+    
+        return $this->BelongsTo('App\Models\TipoUsuario', 'id_tipo_usuario');
     
     }
 

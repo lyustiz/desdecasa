@@ -1,11 +1,11 @@
 <template>
 
-<v-dialog v-model="modal" persistent >
+<v-dialog v-model="modal" persistent width="500">
     <v-card>
 
-        <v-toolbar dark :color="(HeadColor) ? HeadColor : $App.theme.headModal">
+        <v-card-title dark :color="(HeadColor) ? HeadColor : $App.theme.headModal">
 
-            <v-btn icon dark @click.native="$emit('closeModal')">
+            <v-btn icon x-small dark @click.native="$emit('closeModal')">
                 <v-icon>close</v-icon>
             </v-btn>
 
@@ -13,7 +13,7 @@
                 {{ nbAction }}
             </v-toolbar-title>
 
-        </v-toolbar>
+        </v-card-title>
 
         <v-card-text>
 

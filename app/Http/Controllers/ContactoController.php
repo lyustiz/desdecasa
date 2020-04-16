@@ -18,7 +18,6 @@ class ContactoController extends Controller
                              ->get();
         
         return $contactos;
-
     }
 
     /**
@@ -32,21 +31,22 @@ class ContactoController extends Controller
         $validate = request()->validate([
             
             'id_comercio'       => 'required',
-            'tx_comercio'       => 'required',
-            'tx_sitio_web'      => 'required',
-            'tx_facebook'       => 'required',
-            'tx_twitter'        => 'required',
-            'tx_instagram'      => 'required',
-            'tx_youtube'        => 'required',
-            'tx_observaciones'  => 'required',
-            'id_status'         => 'required',
+            'tx_email'          => 'bail|email|required',
+            'tx_sitio_web'      => 'nullable',
+            'tx_facebook'       => 'nullable',
+            'tx_twitter'        => 'nullable',
+            'tx_instagram'      => 'nullable',
+            'tx_youtube'        => 'nullable',
+            'tx_observaciones'  => 'nullable',
             'id_usuario'        => 'required',
             
         ]);
 
+        $request->merge(['id_status' => 1]);
+
         $contacto = Contacto::create($request->all());
 
-        return [ 'msj' => 'Registro Agregado Correctamente', compact('contacto') ];
+        return [ 'msj' => 'Registro Agregado Correctamente', 'contacto' =>  $contacto];
     
     }
 
@@ -73,21 +73,20 @@ class ContactoController extends Controller
         $validate = request()->validate([
 
             'id_comercio'       => 'required',
-            'tx_comercio'       => 'required',
-            'tx_sitio_web'      => 'required',
-            'tx_facebook'       => 'required',
-            'tx_twitter'        => 'required',
-            'tx_instagram'      => 'required',
-            'tx_youtube'        => 'required',
-            'tx_observaciones'  => 'required',
-            'id_status'         => 'required',
+            'tx_email'          => 'bail|email|required',
+            'tx_sitio_web'      => 'nullable',
+            'tx_facebook'       => 'nullable',
+            'tx_twitter'        => 'nullable',
+            'tx_instagram'      => 'nullable',
+            'tx_youtube'        => 'nullable',
+            'tx_observaciones'  => 'nullable',
             'id_usuario'        => 'required',
 
         ]);
         
         $contacto = $contacto->update($request->all());
 
-        return [ 'msj' => 'Registro Editado' , compact('contacto')];
+        return [ 'msj' => 'Informacion de Contacto Actualizada' , compact('contacto')];
     
     }
 

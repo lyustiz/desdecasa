@@ -1,45 +1,47 @@
 <template>
-    <v-card class="mx-auto" max-width="400">
+    <v-form v-model="valid" ref="form" >
+    <v-card class="mx-auto" max-width="400" :loading="loading">
         <v-card-title >
             Informacion del Contacto
         </v-card-title>
         <v-card-text>
 
-            <v-flex xs12 >
-                <v-text-field
-                    color="cyan darken-3"
+            <v-flex xs12 d-flex>
+                <v-select
+                    label="Telefonos*"
                     prepend-inner-icon="mdi-phone"
-                    label="Telefono Fijo"
-                    type="text"
-                    v-model="data"
+                    append-outer-icon="mdi-phone-plus"
+                    @click:append-outer="addPhone()"
+                    :rules="rules.mutiple"
+                    :value="form.telefonos"
+                    :items="form.telefonos"
+                    readonly
+                    multiple
                     dense
                     outlined
-                    filled >
-                </v-text-field>
+                    filled
+                    :loading="loading"
+                >
+                    <template v-slot:selection="{ item }">
+                        <span>
+                        <v-chip small close @click:close="delPhone(item)">
+                            <v-icon class="mx-1">{{getPhoneIcon(item.id_tipo_telefono)}}</v-icon>
+                            <span>{{ item.tx_telefono }}</span>
+                        </v-chip>
+                        <v-icon v-if="item.bo_whatsapp == 1" color="success">mdi-whatsapp</v-icon>
+                        </span>
+                    </template>
+                </v-select>
             </v-flex>
 
             <v-flex xs12 >
                 <v-text-field
-                    color="cyan darken-3"
-                    prepend-inner-icon="mdi-cellphone"
-                    label="Telefono Movil"
-                    type="text"
-                    v-model="data"
-                    dense
-                    outlined
-                    filled >
-                </v-text-field>
-            </v-flex>
-
-            <v-flex xs12 >
-                <v-text-field
-                    color="cyan darken-3"
                     prepend-inner-icon="mdi-email"
                     label="Email de Comercio"
                     type="text"
                     hint="Email de contacto del Comercio"
-                    :rules="rules.required"
-                    v-model="data"
+                    :rules="rules.email"
+                    v-model="form.tx_email"
                     dense
                     outlined
                     filled >
@@ -48,37 +50,10 @@
 
             <v-flex xs12 >
                 <v-text-field
-                    color="cyan darken-3"
-                    prepend-inner-icon="mdi-printer"
-                    label="Fax"
-                    type="text"
-                    v-model="data"
-                    dense
-                    outlined
-                    filled >
-                </v-text-field>
-            </v-flex>
-
-            <v-flex xs12 >
-                <v-text-field
-                    color="cyan darken-3"
-                    prepend-inner-icon="mdi-whatsapp"
-                    label="Whatsapp"
-                    type="text"
-                    v-model="data"
-                    dense
-                    outlined
-                    filled >
-                </v-text-field>
-            </v-flex>
-
-            <v-flex xs12 >
-                <v-text-field
-                    color="cyan darken-3"
                     prepend-inner-icon="mdi-tablet-dashboard"
                     label="Sitio Web"
                     type="text"
-                    v-model="data"
+                    v-model="form.tx_sitio_web"
                     dense
                     outlined
                     filled >
@@ -87,12 +62,12 @@
 
             <v-flex xs12 >
                 <v-text-field
-                    color="cyan darken-3"
                     prepend-inner-icon="mdi-facebook"
                     label="Facebook"
                     type="text"
-                    hint="Ej: https://www.facebook.com/desdecasa.com"
-                    v-model="data"
+                    hint="Ej: https://www.facebook.com/desdecasaweb"
+                    persistent-hint
+                    v-model="form.tx_facebook"
                     dense
                     outlined
                     filled >
@@ -101,13 +76,12 @@
 
             <v-flex xs12 >
                 <v-text-field
-                    color="cyan darken-3"
                     prepend-inner-icon="mdi-twitter"
                     label="Twitter"
                     type="text"
-                    hint="Ej: @desdecasa.com"
-                    :rules="rules.required"
-                    v-model="data"
+                    hint="Ej: @desdecasaweb"
+                    persistent-hint
+                    v-model="form.tx_twitter"
                     dense
                     outlined
                     filled >
@@ -116,13 +90,12 @@
 
             <v-flex xs12 >
                 <v-text-field
-                    color="cyan darken-3"
                     prepend-inner-icon="mdi-instagram"
                     label="Instagram"
                     type="text"
-                    hint="Ej: @desdecasa.com"
-                    :rules="rules.required"
-                    v-model="data"
+                    hint="Ej: @desdecasaweb"
+                    persistent-hint
+                    v-model="form.tx_instagram"
                     dense
                     outlined
                     filled >
@@ -131,55 +104,248 @@
 
             <v-flex xs12 >
                 <v-text-field
-                    color="cyan darken-3"
                     prepend-inner-icon="mdi-youtube"
                     label="Youtube"
                     type="text"
                     hint="Ej: https://www.youtube.com/channel/UCeG2aGmZ2"
-                    :rules="rules.required"
-                    v-model="data"
+                    persistent-hint
+                    v-model="form.tx_youtube"
                     dense
                     outlined
                     filled >
                 </v-text-field>
             </v-flex>
 
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn small fab color="amber" dark> <v-icon>mdi-restore</v-icon></v-btn>
-                <v-btn small fab color="primary" dark> <v-icon>mdi-content-save</v-icon></v-btn>
-          </v-card-actions>
-        </v-card>
+        </v-card-text>
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn small dark fab color="amber"   @click="cancel()" :loading="loading"> <v-icon>mdi-reply</v-icon></v-btn>
+            <v-btn small dark fab color="primary" @click="setData()" :loading="loading"> <v-icon>mdi-plus</v-icon></v-btn>
+        </v-card-actions>
+    </v-card>
 
+    <!-- Formulario Insert Telefono-->
+
+    <v-dialog v-model="modal" persistent max-width="400"
+    >
+        <phone-form :comercio="item" :whatsappexist="whatsappExist" @close="close($event)"></phone-form>
+
+    </v-dialog>
+    
+    
+    </v-form>
 </template>
 
 <script>
 
-import AppRules from "~/mixins/AppRules"; 
+import AppForm from '@mixins/AppForm'
+import AppData from '@mixins/AppData'
+import PhoneForm  from './PhoneForm'
 
 export default {
-     mixins:[AppRules],
+
+    components: 
+    {
+        'phone-form' : PhoneForm
+    },
+
+    mixins:[ AppForm, AppData ],
+
+    created() 
+    {
+        this.fetch()
+    },
+
+    computed: 
+    {
+        getIduser()
+        {
+            return this.$store.getters['getUserid']
+        },
+    },
+    watch:
+    {
+        'item.telefono'(telefonos)
+        {
+            this.form.telefonos = []
+
+            if(telefonos)
+            {
+                this.whatsappExist  = telefonos.filter( (item) => item.bo_whatsapp == 1 ).length > 0;
+                this.form.telefonos = telefonos;
+                this.$refs.form.resetValidation()
+            }
+            
+        },
+
+    },
+
     data(){
         return{
-            data: null,
-            select: null,
-            selects: {
-                tipoEmpresa: [
-                    { id: 1, nb_tipo_empresa: 'Sede Física'},
-                    { id: 2, nb_tipo_empresa: 'Tienda Virtual (Solo Medios Digitales)'},
-                    { id: 3, nb_tipo_empresa: 'Solo Servicio a Domicilio (No posee Sede Física)'}
-                ],
-                tipoPago: [
-                    { id: 1, nb_tipo_pago: 'Visa'},
-                    { id: 2, nb_tipo_pago: 'Mastercard'},
-                    { id: 3, nb_tipo_pago: 'Efectivo'},
-                    { id: 3, nb_tipo_pago: 'Debito'},
-                    { id: 3, nb_tipo_pago: 'Criptomoneda'},
-                    { id: 3, nb_tipo_pago: 'Paypal'}
-                ]
+            resource: 'contacto',
+            form:
+            {
+                id:           '',
+                id_comercio:  '',
+                telefonos:    this.telefonos,
+                tx_email:     '',
+                tx_sitio_web: '',
+                tx_facebook:  '',
+                tx_twitter:   '',
+                tx_instagram: '',
+                tx_youtube:   '',
+                id_usuario:   '',   
             },
+            whatsappExist: false
+        }
+    },
+    methods:
+    {
+         fetch()
+        {
+            this.form.id_usuario = this.getIduser;
+            this.loading = true;
+
+            axios.get('/api/v1/comercio/usuario/' + this.getIduser)
+			.then( response =>
+			{
+                this.item = response.data;
+                this.form.id_comercio = this.item.id;
+                if( this.item.contacto)
+                {
+                    this.mapData(this.item.contacto)
+                }
+                this.loading = false
+
+			})
+            .catch( error =>
+            {
+              console.log(error)
+            })
             
+        },
+
+        setData()
+        {
+            if(this.item.contacto) 
+            {
+                this.update()
+            } else 
+            {
+                this.store()
+            }
+        },
+
+        store()
+        {
+            if (!this.$refs.form.validate())  return 
+
+            this.loading = true;
+            this.form.id_usuario = this.getIduser;
+            
+            axios.post('/api/v1/' + this.resource, this.form)
+			.then( response =>
+			{
+                this.showMessage(response.data.msj)
+                this.item.contacto = response.data.contacto
+                this.form.id = response.data.contacto.id
+			})
+            .catch( error =>
+            {
+                this.showError(error);
+            })
+            .finally( () =>
+            {
+                this.loading = false
+            }); 
+    
+        },
+
+        update()
+        {
+            if (!this.$refs.form.validate())  return 
+
+            this.loading = true;
+            this.form.id_usuario = this.getIduser;
+            
+            axios.put('/api/v1/' + this.resource + '/' + this.form.id, this.form)
+			.then( response =>
+			{
+                this.showMessage(response.data.msj)
+                this.item.contacto = this.form
+			})
+            .catch( error =>
+            {
+                this.showError(error);
+            })
+            .finally( () =>
+            {
+                this.loading = false
+            }); 
+    
+        },
+        
+        getPhoneIcon(id_tipo_telefono)
+        {
+            switch (parseInt(id_tipo_telefono)) {
+                case 1:
+                    return 'mdi-phone-classic' 
+                    break;
+                case 2:
+                    return 'mdi-cellphone-android'
+                    break;
+                case 3:
+                    return 'mdi-printer'
+                    break;
+                default:
+                    return 'mdi-phone'
+                    break
+            }
+        },
+
+        delPhone(telefono)
+        {
+            if (this.loading) { return }
+            
+            if (!confirm('desea borrar el telefono '+ telefono.tx_telefono)) { return }
+
+            this.loading = true
+
+            axios.delete('/api/v1/telefono/' + telefono.id)
+			.then( response =>
+			{
+                this.showMessage(response.data.msj)
+                this.loading = false
+                this.item.telefono = this.item.telefono.filter((item) => item.id != telefono.id) 
+			})
+            .catch( error =>
+            {
+              console.log(error)
+            })
+            .finally( () =>
+            {
+                this.loading = false
+            });
+        },
+
+        addPhone()
+        {
+            this.modal = true;
+        },
+
+        close(telefono)
+        {
+            if(telefono)
+            {
+                this.item.telefono.push(telefono)
+            }
+            this.modal = false;
+        },
+
+        cancel()
+        {
+            this.$refs.form.resetValidation()
+            this.mapData(this.item.contacto) 
         }
     }
 }

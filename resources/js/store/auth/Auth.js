@@ -76,6 +76,7 @@ export default
 						localStorage.setItem("token", 	response.data.auth)
 						localStorage.setItem("user", 	JSON.stringify(response.data.user))
 						localStorage.setItem("expire", 	response.data.expires_in)
+						localStorage.setItem("auth", 	true)
 
 						dispatch('autenticate', data)
 						resolve( { status: 200 } )
@@ -109,6 +110,54 @@ export default
 					reject(error)
 				})
 			})
+		},
+		
+		registerCommerce( { commit }, form )
+		{
+			return new Promise((resolve, reject) => 
+			{
+				axios.post('/api/' + 'register-commerce', form)
+				.then(response => 
+				{
+					resolve(response)
+				})
+				.catch(error => 
+				{
+					reject(error)
+				})
+			})
+		},
+		
+		verify( { commit }, form )
+		{
+			return new Promise((resolve, reject) => 
+			{
+				axios.post('/api/' + 'verify', form)
+				.then(response => 
+				{
+					resolve(response)
+				})
+				.catch(error => 
+				{
+					reject(error)
+				})
+			})
+		},
+		
+		resendEmail( { commit }, form )
+		{
+			return new Promise((resolve, reject) => 
+			{
+				axios.post('/api/' + 'email/resend', form)
+				.then(response => 
+				{
+					resolve(response)
+				})
+				.catch(error => 
+				{
+					reject(error)
+				})
+			})
         },
         
         logout( { dispatch }, categoria )
@@ -131,11 +180,11 @@ export default
 			})
         },
         
-        rememberPassword( { commit }, email )
+        recoverPassword( { commit }, form )
 		{
 			return new Promise((resolve, reject) => 
 			{
-				axios.post('/api/' + 'rememberPassword')
+				axios.post('/api/' + 'recover/password', form)
 				.then(response => 
 				{
 					resolve(response)
@@ -147,16 +196,16 @@ export default
 			})
         },
         
-        resetPassword( { commit }, user )
+        resetPassword( { commit }, form )
 		{
-			axios.get('/api/' + 'resetPassword/' + newCredentials)
+			axios.get('/api/' + 'reset/password' + form)
 			.then( response =>
 			{
-				
+				resolve(response)
 			})
             .catch( error =>
             {
-              console.log(error)
+				reject(error)
             })
 		},
 

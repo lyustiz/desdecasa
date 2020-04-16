@@ -1,10 +1,14 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers;
 
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Str;
+
 
 class UsuarioController extends Controller
 {
@@ -39,6 +43,7 @@ class UsuarioController extends Controller
             'tx_nuip'           => 'required',
             'tx_observaciones'  => 'required',
             'remember_token'    => 'required',
+            'id_tipo_usuario'   => 'required',
             'id_status'         => 'required',
             'id_usuarioe'       => 'required',
             
@@ -73,7 +78,7 @@ class UsuarioController extends Controller
 
             'nb_nombres'        => 'required',
             'fe_nacimiento'     => 'required',
-            'tx_foto'           => 'required',
+            'tx_foto'           => 'required|mimes:jpeg,bmp,png',
             'tx_sexo'           => 'required',
             'tx_src'            => 'required',
             'id_usuario'        => 'required',
@@ -169,9 +174,43 @@ class UsuarioController extends Controller
         return [ 'msj' => 'Registro Eliminado' , compact('usuario')];
     }
 
-    public function verify( $hash)
+    protected function decryptHash( $hash )
     {
-        $usuario = Usuario::where('verification', $hash)->first();
+        $hash = explode( '|' , $hash );
+        
+        try {
+            
+            $data =   [ 
+                'usuario'      => Crypt::decryptString($hash[0]), 
+                'verification' => $hash[1]
+               ];
+
+        } catch (DecryptException $e) {
+            
+            $data =   [ 
+                'usuario'      => 'badUser', 
+                'verification' => 'badHash'
+               ];
+        }
+        
+        return $data;
+    }
+
+    public function verify(Request $request)
+    {
+        $validate = request()->validate([
+            'hash'      => 'required',
+        ]);
+
+        $hash         = $this->decryptHash($request->input('hash'));
+
+        $nb_usuario   = $hash['usuario'];
+
+        $verification = $hash['verification'];
+                
+        $usuario = Usuario::where('verification', $verification)
+                          ->where('nb_usuario'  , $nb_usuario)
+                          ->first();
 
         $mensaje = null;
         $tipo    = null;
@@ -182,17 +221,138 @@ class UsuarioController extends Controller
             $usuario->verification  = null;
             $usuario->save();
 
-            $mensaje = 'Correo del Usuario Confirmado ';
+            $msj     = 'Cuenta del usuario confirmada ';
             $tipo    = 'success';
-            $resend  = true;
+            $resend  = false;
         }
         else
         {
-            $mensaje = 'Código de confirmacion inválido';
+            $msj     = 'Enlace de confirmacion inválido';
             $tipo    = 'error';
-            $resend  = false;
+            $resend  = true;
         }
 
-        return view('auth.confirm', compact('mensaje', 'tipo', 'resend'));
+        return compact('msj', 'tipo', 'resend');
     }
+
+    public function resend(Request $request)
+    {      
+        $validate = request()->validate([
+            'hash'      => 'required',
+        ]);
+        
+        $hash   = $this->decryptHash($request->input('hash'));
+
+        $nb_usuario   = $hash['usuario'];
+
+        $usuario = Usuario::where('nb_usuario'  , $nb_usuario)
+                           ->where('id_status'  , 2)
+                           ->first();
+
+        $msj     = 'Enlace de confirmacion inválido';
+        $tipo    = 'error';
+                        
+        if($usuario)
+        {
+            $verification = Str::random(64);
+
+            $usuario->verification  = $verification;
+            $usuario->save();
+            
+            $data = $usuario->toArray();
+
+            $data['verification'] = Crypt::encryptString($nb_usuario) . '|' . $verification;
+
+            // Enviar codigo de confirmacion
+            \Mail::send('auth.mail.mail_confirm', $data, function($message) use ($data) {
+                $message->to($data['tx_email'], $data['nb_usuario'])->subject('"DesdeCasaWeb.com", Por favor confirma tu correo');
+            });
+
+            $msj     = 'Enviado correctamente favor verifique su Correo';
+            
+            $tipo    = 'success';
+
+        }
+        
+        return compact('msj', 'tipo');
+    }
+
+
+    public function recoverPassword(Request $request)
+    {
+        
+        $validate = request()->validate([
+            'tx_email'   => 'required|email',
+        ]);
+        
+        $usuario = Usuario::where('tx_email', $request->tx_email)
+                          ->first();
+         
+        $msj     = 'El Correo no existe en nustros registros';
+        $tipo    = 'error';
+        $resend  = true;
+
+        if ($usuario)
+        {
+            $verification = Str::random(64);
+
+            $usuario->remember_token = $verification;
+            $usuario->save();
+
+            $msj     = 'recuperacion de Contraseña Enviada favor verifique su Correo';
+            $tipo    = 'success';
+            $resend  = false;
+
+            $data = $usuario->toArray();
+
+            $data['verification'] = Crypt::encryptString($usuario->nb_usuario) . '|' . $verification;
+
+            // Enviar codigo de confirmacion
+            \Mail::send('auth.mail.mail_recover', $data, function($message) use ($data) {
+                $message->to($data['tx_email'], $data['nb_usuario'])->subject('"DesdeCasaWeb.com", Recuperacion de Contraseña');
+            });
+        }
+
+        return compact('msj', 'tipo', 'resend');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        
+        $validate = request()->validate([
+            
+            'tx_password'   => 'required',
+            'password'      => 'required',
+            'passwordRew'   => 'required',
+            'hash'          => 'required',
+        ]);
+
+        $hash         = $this->decryptHash($request->input('hash'));
+
+        $nb_usuario   = $hash['usuario'];
+
+        $verification = $hash['verification'];
+                
+        $usuario = Usuario::where('remember_token', $verification)
+                          ->where('nb_usuario'  , $nb_usuario)
+                          ->first();
+
+        $msj     = 'Codigo de recuperacion inválido';
+        $tipo    = 'error';
+
+        if ($usuario)
+        {
+            $update  = $usuario->update([
+                'tx_password'     => $request->input('password'),
+                'remember_token'  => null,
+            ]);
+            
+            $msj     = 'Password Actualizado ';
+            $tipo    = 'success';
+        }
+
+        return compact('msj', 'tipo');
+
+    }
+
 }

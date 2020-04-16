@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
 use App\Models\Usuario;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Models\Comercio;
+use Illuminate\Support\Facades\Crypt;
+
 
 class RegisterController extends Controller
 {
@@ -23,7 +27,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    //use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
@@ -48,15 +52,15 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(Request $request)
     {
-        return Validator::make($data, [
-            'user'       => 'required|max:255|unique:usuario,nb_usuario',
+        return request()->validate([
+            'nb_usuario' => 'required|max:255|unique:usuario,nb_usuario',
             'email'      => 'required|email|max:255|unique:usuario,tx_email',
             'password'   => 'required|min:8'
         ],
         [
-            'user.unique' => 'El usuario ya está en uso.',
+            'nb_usuario.unique' => 'El usuario ya está en uso.',
             'email.unique'      => 'El correo ya está en uso.',
         ]);    
     
@@ -68,32 +72,101 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
+    protected function register(Request $request)
     {
-        $data['co_confirmacion'] = Str::random(64);
+        $this->validator($request);
+        
+        $request->merge(['verification' => Str::random(64)]);
         
         $usuario = Usuario::create([
-            'nb_usuario'        => $data['user'],
-            'tx_email'          => $data['email'],
-            'password'          => Hash::make($data['password']),
+            'nb_usuario'        => $request->input('nb_usuario'),
+            'tx_email'          => $request->input('email'),
+            'password'          => Hash::make($request->input('password')),
+            'id_tipo_usuario'   => 2,
             'id_status'         => 2,
             'id_usuario'        => 0,
-            'co_confirmacion'   => $data['co_confirmacion']
+            'verification'      => $request->input('verification')
         ]);
 
-         // Enviar codigo de confirmacion
-         \Mail::send('auth.mail.mail_confirm', $data, function($message) use ($data) {
-            $message->to($data['email'], $data['user'])->subject('"DesdeCasaWeb.com", Por favor confirma tu correo');
+        $data =  $request->all();
+        
+        // string usuario | verificacion
+        $data['verification'] = Crypt::encryptString($data['nb_usuario'] ) . '|' . $data['verification'];
+
+        // Enviar codigo de confirmacion
+        \Mail::send('auth.mail.mail_confirm', $data, function($message) use ($data) {
+            $message->to($data['email'], $data['nb_usuario'])->subject('"DesdeCasaWeb.com", Por favor confirma tu correo');
         });
 
-        /*$rolUsuario = RolUsuario::create([
-            'id_rol'        => 1,
-            'id_usuario'    => $usuario->id_usuario,
-            'id_status'     => 1, 
-        ]);*/
-
-
-        return $usuario;
-        
+        return response('Created', 201);
     }
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validatorCommerce(Request $request)
+    {
+        return request()->validate([
+            'nb_comercio' => 'bail|required|max:100|unique:comercio,nb_comercio',
+            'tx_nit'      => 'bail|required|max:12|unique:comercio,tx_nit',
+            'nb_usuario'  => 'bail|required|max:255|unique:usuario,nb_usuario',
+            'email'       => 'required|email|max:255|unique:usuario,tx_email',
+            'password'    => 'required|min:8'
+        ],
+        [
+            'nb_comercio.unique' => 'El Comercio ha sido Registrado',
+            'tx_nit.unique'      => 'El Nit ya ha sido Registrado',
+            'nb_usuario.unique'  => 'El usuario ya está en uso.',
+            'email.unique'       => 'El correo ya está en uso.',
+        ]);
+    }
+
+    public function registerCommerce(Request $request)
+    {
+        $this->validatorCommerce($request);
+
+        $request->merge(['verification' => Str::random(64)]);
+
+        $data = $request->all();  
+
+        $result = \DB::transaction(function ()  use($request) {
+            
+            $usuario = Usuario::create([
+                'nb_usuario'        => $request->input('nb_usuario'),
+                'tx_email'          => $request->input('email'),
+                'password'          => Hash::make($request->input('password')),
+                'id_tipo_usuario'   => 3,
+                'id_status'         => 2,
+                'id_usuario'        => 0,
+                'verification'      => $request->input('verification')
+            ]);
+
+            $comercio = Comercio::create(
+                [
+                    'nb_comercio'  => $request->input('nb_comercio'),
+                    'nb_fiscal'    => $request->input('nb_comercio'),
+                    'tx_nit'       => $request->input('tx_nit'),
+                    'id_status'    => 1,
+                    'id_usuario'   => $usuario->id,
+                ]
+            );
+
+            return ['comercio' => $comercio, 'usuario' => $usuario];
+        });
+        
+        // string usuario | verificacion
+        $data['verification'] = Crypt::encryptString($data['nb_usuario'] ) . '|' . $data['verification'];
+
+        // Enviar codigo de confirmacion
+        \Mail::send('auth.mail.mail_confirm', $data, function($message) use ($data) {
+            $message->to($data['email'], $data['nb_usuario'])->subject('"DesdeCasaWeb.com", Por favor confirma tu correo');
+        });
+
+        return response('Created', 201);
+    }
+
+    
 }

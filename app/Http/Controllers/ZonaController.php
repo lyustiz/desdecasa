@@ -15,7 +15,7 @@ class ZonaController extends Controller
     public function index()
     {
         $zonas = Zona::with(['status'])
-                     ->select('id', 'nb_zona') 
+                     ->select('id', 'nb_zona', 'tx_latitud', 'tx_longitud') 
                      ->where('id_status', 1)      
                      ->get();
         
@@ -35,8 +35,8 @@ class ZonaController extends Controller
             'co_zona'           => 'required',
             'nb_zona'           => 'required',
             'id_ciudad'         => 'required',
-            'nu_latitud'        => 'required',
-            'nu_longitud'       => 'required',
+            'tx_latitud'        => 'required',
+            'tx_longitud'       => 'required',
             'tx_observaciones'  => 'required',
             'id_status'         => 'required',
             'id_usuario'        => 'required',
@@ -74,8 +74,8 @@ class ZonaController extends Controller
             'co_zona'           => 'required',
             'nb_zona'           => 'required',
             'id_ciudad'         => 'required',
-            'nu_latitud'        => 'required',
-            'nu_longitud'       => 'required',
+            'tx_latitud'        => 'required',
+            'tx_longitud'       => 'required',
             'tx_observaciones'  => 'required',
             'id_status'         => 'required',
             'id_usuario'        => 'required',

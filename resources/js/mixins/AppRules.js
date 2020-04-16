@@ -33,6 +33,9 @@ export default
                 image:[
                     v => !v || v.size < 2000000 || 'Imagen debe tener menos de 2 MB!',
                 ],
+                coordinate:[
+                    v => !v || v != 0 || 'Debe Seleccionar una Ubicacion',
+                ],
         
                 password: [
                     v => !!v || 'La Contraseña es Requerida',

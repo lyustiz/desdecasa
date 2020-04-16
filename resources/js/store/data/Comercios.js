@@ -2,6 +2,7 @@ export default
 {
 	state(){
 		return	{
+			comercio: null,
 			comercios: [ ],
 		}
 	},
@@ -10,7 +11,9 @@ export default
 	{
         getComercios: state => state.comercios,
                 
-        countComercios: state => state.comercios.length,
+		countComercios: state => state.comercios.length,
+		
+		getComercio: state => state.comercio,
 	},
 
 	mutations:
@@ -29,6 +32,10 @@ export default
         {
             state.comercios 	= comercios
 		},
+		setComercio (state, comercio)
+        {
+            state.comercio 	= comercio
+        },
 	},
 
 	actions:
@@ -36,7 +43,6 @@ export default
 
 		apiComerciosCategoria( { commit }, categoria )
 		{
-            console.log(categoria);
 			axios.get('/api/v1/' + 'comercio/categoria/' + categoria)
 			.then( response =>
 			{
@@ -46,6 +52,23 @@ export default
             {
               console.log(error)
             })
+		},
+
+		apiComercioUsuario( { commit }, idUsuario )
+		{
+			return new Promise((resolve, reject) => 
+			{
+				axios.get('/api/v1/' + 'comercio/usuario/' + idUsuario)
+				.then(response => 
+				{
+					commit('setComercio', response.data)
+					resolve(response)
+				})
+				.catch(error => 
+				{
+					reject(error)
+				})
+			})
 		}
 
 	}

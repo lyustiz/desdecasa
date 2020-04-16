@@ -141,7 +141,7 @@ export default {
 
         getUserid()
         {
-            return 20// this.$store.getters['getUserid']
+            return this.$store.getters['getUserid']
         }
 
     },

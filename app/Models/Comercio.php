@@ -21,8 +21,8 @@ class Comercio extends Model
                             'tx_direccion',
                             'id_tipo_comercio',
                             'id_tipo_pago',
-                            'nu_latitud',
-                            'nu_longitud',
+                            'tx_latitud',
+                            'tx_longitud',
                             'tx_observaciones',
                             'id_status',
                             'id_usuario',
@@ -87,49 +87,49 @@ class Comercio extends Model
 
     public function telefono(){
 
-        return $this->HasMany('App\Models\Telefono', 'id');
+        return $this->HasMany('App\Models\Telefono', 'id_comercio');
 
     }
 
     public function horario(){
 
-        return $this->HasMany('App\Models\Horario', 'id');
+        return $this->HasMany('App\Models\Horario', 'id_comercio');
 
     }
 
     public function contacto(){
 
-        return $this->HasMany('App\Models\Contacto', 'id');
+        return $this->HasOne('App\Models\Contacto', 'id_comercio');
 
     }
 
     public function foto(){
 
-        return $this->HasMany('App\Models\Foto', 'id');
+        return $this->HasMany('App\Models\Foto', 'id_comercio');
 
     }
 
     public function pago(){
 
-        return $this->HasMany('App\Models\Pago', 'id');
+        return $this->HasMany('App\Models\Pago', 'id_comercio');
 
     }
 
     public function subcripcion(){
 
-        return $this->HasMany('App\Models\Subcripcion', 'id');
+        return $this->HasMany('App\Models\Subcripcion', 'id_comercio');
 
     }
 
     public function valoracion(){
 
-        return $this->HasMany('App\Models\Valoracion', 'id');
+        return $this->HasMany('App\Models\Valoracion', 'id_comercio');
 
     }
 
     public function comercioCategoria(){
 
-        return $this->HasMany('App\Models\ComercioCategoria', 'id');
+        return $this->HasMany('App\Models\ComercioCategoria', 'id_comercio');
 
     }
 }

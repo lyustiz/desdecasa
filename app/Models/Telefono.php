@@ -12,7 +12,7 @@ class Telefono extends Model
                             'tx_telefono',
                             'id_comercio',
                             'id_tipo_telefono',
-                            'bo_principal',
+                            'bo_whatsapp',
                             'tx_observaciones',
                             'id_status',
                             'id_usuario',

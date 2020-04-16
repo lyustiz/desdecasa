@@ -18,7 +18,7 @@ class CreateTelefonoTable extends Migration
 			$table->string('tx_telefono', 20);
 			$table->integer('id_comercio');
 			$table->integer('id_tipo_telefono');
-			$table->boolean('bo_principal');
+			$table->boolean('bo_whatsapp')->default(false);
 			$table->string('tx_observaciones', 100)->nullable();
 			$table->integer('id_status');
 			$table->integer('id_usuario');

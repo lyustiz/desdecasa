@@ -11,15 +11,46 @@
         <v-card class="mx-auto elevation-8 mt-5" max-width="320" :loading="loading">
             
             <v-card-title primary-title class="cyan darken-3 white--text">
-               <h4>Registro</h4><v-icon class="mx-2" color="white">mdi-account-plus</v-icon>
+               <h4>Registro de Comercio</h4><v-icon class="mx-2" color="white">mdi-storefront</v-icon>
             </v-card-title>
 
             <v-divider></v-divider>
         
             <v-card-text class="px-6">
 
-                
-                <v-flex xs12 class="mt-4">
+                <v-flex xs12 >
+                    <v-text-field
+                        color="cyan darken-3"
+                        prepend-inner-icon="mdi-storefront"
+                        label="Nombre del Comercio"
+                        type="text"
+                        v-model="form.nb_comercio"
+                        :rules="rules.required"
+                        dense
+                        rounded
+                        filled >
+                    </v-text-field>
+                </v-flex>
+
+                <v-flex xs12 class="">
+                    <v-text-field
+                        color="cyan darken-3"
+                        prepend-inner-icon="mdi-storefront"
+                        label="NIT"
+                        hint="Numero de Informacion Fiscal"
+                        persistent-hint
+                        type="text"
+                        v-model="form.tx_nit"
+                        :rules="rules.required"
+                        dense
+                        rounded
+                        filled >
+                    </v-text-field>
+                </v-flex>
+
+                <v-divider></v-divider>
+
+                <v-flex xs12 class="mt-2" >
                     <v-text-field
                         color="cyan darken-3"
                         prepend-inner-icon="mdi-account"
@@ -80,8 +111,13 @@
                     </v-text-field>
                 </v-flex>
 
-                <v-flex xl-12 class="mx-2">
-                    <v-btn text block x-small color="cyan darken-3" @click="$router.push('login')">
+                
+
+                <v-flex xl-12 class="mx-2 justify-space-between" >
+                    <v-btn text  x-small color="cyan darken-3" @click="$router.push('tipocuenta')">
+                        tipo de cuenta<v-icon>mdi-account-question</v-icon>
+                    </v-btn>
+                    <v-btn text  x-small color="cyan darken-3" @click="$router.push('login')">
                         Ingresar<v-icon>mdi-login-variant</v-icon>
                     </v-btn>
                 </v-flex>
@@ -89,10 +125,10 @@
             </v-card-text>
 
             <v-card-actions class="white px-6 pb-4">
-                    <v-btn dark color="cyan darken-3" :loading="loading" @click="register">Registro</v-btn>
+                    <v-btn block dark small color="cyan darken-3" :loading="loading" @click="register">Registrarse</v-btn>
                     <v-spacer></v-spacer>
               
-                     <v-tooltip top >
+                     <!-- <v-tooltip top >
                         <template v-slot:activator="{ on }">
                             <v-btn fab dark x-small color="red" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-google</v-icon></v-btn>
                         </template>
@@ -109,7 +145,7 @@
                             <v-btn fab dark x-small color="info" v-on="on" class="mx-1" :loading="loading"><v-icon>mdi-twitter</v-icon></v-btn>
                         </template>
                         <span>Registrarse con Twitter</span>
-                     </v-tooltip>                
+                     </v-tooltip>          -->       
             </v-card-actions>
            
         </v-card>
@@ -144,7 +180,9 @@ export default {
 	{
         return {
             form:{
-                user:  '',
+                nb_comercio: '',
+                tx_nit:      '',
+                nb_usuario:  '',
                 email:       '',
                 password:    '',
                 passwordRew: ''
@@ -161,7 +199,7 @@ export default {
             
             this.loading = true
             
-            this.$store.dispatch('register', this.form)
+            this.$store.dispatch('registerCommerce', this.form)
             .then(response => {
               
                 if(response.status == 201 && response.statusText == "Created")

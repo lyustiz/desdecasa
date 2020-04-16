@@ -18,8 +18,8 @@ class CreateCiudadTable extends Migration
 			$table->integer('co_ciudad')->unique();
 			$table->string('nb_ciudad', 30);
 			$table->integer('id_departamento');
-			$table->float('nu_latitud', 2, 7)->nullable();
-			$table->float('nu_longitud', 2, 7)->nullable();
+			$table->string('tx_latitud', 20)->nullable();
+			$table->string('tx_longitud', 20)->nullable();
 			$table->string('tx_observaciones', 100)->nullable();
 			$table->integer('id_status');
 			$table->integer('id_usuario');

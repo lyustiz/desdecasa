@@ -47,6 +47,7 @@
 
 <script>
 
+import { mapActions } from 'vuex';
 import CardSection from './CardSections';
 
 export default {
@@ -56,7 +57,20 @@ export default {
     },
     created()
     {
-         this.expand(2)
+        let auth = this.$store.getters['getAuth'];
+
+        if(!auth)
+        {
+             this.$router.push('login').catch(err => {})
+        }
+        
+        let userID = this.$store.getters['getUserid']
+        
+        this.apiComercioUsuario(userID)
+        .then( (response)=> {
+            this.expand(2)
+        })
+  
     },
     data()
     {
@@ -121,11 +135,12 @@ export default {
         }
     },
     methods: {
+
+        ...mapActions(['apiComercioUsuario']),
+
         expand(cardId)
         {
             
-            console.log(cardId);
-
             this.cardSections.forEach((card, index) => {
                 
                 if(card.id == cardId)
@@ -142,6 +157,7 @@ export default {
 
 
         },
+
         minimize(cardId)
         {
 

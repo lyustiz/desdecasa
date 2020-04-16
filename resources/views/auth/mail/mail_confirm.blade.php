@@ -42,7 +42,7 @@
                                 <!-- Body content -->
                                 <tr>
                                     <td class="content-cell" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; padding: 35px;">
-                                        <h1 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #2F3133; font-size: 19px; font-weight: bold; margin-top: 0; text-align: left;">Hola: {{ $user }}</h1>
+                                        <h1 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #2F3133; font-size: 19px; font-weight: bold; margin-top: 0; text-align: left;">Hola: {{ $nb_usuario }}</h1>
 <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">Recibes este Correo porque te has registrado en  "DESDECASAWEB.COM". Da click al siguiente boton para completar con el registro:</p>
 <table class="action" align="center" width="100%" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; margin: 30px auto; padding: 0; text-align: center; width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 100%;">
     <tr>
@@ -53,7 +53,7 @@
                         <table border="0" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
                             <tr>
                                 <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
-                                    <a href="{{ url('/usuario/verify/' . $co_confirmacion) }}" class="button button-blue" target="_blank" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; border-radius: 3px; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16); color: #FFF; display: inline-block; text-decoration: none; -webkit-text-size-adjust: none; background-color: #3097D1; border-top: 10px solid #3097D1; border-right: 18px solid #3097D1; border-bottom: 10px solid #3097D1; border-left: 18px solid #3097D1;">Activar Usuario</a>
+                                    <a href="{{ url('/verify/' . $verification) }}" class="button button-blue" target="_blank" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; border-radius: 3px; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16); color: #FFF; display: inline-block; text-decoration: none; -webkit-text-size-adjust: none; background-color: #3097D1; border-top: 10px solid #3097D1; border-right: 18px solid #3097D1; border-bottom: 10px solid #3097D1; border-left: 18px solid #3097D1;">Activar Usuario</a>
                                 </td>
                             </tr>
                         </table>
@@ -69,7 +69,7 @@
     <tr>
         <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
             <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; line-height: 1.5em; margin-top: 0; text-align: left; font-size: 12px;">Si tienes problemas al dar click al boton "Activar Usuario", copia y pega la siguiente URL
-en tu navegador: <a href="{{ url('/usuario/verify/' . $co_confirmacion) }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;">{{ url('/usuario/verify/' . $co_confirmacion) }}</a></p>
+en tu navegador: <a href="{{ url('/verify/' . $verification) }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;">{{ url('/verify/' . $verification) }}</a></p>
         </td>
     </tr>
 </table>
@@ -86,7 +86,7 @@ en tu navegador: <a href="{{ url('/usuario/verify/' . $co_confirmacion) }}" styl
         <table class="footer" align="center" width="570" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; margin: 0 auto; padding: 0; text-align: center; width: 570px; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 570px;">
             <tr>
                 <td class="content-cell" align="center" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; padding: 35px;">
-                    <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; line-height: 1.5em; margin-top: 0; color: #AEAEAE; font-size: 12px; text-align: center;">© 2018 VUELTA A LA PATRIA. All rights reserved.</p>
+                    <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; line-height: 1.5em; margin-top: 0; color: #AEAEAE; font-size: 12px; text-align: center;">© 2020 DESDECASAWEB. All rights reserved.</p>
                 </td>
             </tr>
         </table>

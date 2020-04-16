@@ -15,7 +15,7 @@ class TelefonoController extends Controller
     public function index()
     {
         $telefonos = Telefono::with(['status'])
-                        ->get();
+                             ->get();
         
         return $telefonos;
 
@@ -34,16 +34,15 @@ class TelefonoController extends Controller
             'tx_telefono'       => 'required',
             'id_comercio'       => 'required',
             'id_tipo_telefono'  => 'required',
-            'bo_principal'      => 'required',
-            'tx_observaciones'  => 'required',
-            'id_status'         => 'required',
+            'bo_whatsapp'       => 'required',
             'id_usuario'        => 'required',
-            
         ]);
 
+        $request->merge(['id_status' => 1]);
+        
         $telefono = Telefono::create($request->all());
 
-        return [ 'msj' => 'Registro Agregado Correctamente', compact('telefono') ];
+        return [ 'msj' => 'Telefono Agregado Correctamente', 'telefono' => $telefono ];
     
     }
 
@@ -56,7 +55,6 @@ class TelefonoController extends Controller
     public function show(Telefono $telefono)
     {
         return $telefono;
-
     }
 
     /**
@@ -73,7 +71,7 @@ class TelefonoController extends Controller
             'tx_telefono'       => 'required',
             'id_comercio'       => 'required',
             'id_tipo_telefono'  => 'required',
-            'bo_principal'      => 'required',
+            'bo_whatsapp'      => 'required',
             'tx_observaciones'  => 'required',
             'id_status'         => 'required',
             'id_usuario'        => 'required'
@@ -96,7 +94,7 @@ class TelefonoController extends Controller
     {
         $telefono = $telefono->delete();
  
-        return [ 'msj' => 'Registro Eliminado' , compact('telefono')];
+        return [ 'msj' => 'Telefono Eliminado' , compact('telefono')];
 
     }
 }

@@ -38,24 +38,24 @@ import EmailForm from './forms/account/EmailForm';
 
 export default {
 
-components:{
-    'password-form': PasswordForm,
-    'info-form':     InfoForm,
-    'email-form':    EmailForm
-},
-props:
-{
-    color:{
-        type:       String,
-        default:    'info'
+    components:{
+        'password-form': PasswordForm,
+        'info-form':     InfoForm,
+        'email-form':    EmailForm
     },
-},
-data(){
-    return {
-        data: null,
-        tab: 2
+    props:
+    {
+        color:{
+            type:       String,
+            default:    'info'
+        },
+    },
+    data(){
+        return {
+            data: null,
+            tab: 2
+        }
     }
-}
 }
 </script>
 

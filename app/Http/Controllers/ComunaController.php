@@ -34,8 +34,8 @@ class ComunaController extends Controller
             'co_comuna'         => 'required',
             'nb_comuna'         => 'required',
             'id_zona'           => 'required',
-            'nu_latitud'        => 'required',
-            'nu_longitud'       => 'required',
+            'tx_latitud'        => 'required',
+            'tx_longitud'       => 'required',
             'tx_observaciones'  => 'required',
             'id_status'         => 'required',
             'id_usuario'        => 'required',
@@ -60,6 +60,21 @@ class ComunaController extends Controller
     }
 
     /**
+     * Listar Barrio por COmuna     
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function comunaZona($id_zona)
+    {
+        $barrios =  Comuna::select('id', 'nb_comuna', 'tx_latitud', 'tx_longitud')
+                          ->where('id_zona', $id_zona)
+                          ->where('id_status', 1)
+                          ->get();
+
+        return $barrios;
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -73,8 +88,8 @@ class ComunaController extends Controller
             'co_comuna'         => 'required',
             'nb_comuna'         => 'required',
             'id_zona'           => 'required',
-            'nu_latitud'        => 'required',
-            'nu_longitud'       => 'required',
+            'tx_latitud'        => 'required',
+            'tx_longitud'       => 'required',
             'tx_observaciones'  => 'required',
             'id_status'         => 'required',
             'id_usuario'        => 'required',

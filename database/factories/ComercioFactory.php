@@ -22,8 +22,8 @@ $factory->define(Comercio::class, function (Faker $faker) {
         'tx_direccion'     => $faker->streetAddress(),
         'id_tipo_comercio' => $faker->numberBetween($min = 1, $max = 3),
         'id_tipo_pago'     => $faker->numberBetween($min = 1, $max = 6),
-        'nu_latitud'       => $faker->latitude($min = 3.488, $max = 3.489),    
-        'nu_longitud'      => $faker->longitude($min = -76.488, $max = -76.489),
+        'tx_latitud'       => $faker->latitude($min = 3.488, $max = 3.489),    
+        'tx_longitud'      => $faker->longitude($min = -76.488, $max = -76.489),
         'id_status'        => 1,
         'id_usuario'       => 1,
     ];

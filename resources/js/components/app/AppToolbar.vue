@@ -84,7 +84,7 @@
         <template v-else>
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                    <v-btn small text v-on="on" @click="navegateTo('/registro')">
+                    <v-btn small text v-on="on" @click="navegateTo('/tipocuenta')">
                         <v-icon>mdi-account-plus</v-icon> Registro
                     </v-btn>
                 </template>

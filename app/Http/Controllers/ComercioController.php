@@ -6,8 +6,14 @@ use App\Models\Comercio;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
+use App\Http\Controllers\Traits\ComercioCategoriaTrait;
+use App\Http\Controllers\Traits\HorarioTrait;
+
 class ComercioController extends Controller
 {
+    
+    use ComercioCategoriaTrait;
+    
     /**
      * Display a listing of the resource.
      *
@@ -81,7 +87,18 @@ class ComercioController extends Controller
      */
     public function comercioUsuario($id_usuario)
     {
-        $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio:id,nb_barrio', 'horario:id,nb_horario'])
+        $barrios =  Comercio::with([
+                        'foto:id_comercio,tx_src', 
+                        'contacto:id,id_comercio,tx_email,tx_sitio_web,tx_facebook,tx_twitter,tx_instagram,tx_youtube',
+                        'telefono:id,id_comercio,tx_telefono,id_tipo_telefono,bo_whatsapp',
+                        'comercioCategoria:id_comercio,id_categoria', 
+                        'departamento:id,nb_departamento', 
+                        'ciudad:id,nb_ciudad,tx_latitud,tx_longitud',
+                        'zona:id,nb_zona,tx_latitud,tx_longitud',
+                        'comuna:id,nb_comuna,tx_latitud,tx_longitud',
+                        'barrio:id,nb_barrio,tx_latitud,tx_longitud', 
+                        'horario:nb_horario,id_comercio',
+                    ])
                     ->where('id_usuario', $id_usuario)
                     ->where('id_status', 1)
                     ->first();
@@ -112,8 +129,8 @@ class ComercioController extends Controller
             'tx_direccion'     => 'required',
             'id_tipo_comercio' => 'required',
             'id_tipo_pago'     => 'required',
-            'nu_latitud'       => 'required',
-            'nu_longitud'      => 'required',
+            'tx_latitud'       => 'required',
+            'tx_longitud'      => 'required',
             'tx_observaciones' => 'required',
             'id_status'        => 'required',
             'id_usuario'       => 'required',
@@ -126,6 +143,30 @@ class ComercioController extends Controller
     
     }
 
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function infoValidate($request)
+    {
+        return request()->validate([
+
+            'nb_comercio'         => 'bail|required|max:50',
+            'nb_fiscal'           => 'bail|required|max:50',
+            'tx_nit'              => 'bail|required|max:12',
+            'tx_descripcion'      => 'bail|required',
+            'id_tipo_comercio'    => 'bail|required',
+            'categorias'          => 'bail|required|array',
+            'id_tipo_pago'        => 'bail|required',
+            'horarios'            => 'bail|required|array',
+            'id_usuario'          => 'bail|required',
+            
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -134,23 +175,122 @@ class ComercioController extends Controller
      */
     public function comercioInfo(Request $request)
     {
-        $validate = request()->validate([
+        $validate = $this->infoValidate($request);
 
-            'nb_comercio'      => 'required',
-            'nb_fiscal'        => 'required',
-            'tx_nit'           => 'required',
-            'tx_descripcion'   => 'required',
-            'id_tipo_comercio' => 'required',
-            'id_tipo_pago'     => 'required',
-            'id_usuario'       => 'required',
+        $request->merge(['id_status' => 1]);
+
+        $response = \DB::transaction(function ()  use($request) {
+
+            $comercio = Comercio::create($request->only(
+                'nb_comercio',
+                'nb_fiscal',
+                'tx_nit',
+                'tx_descripcion',
+                'id_tipo_comercio',
+                'id_tipo_pago',
+                'id_usuario',
+                'id_status'
+            ));
+
+            $categorias =  ComercioCategoriaTrait::storeAll([
+                'categorias'    => $request->input('categorias'),
+                'id_comercio'   => $comercio->id,
+                'id_usuario'    => $request->input('id_usuario'),
+            ]);
+
+            $horarios  = HorarioTrait::storeAll([
+                'horarios'      => $request->input('horarios'),
+                'id_comercio'   => $comercio->id,
+                'id_usuario'    => $request->input('id_usuario'),
+            ]);
+
+            $comercio['categorias'] = $categorias;
+
+            $comercio['horarios']   = $horarios;
+
+            return $comercio;
+        
+        });
+
+        return [ 'msj' => 'Comercio Actualizado Correctamente', 'comercio' => $response];
+    
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function comercioInfoUpdate(Request $request)
+    {
+        $validate = $this->infoValidate($request);
+
+        $comercio = Comercio::where('id', $request->input('id'));
+
+        $response = \DB::transaction(function ()  use($request, $comercio) {
+            
+            $update = $comercio->update($request->only(
+                'nb_comercio',
+                'nb_fiscal',
+                'tx_nit',
+                'tx_descripcion',
+                'id_tipo_comercio',
+                'id_tipo_pago',
+                'id_usuario',
+            ));
+
+            $categorias =  ComercioCategoriaTrait::replaceAll([
+                'categorias'    => $request->input('categorias'),
+                'id_comercio'   => $request->input('id'),
+                'id_usuario'    => $request->input('id_usuario'),
+            ]);
+
+            $horarios  = HorarioTrait::replaceAll([
+                'horarios'      => $request->input('horarios'),
+                'id_comercio'   => $request->input('id'),
+                'id_usuario'    => $request->input('id_usuario'),
+            ]);
+
+            return [ 'categorias' => $categorias, 'horarios' => $horarios ];
+
+        });
+        
+        return [ 'msj' => 'Comercio Actualizado Correctamente',  $response];
+    }
+
+
+    //LOCATIONS FORM
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function comercioLocation(Request $request)
+    {
+        request()->validate([
+
+            "id"                => 'bail|required|integer',
+            "id_departamento"   => 'bail|required|integer',
+            "id_ciudad"         => 'bail|required|integer',
+            "id_zona"           => 'bail|required|integer',
+            "id_comuna"         => 'bail|required|integer',
+            "id_barrio"         => 'bail|required|integer',
+            "tx_direccion"      => 'bail|required|max:50',
+            'tx_latitud'       =>  'required',
+            'tx_longitud'      =>  'required',
+            "id_usuario"        => 'bail|required|integer',
             
         ]);
 
-        $comercio = Comercio::create($request->all());
+        $comercio = Comercio::where('id', $request->input('id'))->update($request->all());
 
-        return [ 'msj' => 'Informacion de Comercio actualizada', compact('comercio') ];
-    
+        return [ 'msj' => 'Comercio Actualizado Correctamente', 'comercio' => $comercio];
     }
+
+
 
 
     /**
@@ -187,8 +327,8 @@ class ComercioController extends Controller
             'tx_direccion'     => 'required',
             'id_tipo_comercio' => 'required',
             'id_tipo_pago'     => 'required',
-            'nu_latitud'       => 'required',
-            'nu_longitud'      => 'required',
+            'tx_latitud'       => 'required',
+            'tx_longitud'      => 'required',
             'tx_observaciones' => 'required',
             'id_status'        => 'required',
             'id_usuario'       => 'required',

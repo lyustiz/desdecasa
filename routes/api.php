@@ -16,31 +16,32 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'guest:api'], function () {
 
-    Route::post('login',            'Auth\LoginController@login');
+    //registro
     Route::post('register',         'Auth\RegisterController@register');
-    Route::post('password/email',   'Auth\ForgotPasswordController@sendResetLinkEmail');
-    Route::post('password/reset',   'Auth\ResetPasswordController@reset');
+    Route::post('register-commerce','Auth\RegisterController@registerCommerce');
 
-    //email Verification
-    Route::post('email/resend',     'Auth\VerificationController@resend');
+    // Email Verification
+    Route::post('verify',           'UsuarioController@verify');
+    Route::post('email/resend',     'UsuarioController@resend');
 
-    // Route::post('recaptcha',        'Auth\CaptchaController@checkToken');
+    //Autenticacion
+    Route::post('login',            'Auth\LoginController@login');
+    Route::post('recover/password', 'UsuarioController@recoverPassword');
+    Route::post('reset/password',   'UsuarioController@resetPassword');
 
-//$this->middleware('verified');
-/*
-GET|HEAD  | email/verify                                 | verification.notice       | App\Http\Controllers\Auth\VerificationController@show                  | web,auth                     |
-GET|HEAD  | email/verify/{id}/{hash}                     | verification.verify       | App\Http\Controllers\Auth\VerificationController@verify                | web,auth,signed,throttle:6,1 |
-*/
-
+    //Route::post('recaptcha',      'Auth\CaptchaController@checkToken');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-
 });
 
 Route::group(['prefix'=>'v1'], function() {
 
+    Route::post('/comercio/info',                    'ComercioController@comercioInfo');
+    Route::put('/comercio/info',                     'ComercioController@comercioInfoUpdate');
+    Route::put('/comercio/location',                 'ComercioController@comercioLocation');
+    
     Route::apiResource('/usuario',          'UsuarioController');
     Route::apiResource('/status',           'StatusController');
     Route::apiResource('/pais',             'PaisController', ['parameters' => ['pais' => 'pais']]);
@@ -49,6 +50,7 @@ Route::group(['prefix'=>'v1'], function() {
     Route::apiResource('/zona',             'ZonaController');
     Route::apiResource('/comuna',           'ComunaController');
     Route::apiResource('/barrio',           'BarrioController');
+    Route::apiResource('/tipoUsuario',      'TipoUsuarioController');
     Route::apiResource('/tipoServicio',     'TipoServicioController');
     Route::apiResource('/tipoFoto',         'TipoFotoController');
     Route::apiResource('/tipoPago',         'TipoPagoController');
@@ -65,18 +67,21 @@ Route::group(['prefix'=>'v1'], function() {
     Route::apiResource('/subcripcion',      'SubcripcionController');
     Route::apiResource('/valoracion',       'ValoracionController');
 
+    Route::get('/comuna/zona/{id_zona}',             'ComunaController@comunaZona');
+    
     Route::get('/barrio/zona/{id_zona}',             'BarrioController@barrioZona');
+    Route::get('/barrio/comuna/{id_comuna}',         'BarrioController@barrioComuna');
 
     Route::get('/comercio/categoria/{id_categoria}', 'ComercioController@comercioCategoria');
     Route::get('/comercio/barrio/{id_barrio}',       'ComercioController@comercioBarrio');
     Route::get('/comercio/filters/{filters}',        'ComercioController@comercioFilters');
     Route::get('/comercio/usuario/{id_usuario}',     'ComercioController@comercioUsuario');
 
-    Route::post('/comercio/info',                   'ComercioController@comercioInfo');
+    
 
     Route::put('/usuario/email/{usuario}',           'UsuarioController@updateEmail');
     Route::put('/usuario/password/{usuario}',        'UsuarioController@updatePassword');
-
+    
     
 
 });

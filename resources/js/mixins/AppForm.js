@@ -15,7 +15,8 @@ export default
             dates:      {},
             picker:     false,
             loading:    true,
-            item:       null
+            item:       null,
+            modal:      false
         }
     },
 
@@ -23,6 +24,7 @@ export default
     {
         //this.fillSelects()
        // this.mapForm();
+       //donde esta mi hogar
     },
 
 	computed: 
@@ -44,31 +46,34 @@ export default
         {
             if(this.item)
             {
-                for(var key in this.item)
-                {
-                    if(this.form.hasOwnProperty(key))
-                    {
-                        if(key.includes('fe_') && this.item[key].length > 10)
-                        {
-                            this.dates[key] =  this.formatDate(this.item[key]);
-							
-							this.form[key] = this.item[key].substr(0, 10);
-							
-                        } else {
-							
-							this.form[key]  =  this.item[key];
-						}
-                    }
-                }
+                this.mapData(this.item)
             }else
             {
                this.clear()
             }
         },
 
-        fetch()
+        mapData(data)
         {
-
+            if(data)
+            {
+                for(var key in data)
+                {
+                    if(this.form.hasOwnProperty(key))
+                    {
+                        if(key.includes('fe_') && data[key].length > 10)
+                        {
+                            this.dates[key] =  this.formatDate(data[key]);
+							
+							this.form[key]  = data[key].substr(0, 10);
+							
+                        } else {
+							
+							this.form[key]  =  data[key];
+						}
+                    }
+                }
+            }
         },
 
 		store() 

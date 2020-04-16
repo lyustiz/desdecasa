@@ -6,25 +6,37 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     created()
     {
         this.$store.commit('setIsMobile', this.$App.isMobile)
+        this.apiCategorias();
+        this.apiZonas();
       
-        let auth = localStorage.getItem('auth');
-        let user = localStorage.getItem('user');
+        let auth  = localStorage.getItem('auth');
+        let token = localStorage.getItem('token');
+        let user  = localStorage.getItem('user');
         
-        if(auth)
+        if(auth) //check expire
         {
-            this.$store.commit('setAuth', auth)
-            this.$store.commit('setUser', JSON.parse(user))
+            this.$store.commit('setAuth',  auth)
+            this.$store.commit('setToken', token)
+            this.$store.commit('setUser',  JSON.parse(user))
         }
+        else{
+            localStorage.removeItem("token")
+            localStorage.removeItem("user")
+            localStorage.removeItem("expire")
+            localStorage.removeItem("auth")
+        }
+    
     },
-    computed: {
+    computed: 
+    {
         size()
         {
-            console.log(this.$vuetify.breakpoint)
             this.$store.commit('setSize', this.$vuetify.breakpoint.name)
             return this.$vuetify.breakpoint.name
         },
@@ -38,12 +50,11 @@ export default {
             return this.$store.getters['getLayout']
         }
     },
-    data () 
-	{
-        return {
-             // layout: 'principal-layout',
-        }
-    },
+
+    methods: 
+    {
+        ...mapActions(['apiCategorias', 'apiZonas'])
+    }
   }
 
 </script>

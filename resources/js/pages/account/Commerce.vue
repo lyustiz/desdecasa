@@ -14,11 +14,11 @@
         <v-tab>
             Contacto <v-icon>mdi-cellphone-message</v-icon>
         </v-tab>
-
+        
         <v-tab-item class="my-3">
             <info-form></info-form>
         </v-tab-item>
-
+        
         <v-tab-item class="my-3">
             <location-form></location-form>
         </v-tab-item>
