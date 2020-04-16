@@ -196,9 +196,7 @@ export default {
     {
         fetch()
         {
-            this.loading = true;
             this.item    = this.$store.getters['getComercio']
-            console.log(this.$store.getters['getComercio'])
             this.form.id = this.item.id;
 
             if( this.item.id_departamento != null)
@@ -208,7 +206,6 @@ export default {
                 this.getComunas(this.item.id_zona)
                 this.getBarrios(this.item.id_comuna)
             }
-            
             this.loading = false
         },
 

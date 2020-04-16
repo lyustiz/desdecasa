@@ -57,21 +57,22 @@ export default {
     },
     created()
     {
-        let auth = this.$store.getters['getAuth'];
 
-        if(!auth)
+        if(!this.$store.getters['getAuth'])
         {
-             this.$router.push('login').catch(err => {})
+            this.$router.push('login').catch(err => {})
         }
+
+        let user = this.$store.getters['getUser']
         
-        let userID = this.$store.getters['getUserid']
-        
-        this.apiComercioUsuario(userID)
-        .then( (response)=> {
+        this.apiComercioUsuario(user.id).then( ()=> {
             this.expand(2)
         })
-  
+
+        this.cardSections = this.sectionsByUser(user.id_tipo_usuario)
+
     },
+
     data()
     {
         return {
@@ -80,8 +81,107 @@ export default {
             cardHeight: 180,
             display: 'd-block',
             expander: true,
-            cardSections: [
+            cardSections: []
+        }
+    },
+    methods: {
+
+        ...mapActions(['apiComercioUsuario']),
+
+        expand(cardId)
+        {
+            
+            this.cardSections.forEach((card, index) => {
+                
+                if(card.id == cardId)
                 {
+                    this.cardSections[index].expand = true;
+                    this.cardSections[index].cols = 12;
+                }
+                else
+                {
+                    this.cardSections[index].visible = false;
+                }
+
+            }, this);
+
+
+        },
+
+        minimize(cardId)
+        {
+
+            this.cardSections.forEach((card, index) => {
+                
+                if(card.id == cardId)
+                {
+                    this.cardSections[index].expand = false;
+                    this.cardSections[index].cols = 3;
+                }
+                else
+                {
+                    this.cardSections[index].visible = true;
+                }
+
+            }, this);
+            
+        },
+
+        sectionsByUser(tipoUsuario)
+        {
+            
+            if(tipoUsuario == 2)
+            {
+                return [
+                    {
+                        id: 1,
+                        color: 'amber',
+                        title: 'Cuenta',
+                        subtitle: 'Configurar',
+                        icon: 'mdi-account-box',
+                        visible: true,
+                        expand: false,
+                        menuItems: [],
+                        component: 'account', 
+                        cols: 3
+                    }
+                ]
+            }
+
+            if(tipoUsuario == 3)
+            {
+                return  [
+                    {
+                        id: 1,
+                        color: 'amber',
+                        title: 'Cuenta',
+                        subtitle: 'Configurar',
+                        icon: 'mdi-account-box',
+                        visible: true,
+                        expand: false,
+                        menuItems: [],
+                        component: 'account', 
+                        cols: 3
+                    },
+                    {
+                        id: 2,
+                        color: 'success',
+                        title: 'Comercio',
+                        subtitle: 'Configurar',
+                        icon: 'mdi-storefront',
+                        visible: true,
+                        expand: false,
+                        menuItems: [],
+                        component: 'commerce', 
+                        cols: 3
+                    }
+                ]
+            }
+
+            if(tipoUsuario == 1)
+            {
+                return  [
+                    {
                     id: 1,
                     color: 'amber',
                     title: 'Cuenta',
@@ -129,52 +229,8 @@ export default {
                     component: 'webpage', 
                     cols: 3
                 },
-                
-
-            ]
-        }
-    },
-    methods: {
-
-        ...mapActions(['apiComercioUsuario']),
-
-        expand(cardId)
-        {
-            
-            this.cardSections.forEach((card, index) => {
-                
-                if(card.id == cardId)
-                {
-                    this.cardSections[index].expand = true;
-                    this.cardSections[index].cols = 12;
-                }
-                else
-                {
-                    this.cardSections[index].visible = false;
-                }
-
-            }, this);
-
-
-        },
-
-        minimize(cardId)
-        {
-
-            this.cardSections.forEach((card, index) => {
-                
-                if(card.id == cardId)
-                {
-                    this.cardSections[index].expand = false;
-                    this.cardSections[index].cols = 3;
-                }
-                else
-                {
-                    this.cardSections[index].visible = true;
-                }
-
-            }, this);
-            
+                ]
+            }
         }
     }
 }

@@ -203,26 +203,13 @@ export default {
     {
          fetch()
         {
-            this.form.id_usuario = this.getIduser;
-            this.loading = true;
-
-            axios.get('/api/v1/comercio/usuario/' + this.getIduser)
-			.then( response =>
-			{
-                this.item = response.data;
-                this.form.id_comercio = this.item.id;
-                if( this.item.contacto)
-                {
-                    this.mapData(this.item.contacto)
-                }
-                this.loading = false
-
-			})
-            .catch( error =>
+            this.item = this.$store.getters['getComercio']
+            this.form.id_comercio = this.item.id;
+            if( this.item.contacto)
             {
-              console.log(error)
-            })
-            
+                this.mapData(this.item.contacto)
+            }
+            this.loading = false
         },
 
         setData()

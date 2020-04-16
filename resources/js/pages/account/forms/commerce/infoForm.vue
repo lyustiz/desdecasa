@@ -129,7 +129,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn small dark fab color="amber" @click="cancel()" :loading="loading"> <v-icon>mdi-restore</v-icon></v-btn>
-                <v-btn small dark fab color="primary" @click="setData()" :loading="loading"> <v-icon>mdi-content-save</v-icon></v-btn>
+                <v-btn small dark fab color="primary" @click="update()" :loading="loading"> <v-icon>mdi-content-save</v-icon></v-btn>
           </v-card-actions>
     </v-card>
     </v-form>
@@ -174,6 +174,7 @@ export default {
         return{
             resource: 'comercio', 
             form: {
+                id:                '',
                 nb_comercio:      '',
                 nb_fiscal:        '',
                 tx_nit:           '',
@@ -204,40 +205,6 @@ export default {
     },
     methods:
     {
-
-        setData()
-        {
-            if(this.item.hasOwnProperty('id')) {
-                this.form.id = this.item.id
-                this.update()
-            } else {
-                this.store()
-            }
-        },
-
-        store()
-        {
-            if (!this.$refs.form.validate())  return 
-
-            this.loading = true;
-            this.form.id_usuario = this.getIduser;
-            
-            axios.post('/api/v1/' + this.resource + '/info', this.form)
-			.then( response =>
-			{
-                this.showMessage(response.data.msj)
-                this.item = response.data.comercio
-			})
-            .catch( error =>
-            {
-                this.showError(error);
-            })
-            .finally( () =>
-            {
-                this.loading = false
-            }); 
-    
-        },
 
         update()
         {
