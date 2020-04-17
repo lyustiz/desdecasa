@@ -122,20 +122,16 @@ export default {
             {
                 this.loading = false
             }); 
-    
         },
 
         cancel()
         {
-
             for(var key in this.form)
             {
                 this.form[key] = '';
             }
             
             this.$refs.form.resetValidation();
-
-   
         }
     }
 }

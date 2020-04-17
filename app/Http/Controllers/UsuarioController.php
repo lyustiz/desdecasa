@@ -78,16 +78,19 @@ class UsuarioController extends Controller
 
             'nb_nombres'        => 'required',
             'fe_nacimiento'     => 'required',
-            'tx_foto'           => 'required|mimes:jpeg,bmp,png',
+            'tx_foto'           => 'required',
             'tx_sexo'           => 'required',
-            'tx_src'            => 'required',
+            'tx_src'            => 'nullable',
             'id_usuario'        => 'required',
             
         ]);
         
         $filename = $this->getFilename($request->input('tx_foto'), $usuario->id);
         
-        $photo    = $this->storePhoto($request->input('tx_src'), $filename);
+        if($request->filled('tx_src'))
+        {
+            $photo    = $this->storePhoto($request->input('tx_src'), $filename);
+        }
 
         $request->merge(['tx_foto' => $filename]);
   

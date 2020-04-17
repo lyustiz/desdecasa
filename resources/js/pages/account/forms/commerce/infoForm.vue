@@ -1,137 +1,184 @@
 <template>
     <v-form v-model="valid" ref="form" >
-    <v-card class="mx-auto" max-width="400" :loading="loading">
-        <v-card-title >
-            Informacion del Comercio
-        </v-card-title>
-        <v-card-text>
+    <v-row no-gutters="">
+        <v-col md="6" sm="12" xs="12">
+            <v-card class="ml-auto" max-width="400" :loading="loading">
+            <v-card-title >
+                Informacion del Comercio
+            </v-card-title>
+            <v-card-text>
 
-            <v-flex xs12 >
-                <v-text-field
-                    color="cyan darken-3"
-                    prepend-inner-icon="mdi-gavel"
-                    label="Nit"
-                    hint=""
-                    :rules="rules.required"
-                    v-model="form.tx_nit"
-                    dense
-                    outlined
-                    filled >
-                </v-text-field>
-            </v-flex>
+                <v-flex xs12 >
+                    <v-text-field
+                        color="cyan darken-3"
+                        prepend-inner-icon="mdi-gavel"
+                        label="Nit"
+                        hint=""
+                        :rules="rules.required"
+                        v-model="form.tx_nit"
+                        dense
+                        outlined
+                        filled >
+                    </v-text-field>
+                </v-flex>
 
-            <v-flex xs12 >
-                <v-text-field
-                    color="cyan darken-3"
-                    prepend-inner-icon="mdi-storefront-outline"
-                    label="Nombre Fiscal"
-                    type="text"
-                    :rules="rules.required"
-                    v-model="form.nb_fiscal"
-                    dense
-                    outlined
-                    filled >
-                </v-text-field>
-            </v-flex>
+                <v-flex xs12 >
+                    <v-text-field
+                        color="cyan darken-3"
+                        prepend-inner-icon="mdi-storefront-outline"
+                        label="Nombre Fiscal"
+                        type="text"
+                        :rules="rules.required"
+                        v-model="form.nb_fiscal"
+                        dense
+                        outlined
+                        filled >
+                    </v-text-field>
+                </v-flex>
 
-            <v-flex xs12 >
-                <v-text-field
-                    color="cyan darken-3"
-                    prepend-inner-icon="mdi-storefront-outline"
-                    label="Nombre Comercial"
-                    type="text"
-                    :rules="rules.required"
-                    v-model="form.nb_comercio"
-                    dense
-                    outlined
-                    filled >
-                </v-text-field>
-            </v-flex>
+                <v-flex xs12 >
+                    <v-text-field
+                        color="cyan darken-3"
+                        prepend-inner-icon="mdi-storefront-outline"
+                        label="Nombre Comercial"
+                        type="text"
+                        :rules="rules.required"
+                        v-model="form.nb_comercio"
+                        dense
+                        outlined
+                        filled >
+                    </v-text-field>
+                </v-flex>
 
-            <v-flex xs12 d-flex>
-                <v-select
-                    label="Tipo Comercio*"
-                    prepend-inner-icon="mdi-storefront-outline"
-                    :rules="rules.select"
-                    v-model="form.id_tipo_comercio" 
-                    :items="selects.tipoComercio"
-                    item-value="id"
-                    item-text="nb_tipo_comercio"
-                    dense
-                    outlined
-                    filled
-                ></v-select>
-            </v-flex>
+                <v-flex xs12 d-flex>
+                    <v-select
+                        label="Tipo Comercio*"
+                        prepend-inner-icon="mdi-storefront-outline"
+                        :rules="rules.select"
+                        v-model="form.id_tipo_comercio" 
+                        :items="selects.tipoComercio"
+                        item-value="id"
+                        item-text="nb_tipo_comercio"
+                        dense
+                        outlined
+                        filled
+                    ></v-select>
+                </v-flex>
 
-            <v-flex xs12 d-flex>
-                <v-select
-                    label="Categorias del Comercio*"
-                    prepend-inner-icon="mdi-storefront-outline"
-                    :rules="rules.select"
-                    v-model="form.categorias" 
-                    :items="getCategorias"
-                    item-value="id"
-                    item-text="nb_categoria"
-                    multiple
-                    chips
-                    dense
-                    outlined
-                    filled
-                ></v-select>
-            </v-flex>
+                <v-flex xs12 d-flex>
+                    <v-select
+                        label="Categorias del Comercio*"
+                        prepend-inner-icon="mdi-storefront-outline"
+                        :rules="rules.select"
+                        v-model="form.categorias" 
+                        :items="getCategorias"
+                        item-value="id"
+                        item-text="nb_categoria"
+                        multiple
+                        chips
+                        dense
+                        outlined
+                        filled
+                    ></v-select>
+                </v-flex>
 
-            <v-flex xs12 d-flex>
-                <v-select
-                    prepend-inner-icon="credit_card"
-                    label="Medios de Pago*"
-                    v-model="form.id_tipo_pago" 
-                    :rules="rules.select"
-                    :items="selects.tipoPago"
-                    item-value="id"
-                    item-text="nb_tipo_pago"
-                    chips
-                    dense
-                    outlined
-                    filled
-                ></v-select>
-            </v-flex>
+                <v-flex xs12 d-flex>
+                    <v-select
+                        prepend-inner-icon="credit_card"
+                        label="Medios de Pago*"
+                        v-model="form.id_tipo_pago" 
+                        :rules="rules.select"
+                        :items="selects.tipoPago"
+                        item-value="id"
+                        item-text="nb_tipo_pago"
+                        chips
+                        dense
+                        outlined
+                        filled
+                    ></v-select>
+                </v-flex>
 
-            <v-flex xs12 d-flex>
-                <v-combobox
-                    prepend-inner-icon="mdi-calendar-clock"
-                    label="Horarios*"
-                    hint="Seleccione o escriba los horarios de trabajo"
-                    v-model="form.horarios" 
-                    :rules="rules.select"
-                    :items="selects.horarios"
-                    multiple
-                    chips
-                    dense
-                    outlined
-                    filled
-                ></v-combobox>
-            </v-flex>
+                <v-flex xs12 d-flex>
+                    <v-combobox
+                        prepend-inner-icon="mdi-calendar-clock"
+                        label="Horarios*"
+                        hint="Seleccione o escriba los horarios de trabajo"
+                        v-model="form.horarios" 
+                        :rules="rules.select"
+                        :items="selects.horarios"
+                        multiple
+                        chips
+                        dense
+                        outlined
+                        filled
+                    ></v-combobox>
+                </v-flex>
 
-            <v-flex xs12 d-flex>
-                <v-textarea
-                    prepend-inner-icon="mdi-wallet-travel"
-                    label="Actividad Comercial"
-                    hint="Detalle la Actvidad Comercial de la Empresa"
-                    v-model="form.tx_descripcion"
-                    dense
-                    outlined
-                    filled
-                    rows="2"
-                ></v-textarea>
-            </v-flex>
+                <v-flex xs12 d-flex>
+                    <v-textarea
+                        prepend-inner-icon="mdi-wallet-travel"
+                        label="Actividad Comercial"
+                        hint="Detalle la Actvidad Comercial de la Empresa"
+                        v-model="form.tx_descripcion"
+                        dense
+                        outlined
+                        filled
+                        rows="2"
+                    ></v-textarea>
+                </v-flex>
+                
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn small dark fab color="amber" @click="cancel()" :loading="loading"> <v-icon>mdi-restore</v-icon></v-btn>
+                    <v-btn small dark fab color="primary" @click="update()" :loading="loading"> <v-icon>mdi-content-save</v-icon></v-btn>
+            </v-card-actions>
+        </v-card>
+
+        </v-col >
+
+
+        <v-col cols="12" md="6" lg="6">
+
+            <v-card class="mx-rigth pa-2" max-width="300">
             
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn small dark fab color="amber" @click="cancel()" :loading="loading"> <v-icon>mdi-restore</v-icon></v-btn>
-                <v-btn small dark fab color="primary" @click="update()" :loading="loading"> <v-icon>mdi-content-save</v-icon></v-btn>
-          </v-card-actions>
-    </v-card>
+                <v-img
+                :src="fileSrc"
+                lazy-src="images/store.png"
+                aspect-ratio="1"
+                class="grey lighten-2"
+                max-width="300"
+                max-height="200"
+                >
+                    <template  >
+                        <v-row
+                        class="fill-height"
+                        align="center"
+                        justify="center"
+                        >
+                        <v-file-input 
+                            color="red" 
+                            accept="image/*" 
+                            capture="camera" 
+                            v-model="file" 
+                            prepend-icon="mdi-image-search" 
+                            class="col-1" 
+                            ref="inputImage"
+                        >
+                            <template v-slot:selection="{  }">
+                                <div></div>
+                            </template>
+                        </v-file-input>
+                        </v-row>
+                    </template>
+                </v-img>
+
+            </v-card>
+        </v-col>
+    
+    </v-row>
+    
+    
     </v-form>
 </template>
 
@@ -185,6 +232,8 @@ export default {
                 horarios:         '',
                 id_usuario:       '',
             },
+            fileSrc: 'images/store.png',
+            file: null,
             selects: {
                 tipoComercio: [
                     { id: 1, nb_tipo_comercio: 'Sede Física'},

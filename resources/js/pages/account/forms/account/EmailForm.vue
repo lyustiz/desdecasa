@@ -2,7 +2,7 @@
     <v-form v-model="valid" ref="form" >
     <v-card class="mx-auto" max-width="400">
         <v-card-title >
-            Actualizar Email
+            Actualizar Correo
         </v-card-title>
         <v-card-text>
 
@@ -72,7 +72,8 @@ export default {
 
     created()
     {
-        this.fetch();
+        this.item = this.$store.getters['getUser']
+        this.mapForm()
     },
 
     computed: 
@@ -97,23 +98,6 @@ export default {
     },
     methods: 
     {
-        fetch()
-        {
-            this.form.id_usuario = this.getIduser;
-
-            axios.get('/api/v1/' + this.resource + '/' + this.getIduser)
-			.then( response =>
-			{
-                this.item = response.data;
-                this.mapForm()
-			})
-            .catch( error =>
-            {
-              console.log(error)
-            })
-            
-        },
-
         update()
         {
             if (!this.$refs.form.validate())  return 

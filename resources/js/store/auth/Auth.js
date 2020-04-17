@@ -72,11 +72,6 @@ export default
 									token: response.data.auth,
 									expire: response.data.expires_in
 								};
-						
-						localStorage.setItem("token", 	response.data.auth)
-						localStorage.setItem("user", 	JSON.stringify(response.data.user))
-						localStorage.setItem("expire", 	response.data.expires_in)
-						localStorage.setItem("auth", 	true)
 
 						dispatch('autenticate', data)
 						resolve( { status: 200 } )
@@ -160,7 +155,7 @@ export default
 			})
         },
         
-        logout( { dispatch }, categoria )
+        logout( { dispatch } )
 		{
 			return new Promise((resolve, reject) => 
 			{
@@ -216,6 +211,10 @@ export default
 			commit('setToken' , data.token);
 			commit('setExpire', data.expire);
 
+			localStorage.setItem("token", 	data.token)
+			localStorage.setItem("user", 	JSON.stringify(data.user))
+			localStorage.setItem("expire", 	data.expire)
+			localStorage.setItem("auth", 	true)
 		},
 
 		unatenticate({ commit })
@@ -224,6 +223,11 @@ export default
 			commit('setAuth'  , false);
 			commit('setToken' , null);
 			commit('setExpire', null);
+
+			localStorage.removeItem("token")
+			localStorage.removeItem("user")
+			localStorage.removeItem("expire")
+			localStorage.setItem("auth", 	false)
 		}
 
     }

@@ -96,9 +96,9 @@ class LoginController extends Controller
     {
         auth()->logout();
 
-        JWTAuth::parseToken()->refresh();
+        //JWTAuth::parseToken()->refresh();
         
-        return redirect('/');
+        return response('Cerrrando Sesion', 200) ;
     }
 
     public function refresh()

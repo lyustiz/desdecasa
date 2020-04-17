@@ -18,18 +18,21 @@ export default {
         let auth  = localStorage.getItem('auth');
         let token = localStorage.getItem('token');
         let user  = localStorage.getItem('user');
+        let expire  = localStorage.getItem('expire');
         
-        if(auth) //check expire
+        if(auth==='true') //check expire
         {
-            this.$store.commit('setAuth',  auth)
-            this.$store.commit('setToken', token)
-            this.$store.commit('setUser',  JSON.parse(user))
+            const data ={
+                            user: JSON.parse(user),
+                            token,
+                            expire
+                        };
+            
+            this.$store.dispatch('autenticate', data)
         }
-        else{
-            localStorage.removeItem("token")
-            localStorage.removeItem("user")
-            localStorage.removeItem("expire")
-            localStorage.removeItem("auth")
+        else
+        {
+            this.$store.dispatch('unatenticate')
         }
     
     },

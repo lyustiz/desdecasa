@@ -2,7 +2,7 @@
     <v-form v-model="valid" ref="form" >
     <v-row no-gutters>
     <v-col  md="6" sm="12" xs="12">
-    <v-card class="ml-auto" max-width="400">
+    <v-card class="ml-auto" max-width="400" :loading="loading">
         <v-card-title >
             Datos Personales
         </v-card-title>
@@ -112,7 +112,11 @@ export default {
 
     created()
     {
-        this.fetch();
+        this.item = this.$store.getters['getUser']
+        this.mapForm()
+        this.formatPicker()
+        this.setSrc()
+        this.loading = false
     },
     computed: 
     {
@@ -165,24 +169,6 @@ export default {
     },
     methods:
     {
-        
-        fetch()
-        {
-            axios.get('/api/v1/' + this.resource + '/' + this.getUserid)
-			.then( response =>
-			{
-                this.item = response.data;
-                this.mapForm()
-                this.formatPicker()
-                this.setSrc()
-			})
-            .catch( error =>
-            {
-              console.log(error)
-            })
-            
-        },
-
         validImage(image)
         {
             let size = image.size / 1024  ; //kilobites
