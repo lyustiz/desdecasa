@@ -21,6 +21,7 @@ class Comercio extends Model
                             'tx_direccion',
                             'id_tipo_comercio',
                             'id_tipo_pago',
+                            'tx_foto',
                             'tx_latitud',
                             'tx_longitud',
                             'tx_observaciones',

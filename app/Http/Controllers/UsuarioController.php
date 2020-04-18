@@ -83,6 +83,9 @@ class UsuarioController extends Controller
             'tx_src'            => 'nullable',
             'id_usuario'        => 'required',
             
+        ],
+        [
+            'tx_foto.required'   => 'La foto es requerida',
         ]);
         
         $filename = $this->getFilename($request->input('tx_foto'), $usuario->id);

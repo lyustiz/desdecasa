@@ -1,6 +1,6 @@
 <template>
     <v-form v-model="valid" ref="form" >
-    <v-card class="mx-auto" max-width="400">
+    <v-card class="mx-auto" max-width="400" :loading="loading">
          <v-card-title >
             Actualizar Password 
          </v-card-title>
@@ -62,11 +62,15 @@
 
 <script>
 import AppForm from '@mixins/AppForm'
-import AppData from '@mixins/AppData'
 
 export default {
 
-    mixins: [ AppForm, AppData ],
+    mixins: [ AppForm ],
+
+    created()
+    {
+        this.loading = false
+    },
 
     computed: 
     {
@@ -130,7 +134,6 @@ export default {
             {
                 this.form[key] = '';
             }
-            
             this.$refs.form.resetValidation();
         }
     }

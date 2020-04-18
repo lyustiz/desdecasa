@@ -61,11 +61,14 @@ export default
                 {
                     if(this.form.hasOwnProperty(key))
                     {
-                        if(key.includes('fe_') && data[key].length > 10)
+                        if(key.includes('fe_'))
                         {
                             this.dates[key] =  this.formatDate(data[key]);
 							
-							this.form[key]  = data[key].substr(0, 10);
+                            if(data[key])
+                            {
+                                this.form[key]  = data[key].substr(0, 10);
+                            }
 							
                         } else {
 							

@@ -57,8 +57,8 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn small fab dark color="amber"  @click="reset()"> <v-icon>mdi-restore</v-icon></v-btn>
-                <v-btn small fab dark color="primary" @click="update()"> <v-icon>mdi-content-save</v-icon></v-btn>
+                <v-btn small fab dark color="amber"  @click="reset()" :loading="loading"> <v-icon>mdi-restore</v-icon></v-btn>
+                <v-btn small fab dark color="primary" @click="update()" :loading="loading"> <v-icon>mdi-content-save</v-icon></v-btn>
           </v-card-actions>
         </v-card>
         </v-col>
@@ -218,9 +218,12 @@ export default {
         {
             let fullSrc = '/storage/account/' + this.form.tx_foto
             
-            if(this.form.tx_foto.length > 0)
+            if(this.form.tx_foto)
             {
-                this.file = { size: 10, type: 'image/jpeg', src: fullSrc, name:this.form.tx_foto }                
+                if(this.form.tx_foto.length > 0)
+                {
+                    this.file = { size: 10, type: 'image/jpeg', src: fullSrc, name:this.form.tx_foto }                
+                }
             }
         },
 
@@ -239,7 +242,18 @@ export default {
                 this.form.tx_src=null;
             };
 
+        },
+
+        cancel()
+        {
+            let email = this.item.tx_email
+
+            this.clear()
+            
+            this.form.tx_email  = email;
         }
+
+
 
     }
 

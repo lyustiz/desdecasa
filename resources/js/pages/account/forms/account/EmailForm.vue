@@ -1,6 +1,6 @@
 <template>
     <v-form v-model="valid" ref="form" >
-    <v-card class="mx-auto" max-width="400">
+    <v-card class="mx-auto" max-width="400" :loading="loading">
         <v-card-title >
             Actualizar Correo
         </v-card-title>
@@ -57,7 +57,6 @@
               <v-btn small dark fab color="primary" @click="update()"> <v-icon>mdi-content-save</v-icon></v-btn>
           </v-card-actions>
     </v-card>
-
     </v-form>
 </template>
 
@@ -68,20 +67,14 @@ import AppData from '@mixins/AppData'
 
 export default {
 
-    mixins: [ AppForm, AppData ],
+    mixins: [ AppForm ],
 
     created()
     {
         this.item = this.$store.getters['getUser']
         this.mapForm()
-    },
-
-    computed: 
-    {
-        getIduser()
-        {
-            this.$store.getters['getUserid']
-        }
+        this.form.id_usuario = this.getIduser;
+        this.loading = false
     },
 
     data()
@@ -92,7 +85,7 @@ export default {
                 tx_email:      '',
                 tx_new_email:  '',
                 tx_ret_email:  '',
-                id_usuario:   ''
+                id_usuario:    ''
             },
         }
     },
@@ -103,14 +96,15 @@ export default {
             if (!this.$refs.form.validate())  return 
 
             this.loading = true;
-            this.form.id_usuario = this.getIduser;
-            
-            axios.put('/api/v1/' + this.resource + '/email/' + this.getIduser, this.form)
+            this.form.id_usuario = this.item.id;
+            axios.put('/api/v1/' + this.resource + '/email/' + this.item.id, this.form)
 			.then( response =>
 			{
                 this.showMessage(response.data.msj)
                 this.item.tx_email = this.form.tx_new_email;
-                this.reset();
+                this.$store.commit('setUser', this.item)
+                this.clear();
+                this.form.tx_email = this.item.tx_email;
 			})
             .catch( error =>
             {
@@ -125,11 +119,10 @@ export default {
 
         cancel()
         {
-            let email = this.item.tx_email
 
             this.clear()
             
-            this.form.tx_email  = email;
+            this.form.tx_email  = this.item.tx_email;
         }
 
         

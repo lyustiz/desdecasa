@@ -62,6 +62,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'commerce' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/commerce'),
+            'url' => env('APP_URL').'/storage/commerce',
+            'visibility' => 'public',
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

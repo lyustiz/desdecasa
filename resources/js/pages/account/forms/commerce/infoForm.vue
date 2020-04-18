@@ -69,7 +69,7 @@
                     <v-select
                         label="Categorias del Comercio*"
                         prepend-inner-icon="mdi-storefront-outline"
-                        :rules="rules.select"
+                        :rules="rules.mutiple"
                         v-model="form.categorias" 
                         :items="getCategorias"
                         item-value="id"
@@ -131,7 +131,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn small dark fab color="amber" @click="cancel()" :loading="loading"> <v-icon>mdi-restore</v-icon></v-btn>
-                    <v-btn small dark fab color="primary" @click="update()" :loading="loading"> <v-icon>mdi-content-save</v-icon></v-btn>
+                    <v-btn small dark fab color="success" @click="update()" :loading="loading"> <v-icon>mdi-content-save-edit</v-icon></v-btn>
             </v-card-actions>
         </v-card>
 
@@ -157,6 +157,7 @@
                         justify="center"
                         >
                         <v-file-input 
+                            id="inputImage" 
                             color="red" 
                             accept="image/*" 
                             capture="camera" 
@@ -185,17 +186,17 @@
 <script>
 
 import AppForm from '@mixins/AppForm'
-import AppData from '@mixins/AppData'
 
 export default {
     
-    mixins: [ AppForm, AppData ],
+    mixins: [ AppForm ],
 
     created()
     {
         this.item = this.$store.getters['getComercio']
         this.mapForm()
         this.setRelations()
+        this.setSrc()
         this.loading = false
     },
 
@@ -214,14 +215,37 @@ export default {
         getCategorias()
         {
             return this.$store.getters['getCategorias']
-        }
+        },
+
+        fileSrc()
+        {
+           if(this.file) {
+
+                if(this.validImage(this.file))
+                {
+                    this.form.tx_foto = this.file.name;
+                    let src = (this.file.src) ? this.file.src : URL.createObjectURL(this.file);
+
+                    if(!this.file.src)
+                    {
+                        this.fileToSrc()
+                    }
+
+                    return  src;
+                }
+            }
+
+            this.form.tx_foto = '';
+            this.form.tx_src  = '';
+            return 'images/store.png';
+        },
     },
 
     data(){
         return{
             resource: 'comercio', 
             form: {
-                id:                '',
+                id:               '',
                 nb_comercio:      '',
                 nb_fiscal:        '',
                 tx_nit:           '',
@@ -231,8 +255,8 @@ export default {
                 id_tipo_pago:     '',
                 horarios:         '',
                 id_usuario:       '',
+                tx_foto:          ''
             },
-            fileSrc: 'images/store.png',
             file: null,
             selects: {
                 tipoComercio: [
@@ -290,6 +314,75 @@ export default {
             }
         },
 
+        validImage(image)
+        {
+            let size = image.size / 1024  ; //kilobites
+            let type = image.type.split('/');
+            let imageType = ['jpeg', 'png', 'bmp'];
+
+            const fileTypes = [
+                "image/apng",
+                "image/bmp",
+                "image/gif",
+                "image/jpeg",
+                "image/pjpeg",
+                "image/png",
+                "image/svg+xml",
+                "image/tiff",
+                "image/webp",
+                "image/x-icon"
+                ];
+
+            if(size > 0)
+            {
+                if(size > 2048)
+                {
+                    let msj = 'archivo debe ser menor de 2 MB. (Actual: '+ (size / 1024).toFixed(2) +' MB)';
+                    this.showError(msj)
+                    return false;
+                }
+            }
+
+            if( (type[0] != 'image') || ( !imageType.includes(type[1]) ) )
+            {
+                let msj = 'solo se permiten imagenes con los formatos: ' + imageType;
+                this.showError(msj)
+                return false;
+            }
+
+           return true;
+        },
+
+        setSrc()
+        {
+            let fullSrc = '/storage/commerce/' + this.form.tx_foto
+            
+            if(this.form.tx_foto)
+            {
+                if(this.form.tx_foto.length > 0)
+                {
+                    this.file = { size: 10, type: 'image/jpeg', src: fullSrc, name:this.form.tx_foto }                
+                }
+            }
+        },
+
+        fileToSrc()
+        {
+        
+            let reader = new FileReader();
+
+            reader.readAsDataURL(this.file);
+
+            reader.onload = () => {
+                this.form.tx_src = reader.result;
+            };
+
+            reader.onerror = () => {
+                this.form.tx_src=null;
+            };
+
+        },
+
         cancel()
         {
             this.$refs.form.resetValidation()
@@ -301,5 +394,13 @@ export default {
 </script>
 
 <style>
-
+ .v-file-input .v-icon{
+     font-size: 60px !important;
+     color: var(--v-info-base);
+     margin: 8px;
+     opacity: 0.3;
+ }
+  .v-file-input .v-icon:hover{
+     opacity: 0.7;
+ }
 </style>

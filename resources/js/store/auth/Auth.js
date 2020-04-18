@@ -26,16 +26,19 @@ export default
 		setToken (state, token)
         {
 			state.token		= token
+			localStorage.setItem("token", 	token)
 		},
 
 		setExpire (state, expire)
 		{
 			state.expire 	= expire
+			localStorage.setItem("expire", 	expire)
 		},
 		
 		setAuth (state, auth)
         {
-            state.auth 		= auth
+			state.auth 		= auth
+			localStorage.setItem("auth", 	auth)
 		},
 		
 		setUser(state, user)
@@ -43,6 +46,7 @@ export default
 			state.user  	= user
 			state.userid   	= user.id
 			state.username 	= user.nb_usuario
+			localStorage.setItem("user", (user)  ? JSON.stringify(user): null)			
 		},
 
 		setUserid(state, userid)
@@ -210,11 +214,6 @@ export default
 			commit('setAuth'  , true);
 			commit('setToken' , data.token);
 			commit('setExpire', data.expire);
-
-			localStorage.setItem("token", 	data.token)
-			localStorage.setItem("user", 	JSON.stringify(data.user))
-			localStorage.setItem("expire", 	data.expire)
-			localStorage.setItem("auth", 	true)
 		},
 
 		unatenticate({ commit })

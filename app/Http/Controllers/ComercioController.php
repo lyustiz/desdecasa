@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comercio;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Traits\ComercioCategoriaTrait;
 use App\Http\Controllers\Traits\HorarioTrait;
 
@@ -88,7 +88,6 @@ class ComercioController extends Controller
     public function comercioUsuario($id_usuario)
     {
         $barrios =  Comercio::with([
-                        'foto:id_comercio,tx_src', 
                         'contacto:id,id_comercio,tx_email,tx_sitio_web,tx_facebook,tx_twitter,tx_instagram,tx_youtube',
                         'telefono:id,id_comercio,tx_telefono,id_tipo_telefono,bo_whatsapp',
                         'comercioCategoria:id_comercio,id_categoria', 
@@ -154,17 +153,23 @@ class ComercioController extends Controller
     {
         return request()->validate([
 
-            'nb_comercio'         => 'bail|required|max:50',
-            'nb_fiscal'           => 'bail|required|max:50',
-            'tx_nit'              => 'bail|required|max:12',
-            'tx_descripcion'      => 'bail|required',
-            'id_tipo_comercio'    => 'bail|required',
-            'categorias'          => 'bail|required|array',
-            'id_tipo_pago'        => 'bail|required',
-            'horarios'            => 'bail|required|array',
-            'id_usuario'          => 'bail|required',
+            'nb_comercio'       => 'bail|required|max:50',
+            'nb_fiscal'         => 'bail|required|max:50',
+            'tx_nit'            => 'bail|required|max:12',
+            'tx_descripcion'    => 'bail|required',
+            'id_tipo_comercio'  => 'bail|required',
+            'categorias'        => 'bail|required|array',
+            'id_tipo_pago'      => 'bail|required',
+            'horarios'          => 'bail|required|array',
+            'tx_foto'           => 'bail|required',
+            'tx_src'            => 'bail|nullable',
+            'id_usuario'        => 'bail|required',
             
-        ]);
+        ],
+        [
+            'tx_foto.required'   => 'La Foto es requerida',
+        ]
+        );
     }
 
     /**
@@ -216,6 +221,22 @@ class ComercioController extends Controller
     
     }
 
+    private function storePhoto($fileSrc, $filename)
+	{
+        $srcFoto  = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $fileSrc));
+
+        $stored = Storage::disk('commerce')->put($filename, $srcFoto);
+
+        return $stored;
+    }
+
+    private function getFilename($file, $id_comercio)
+    {
+        $extension = explode(".", $file)[1];
+
+        return "$id_comercio.$extension"; 
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -230,6 +251,15 @@ class ComercioController extends Controller
 
         $response = \DB::transaction(function ()  use($request, $comercio) {
             
+            $filename = $this->getFilename($request->input('tx_foto'), $request->input('id'));
+        
+            if($request->filled('tx_src'))
+            {
+                $photo    = $this->storePhoto($request->input('tx_src'), $filename);
+            }
+           
+            $request->merge(['tx_foto' => $filename]);
+
             $update = $comercio->update($request->only(
                 'nb_comercio',
                 'nb_fiscal',
@@ -237,6 +267,7 @@ class ComercioController extends Controller
                 'tx_descripcion',
                 'id_tipo_comercio',
                 'id_tipo_pago',
+                'tx_foto',
                 'id_usuario',
             ));
 

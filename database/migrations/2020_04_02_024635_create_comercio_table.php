@@ -26,7 +26,8 @@ class CreateComercioTable extends Migration
 			$table->integer('id_barrio')->nullable();
 			$table->string('tx_direccion', 100)->nullable();
 			$table->integer('id_tipo_comercio')->nullable();
-			$table->integer('id_tipo_pago')->nullable();
+            $table->integer('id_tipo_pago')->nullable();
+            $table->integer('tx_foto',80)->nullable();
 			$table->string('tx_latitud', 20)->nullable();
 			$table->string('tx_longitud', 20)->nullable();
 			$table->string('tx_observaciones', 100)->nullable();
