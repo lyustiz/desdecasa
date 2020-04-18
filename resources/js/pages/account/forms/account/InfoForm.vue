@@ -57,7 +57,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn small fab dark color="amber"  @click="reset()" :loading="loading"> <v-icon>mdi-restore</v-icon></v-btn>
+                <v-btn small fab dark color="amber"  @click="cancel()" :loading="loading"> <v-icon>mdi-restore</v-icon></v-btn>
                 <v-btn small fab dark color="primary" @click="update()" :loading="loading"> <v-icon>mdi-content-save</v-icon></v-btn>
           </v-card-actions>
         </v-card>
@@ -96,7 +96,6 @@
                     </v-row>
                 </template>
             </v-img>
-
         </v-card>
     </v-col>
     </v-row>
@@ -105,16 +104,14 @@
 
 <script>
 import AppForm from '@mixins/AppForm'
-import AppData from '@mixins/AppData';
 
 export default {
-    mixins: [ AppForm, AppData ],
+    mixins: [ AppForm ],
 
     created()
     {
         this.item = this.$store.getters['getUser']
         this.mapForm()
-        this.formatPicker()
         this.setSrc()
         this.loading = false
     },
@@ -169,6 +166,37 @@ export default {
     },
     methods:
     {
+        update() 
+		{
+            if (!this.$refs.form.validate())  return 
+
+            this.loading = true;
+            this.form.id_usuario = this.item.id;
+            
+            axios.put(this.fullUrlId, this.form)
+            .then(response => 
+            {
+                this.showMessage(response.data.msj)
+                
+                this.item.nb_nombres    = this.form.nb_nombres
+                this.item.fe_nacimiento = this.form.fe_nacimiento
+                this.item.tx_sexo       = this.form.tx_sexo
+                this.item.tx_foto       = this.form.tx_foto
+                this.item.tx_src        = this.form.tx_src
+                this.item.id_usuario    = this.form.id_usuario
+
+                this.$store.commit('setUser', this.item)
+            })
+            .catch(error =>
+            {
+                this.showError(error);
+            })
+            .finally( () =>
+            {
+                this.loading = false
+            }); 
+        },
+        
         validImage(image)
         {
             let size = image.size / 1024  ; //kilobites
@@ -246,11 +274,9 @@ export default {
 
         cancel()
         {
-            let email = this.item.tx_email
-
-            this.clear()
-            
-            this.form.tx_email  = email;
+            this.item = this.$store.getters['getUser']
+            this.mapForm()
+            this.setSrc()
         }
 
 

@@ -55,6 +55,8 @@
                         :value="getCoordinates[0].toFixed(5)"
                         :rules="rules.coordinate"
                         readonly
+                        hint="Seleccione una ubicacion en el mapa"
+                        persistent-hint
                         ></v-text-field>
                     </v-col>
                     <v-col>
@@ -66,11 +68,11 @@
                         ></v-text-field>
                     </v-col>
                 </v-row>
-
+    <pre>{{$props}}</pre>
+    <pre>{{$data}}</pre>
         </v-card-text>
-
+    
     </v-card>
-
 
 </div>
        
@@ -125,8 +127,22 @@ export default {
             type:       Object,
             default:    () => {}
         },
-    },
 
+        setLatLon:{
+            type:       Array,
+            default:    () => [0, 0]
+        },
+    },
+    watch: 
+    {
+        setLatLon()
+        {
+            if(this.setLatLon != [0,0])
+            {
+                this.coordinates = this.setLatLon
+            }
+        }
+    },
     computed: 
     {
         overlay() { return !(this.hasZona && this.hasComuna && this.hasBarrio) },
@@ -137,15 +153,17 @@ export default {
 
         hasBarrio() { return (this.barrio) ? true : false },
 
-        getCoordinates() { return (this.coordinates.length > 0) ? this.coordinates[0]: [ 0, 0] }
+        getCoordinates() { 
+            return (this.coordinates.length > 0) ? this.coordinates[0]: [ 0, 0 ] 
+        }
     },
 
     watch:
     {
         comuna(_new, _old)
         {
-            if(_old)
-            {
+            /* if(_old)
+            { */
                 if(this.comuna)
                 {
                     this.sources = []
@@ -156,10 +174,10 @@ export default {
                     if(center.length > 0)
                     {
                         center = [ parseFloat(center[0].tx_longitud), parseFloat(center[0].tx_latitud) ]
-                        this.mapScope.easeTo({center: center, zoom: this.zoom})
+                        this.mapScope.easeTo({center: center, zoom: this.zoom +2})
                     }
                 }
-            }
+            //}
         }
     },
 
@@ -209,10 +227,12 @@ export default {
 
                 this.sources.push(require('~/assets/geo/comuna'+this.comuna+'.json'))
                 
-                if(this.comercio.tx_latitud && this.comercio.tx_longitud)
+                if( this.setLatLon != [0,0] )//this.comercio.tx_latitud && this.comercio.tx_longitud)
                 {
-                    this.coordinates.push([ parseFloat(this.comercio.tx_longitud), parseFloat(this.comercio.tx_latitud)]);
+                    this.coordinates.push([ parseFloat(this.setLatLon[0]), parseFloat(this.setLatLon[1])]);
                 }
+            }else{
+                this.mapScope = event.map;
             }
         },
         

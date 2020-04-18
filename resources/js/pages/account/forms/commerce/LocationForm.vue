@@ -120,7 +120,8 @@
                 :barrio="form.id_barrio" 
                 :comercio="item" 
                 :comunas="selects.comunas"
-                @OnLocation="setLocation($event)">
+                @OnLocation="setLocation($event)"
+                :setLatLon="setLatLon">
             </map-location>
         </v-col>
         </v-row>
@@ -166,6 +167,11 @@ export default {
         comunaDisabled() { return (this.form.id_zona) ? false : true },
 
         barrioDisabled() { return (this.form.id_comuna) ? false : true },
+
+        setLatLon()  { 
+            return (this.form.tx_latitud && this.form.tx_longitud) ? [this.form.tx_longitud, this.form.tx_latitud ] : [0,0] 
+            }
+
     },
     data(){
         return{
@@ -243,6 +249,14 @@ export default {
 			{
                 this.selects.comunas = response.data;
                 this.comunasLoading = false;
+
+                if(!this.item.id_comuna)
+                {
+                    this.form.id_comuna   = ''
+                    this.form.id_barrio   = ''
+                    this.form.tx_latitud  = ''
+                    this.form.tx_longitud = ''
+                }
 			})
             .catch( error =>
             {
@@ -260,6 +274,12 @@ export default {
 			{
                 this.selects.barrios = response.data;
                 this.barriosLoading = false;
+                if(!this.item.id_barrio)
+                {
+                    this.form.id_barrio  = ''
+                    this.form.tx_latitud  = ''
+                    this.form.tx_longitud = ''
+                }
 			})
             .catch( error =>
             {

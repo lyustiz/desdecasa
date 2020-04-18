@@ -20,6 +20,7 @@ class Usuario extends Authenticatable implements MustVerifyEmail, JWTSubject
                             'tx_email',
                             'tx_sexo',
                             'tx_foto',
+                            'fe_nacimiento',
                             'id_tipo_usuario',
                             'tx_observaciones',
                             'verification',
