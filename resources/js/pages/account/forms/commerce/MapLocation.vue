@@ -68,8 +68,7 @@
                         ></v-text-field>
                     </v-col>
                 </v-row>
-    <pre>{{$props}}</pre>
-    <pre>{{$data}}</pre>
+
         </v-card-text>
     
     </v-card>
