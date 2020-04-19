@@ -38,7 +38,7 @@ class ComercioController extends Controller
     public function comercioCategoria($id_categoria)
     {
         $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio'])
-                    ->select('id', 'nb_comercio', 'tx_descripcion', 'id_zona', 'tx_direccion' )
+                    ->select('id', 'nb_comercio', 'tx_descripcion', 'id_zona', 'tx_direccion', 'tx_foto' )
                     ->whereHas('comercioCategoria', function (Builder $query) use ( $id_categoria ){
                         $query->where('id_categoria', $id_categoria);
                     })

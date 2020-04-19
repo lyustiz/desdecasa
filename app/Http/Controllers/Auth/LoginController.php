@@ -72,18 +72,23 @@ class LoginController extends Controller
         {
             
             $user    = Auth::user();
-            
-            $payload = JWTFactory::sub($user->id_usuario)->make();
-            
-            $token   = JWTAuth::encode($payload);
-            
-            $m       = Cookie::queue('AUTH-TOKEN', $token->get(), 15);
 
-            return [ 
-                'auth' => $token->get(),
-                'user' => $user,
-                'expires_in' => JWTFactory::getTTL() * 60
-            ];
+            if($user->id_status == 1)
+            {
+                $payload = JWTFactory::sub($user->id_usuario)->make();
+                
+                $token   = JWTAuth::encode($payload);
+                
+                $m       = Cookie::queue('AUTH-TOKEN', $token->get(), 15);
+
+                return [ 
+                    'auth' => $token->get(),
+                    'user' => $user,
+                    'expires_in' => JWTFactory::getTTL() * 60
+                ]; 
+            }
+            
+            return response('Usuario esta inactivo favor activar mediante el correo', 403);
         }
         else
         {
