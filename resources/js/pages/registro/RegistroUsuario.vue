@@ -80,20 +80,29 @@
                     </v-text-field>
                 </v-flex>
 
-                <v-flex xl-12 class="mx-2 justify-space-between">
-                    <v-btn text  x-small color="cyan darken-3" @click="$router.push('tipocuenta')">
-                        tipo de cuenta<v-icon>mdi-account-question</v-icon>
-                    </v-btn>
-                    <v-btn text  x-small color="cyan darken-3" @click="$router.push('login')">
-                        Ingresar<v-icon>mdi-login-variant</v-icon>
-                    </v-btn>
-                </v-flex>
-
             </v-card-text>
 
             <v-card-actions class="white px-6 pb-4">
-                    <v-btn block dark small color="cyan darken-3" :loading="loading" @click="register">Registrarse</v-btn>
-                    <v-spacer></v-spacer>
+                
+                <v-row >
+                    
+                    <v-col cols="12">
+                        <v-btn block dark small color="cyan darken-3" :loading="loading" @click="register">Registrarse</v-btn>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-btn text  x-small color="cyan darken-3" :loading="loading" @click="$router.push('tipocuenta')">
+                        tipo de cuenta<v-icon>mdi-account-question</v-icon>
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-btn text  x-small color="cyan darken-3" :loading="loading" @click="$router.push('login')">
+                        Ingresar<v-icon>mdi-login-variant</v-icon>
+                        </v-btn>
+                    </v-col>
+
+                </v-row>
+                
+
               
                    <!--   <v-tooltip top >
                         <template v-slot:activator="{ on }">

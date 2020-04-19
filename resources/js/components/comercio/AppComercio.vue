@@ -56,6 +56,7 @@
             ></v-rating>
            
         </v-card-actions>
+        <pre>{{$props}}</pre>
     </v-card>
 </template>
 

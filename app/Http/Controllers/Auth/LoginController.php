@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Symfony\Component\HttpFoundation\Request;
 use \Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTFactory;
+use Illuminate\Support\Facades\Crypt;
 
 use JWTAuth;
 use Cookie;
@@ -88,7 +89,9 @@ class LoginController extends Controller
                 ]; 
             }
             
-            return response('Usuario esta inactivo favor activar mediante el correo', 403);
+            $hash = Crypt::encryptString($user->nb_usuario) . '|' . $user->verification;
+            
+            return response(['verification' => $hash], 403);
         }
         else
         {

@@ -117,8 +117,8 @@ class RegisterController extends Controller
             'password'    => 'required|min:8'
         ],
         [
-            'nb_comercio.unique' => 'El Comercio ha sido Registrado',
-            'tx_nit.unique'      => 'El Nit ya ha sido Registrado',
+            'nb_comercio.unique' => 'El nombre del Comercio ya esta en uso',
+            'tx_nit.unique'      => 'El nit del Comercio ya esta en uso',
             'nb_usuario.unique'  => 'El usuario ya está en uso.',
             'email.unique'       => 'El correo ya está en uso.',
         ]);

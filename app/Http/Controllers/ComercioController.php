@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comercio;
+use App\Models\ComercioCategoria;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
@@ -37,14 +38,47 @@ class ComercioController extends Controller
      */
     public function comercioCategoria($id_categoria)
     {
-        $barrios =  Comercio::with(['foto:id,tx_src', 'comercioCategoria:id,id_categoria', 'barrio'])
-                    ->select('id', 'nb_comercio', 'tx_descripcion', 'id_zona', 'tx_direccion', 'tx_foto' )
-                    ->whereHas('comercioCategoria', function (Builder $query) use ( $id_categoria ){
-                        $query->where('id_categoria', $id_categoria);
-                    })
-                    ->where('id_status', 1)
-                    ->get();
         
+        $barrios =  Comercio::with([
+                                    'comercioCategoria:id_comercio,id_categoria', 
+                                    'horario:nb_horario,id_comercio',
+                                    'telefono:id_comercio,tx_telefono,id_tipo_telefono,bo_whatsapp'
+                                    ])
+                                ->select('comercio.id',
+                                        'comercio.nb_comercio',
+                                        'comercio.tx_descripcion',
+                                        'comercio.tx_direccion',
+                                        'comercio.tx_foto',
+                                        'comercio.tx_longitud',
+                                        'comercio.tx_latitud',
+                                        'comercio.id_departamento',
+                                        'departamento.nb_departamento',
+                                        'comercio.id_ciudad',
+                                        'ciudad.nb_ciudad',
+                                        'comercio.id_zona',
+                                        'zona.nb_zona',
+                                        'comercio.id_barrio',
+                                        'barrio.nb_barrio',
+                                        'contacto.tx_email',
+                                        'contacto.tx_sitio_web',
+                                        'contacto.tx_facebook',
+                                        'contacto.tx_twitter',
+                                        'contacto.tx_instagram',
+                                        'contacto.tx_youtube'
+                                        ) 
+                                ->join('departamento', 'comercio.id_departamento', '=', 'departamento.id')  
+                                ->join('ciudad', 'comercio.id_ciudad', '=', 'ciudad.id')  
+                                ->join('zona', 'comercio.id_zona', '=', 'zona.id') 
+                                ->join('barrio', 'comercio.id_barrio', '=', 'barrio.id') 
+                                ->join('contacto', 'comercio.id', '=', 'contacto.id_comercio')         
+                                ->where('comercio.id_status', 1)
+                                ->whereIn('comercio.id', function($query) use ($id_categoria){
+                                        $query->select('id_comercio')
+                                        ->from(with(new ComercioCategoria)->getTable())
+                                        ->where('id_categoria', $id_categoria);
+                                })
+                                ->take(1)->get();
+                    
         return $barrios;
     }
 

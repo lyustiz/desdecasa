@@ -50,21 +50,35 @@
                     </v-text-field>
                 </v-flex>
 
-
-                <v-flex class="mx-0 d-flex justify-space-between>"> 
-                   <v-btn text x-small color="cyan darken-3" @click="$router.push('tipocuenta')">
-                       Registro<v-icon class="mx-1">mdi-account-plus-outline</v-icon>
-                    </v-btn>
-                    <v-btn text x-small color="cyan darken-3" @click="$router.push('recover-password')">
-                            Recuperar Password<v-icon class="mx-1">mdi-account-key</v-icon>
-                    </v-btn>
-                </v-flex>
-
             </v-card-text>
 
             <v-card-actions class="white px-6 pb-4">
 
-                <v-btn block dark small color="cyan darken-3" :loading="loading" @click="login()">Ingresar</v-btn>
+
+                <v-row >
+                    <v-col cols="12">
+                        <v-btn block dark small color="cyan darken-3" :loading="loading" @click="login()">Ingresar</v-btn>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-btn text x-small color="cyan darken-3" :loading="loading" @click="$router.push('tipocuenta')">
+                            Registro<v-icon class="mx-1">mdi-account-plus-outline</v-icon>
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="8">
+                        <v-btn text x-small color="cyan darken-3" :loading="loading" @click="$router.push('recover-password')">
+                            Recuperar Password<v-icon class="mx-1">mdi-account-key</v-icon>
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="12" v-if="emailResend">
+                        <v-btn block text x-small color="amber" :loading="loading" @click="resendEmail()">
+                            Renviar Correo de Activacion<v-icon class="mx-1">mdi-email-send</v-icon>
+                        </v-btn>
+                    </v-col>
+
+                </v-row>
+
+     
+                
                 <!-- <v-spacer></v-spacer>
                 <v-tooltip top >
                     <template v-slot:activator="{ on }">
@@ -111,11 +125,14 @@ export default {
         return {
             form:{
                 nb_usuario: '',
-                password:   '',
+                password  :   '',
             },
             show: false,
             loading: false,
-            valid: ''
+            valid: '',
+            emailResend: false,
+            hash: '',
+
         }
     },
     methods: {
@@ -137,6 +154,18 @@ export default {
 
             }).catch(error =>
             {
+                console.log('el error', error, error.response.status, error.response.data)
+                if(error.hasOwnProperty('response'))
+                {
+                    if(error.response.status == 403 && error.response.data.verification)
+                    {
+                        this.showError('Usuario Inactivo, Favor ingrese a su corrreo para activarlo');
+                        this.emailResend = true
+                        this.hash = error.response.data.verification
+                        return
+                    }
+                }
+                
                 this.showError(error);
             })
             .then(() => 
@@ -144,6 +173,37 @@ export default {
                 this.loading = false
             })
 
+        },
+
+        resendEmail()
+        {           
+            this.loading = true
+            this.form.hash = this.hash
+            
+            this.$store.dispatch('resendEmail', this.form)
+            .then(response => {
+              
+                if(response.status == 200 )
+                {
+                    if( response.data.tipo == 'success' )
+                    {
+                        this.showMessage( response.data.msj );
+                        this.emailResend = false
+                    } 
+                    else 
+                    {
+                        this.showError(response.data.msj)
+                    }
+                }
+
+            }).catch(error =>
+            {
+                this.showError(error);
+            })
+            .then(() => 
+            {
+                this.loading = false
+            })
         }
     }
 

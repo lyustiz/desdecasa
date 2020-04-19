@@ -24,6 +24,21 @@
     <v-divider></v-divider>
 
     <v-row no-gutters> 
+        
+        
+        <template v-if="countComercios < 1">
+            <v-col :lg="cols.lg" :md="cols.md" :sm="cols.sm" :xs="cols.xs" >
+                <v-skeleton-loader type="card" class="ma-3"> </v-skeleton-loader>
+            </v-col>
+            <v-col :lg="cols.lg" :md="cols.md" :sm="cols.sm" :xs="cols.xs">
+                <v-skeleton-loader type="card" class="ma-3"> </v-skeleton-loader>
+            </v-col>
+            <v-col :lg="cols.lg" :md="cols.md" :sm="cols.sm" :xs="cols.xs">
+                <v-skeleton-loader type="card" class="ma-3"> </v-skeleton-loader>
+            </v-col>
+        </template>
+
+        
         <v-col :lg="cols.lg" :md="cols.md" :sm="cols.sm" :xs="cols.xs" v-for="(comercio, i) in getComercios" :key="i" >
             
             <app-comercio :comercio="comercio"></app-comercio>
@@ -39,7 +54,6 @@
 
 import { mapGetters } from 'vuex';
 import AppComercio from '@components/comercio/AppComercio';
-import { comercios as comerciosJSON }  from '~/assets/data/comercios.json'
 
 export default 
 {
@@ -60,6 +74,7 @@ export default
     mounted()
     {
         this.$vuetify.goTo('#listComercios', { duration: 2000, offset: 5 } )
+      
 
     },
   
@@ -87,12 +102,7 @@ export default
             return this.$store.getters['countComercios'];
         }
     },
-    data () 
-	{
-        return {
-            comercios: comerciosJSON
-        }
-    },
+
 }
 </script>
 
