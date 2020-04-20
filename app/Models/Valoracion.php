@@ -9,14 +9,18 @@ class Valoracion extends Model
     protected $table 	= 'valoracion';
     
     protected $fillable =   [
+                            'id_comercio',
+                            'tx_valoracion',
+                            'nu_valoracion',
                             'tx_observaciones',
                             'id_status',
                             'id_usuario',
                             'created_at',
+                            'created_at',
                             'updated_at'
                             ];
-
-    protected $hidden   = [ 'created_at', 'updated_at'];
+    
+    protected $dateFormat = 'Y-m-d';
 
     public function comercio(){
 

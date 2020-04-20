@@ -83,7 +83,7 @@ Route::group(['prefix'=>'v1'], function() {
     Route::get('/comercio/filters/{filters}',        'ComercioController@comercioFilters');
     Route::get('/comercio/usuario/{id_usuario}',     'ComercioController@comercioUsuario');
 
-    
+    Route::get('/valoracion/comercio/{id_comercio}/{id_usuario}', 'ValoracionController@valoracionComercio');
 
     Route::put('/usuario/email/{usuario}',           'UsuarioController@updateEmail');
     Route::put('/usuario/password/{usuario}',        'UsuarioController@updatePassword');

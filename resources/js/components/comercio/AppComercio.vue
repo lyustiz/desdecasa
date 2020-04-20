@@ -4,66 +4,236 @@
 
         <v-img class="white--text align-end" height="200px" :src="`/storage/commerce/${comercio.tx_foto}`"></v-img>
         
-        <v-card-title> 
-            <v-icon>mdi-storefront</v-icon> {{ comercio.nb_comercio }}  
+        <v-card-title class="subtitle-1 font-weight-bold pl-7 cyan-darken-3--text grey lighten-5"> 
+            <v-icon color="cyan darken-3" class="mr-2">mdi-storefront</v-icon> {{ comercio.nb_comercio }}  
         </v-card-title>
         
         <v-card-text>
             
-            <p class="caption"> 
-                <v-icon>mdi-map-marker</v-icon>  {{ comercio.tx_direccion }}
-            </p>
+            <v-row >
 
-            <p> 
-                <v-icon>mdi-clock</v-icon> 
-                <v-chip color="green" text-color="white" small>{{ comercio.tx_hora_inicio }}</v-chip>
-                <v-chip color="red" text-color="white" small>{{ comercio.tx_hora_fin }}</v-chip>
-            </p>
+            <v-col> 
+                <v-menu offset-y >
+                    <template v-slot:activator="{ on }">
+                        <v-btn v-on="on" text small color="cyan darken-3">
+                            <v-icon color="info" class="mr-2">mdi-map-marker</v-icon> {{ comercio.tx_direccion }} 
+                        </v-btn> 
+                    </template>
+                    <v-list two-line dense class="pa-2">
+                        <v-list-item>
+                            <v-list-item-avatar>
+                                <v-icon class="grey lighten-1 white--text">mdi-map-search</v-icon>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title>{{comercio.nb_departamento}}</v-list-item-title>
+                                <v-list-item-subtitle>Departamento</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-avatar>
+                                <v-icon class="grey lighten-1 white--text">mdi-city-variant</v-icon>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title>{{comercio.nb_ciudad}}</v-list-item-title>
+                                <v-list-item-subtitle>Ciudad</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-avatar>
+                                <v-icon class="grey lighten-1 white--text">mdi-select-marker</v-icon>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title>{{comercio.nb_zona}}</v-list-item-title>
+                                <v-list-item-subtitle>Zona</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-avatar>
+                                <v-icon class="grey lighten-1 white--text">mdi-home-city</v-icon>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title>{{comercio.nb_barrio}}</v-list-item-title>
+                                <v-list-item-subtitle>Barrio</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+            </v-col>
+            </v-row>
 
-            <p> 
-                <v-icon>mdi-phone</v-icon> 
-                
-                <v-btn link  :href="comercio.tx_telefono" target="_blank" text>
-                    {{ comercio.tx_telefono }}
-                </v-btn>
+                <v-row >
 
-                <v-btn link  :href="`https://wa.me/${comercio.tx_telefono}`" target="_blank" icon >
-                    <v-icon color="green">mdi-whatsapp</v-icon>
-                </v-btn>
-            </p>
+                    <v-col>
+                        <v-menu offset-y >
+                            <template v-slot:activator="{ on }">
+                                <v-btn v-on="on" text small color="cyan darken-3" @click="horario=!horario">
+                                    <v-icon color="amber" class="mr-2">mdi-clock</v-icon> horarios
+                                </v-btn>
+                            </template>
+                            <v-list dense class="pa-2">
+                                <v-list-item v-for="(horario, i) in comercio.horario" :key="i" >
+                                
+                                <v-list-item-avatar>
+                                    <v-icon dark class="grey lighten-1 white--text">mdi-calendar</v-icon>
+                                </v-list-item-avatar>
+                                
+                                <v-list-item-content>
+                                    <v-list-item-title>{{horario.nb_horario}}</v-list-item-title>
+                                </v-list-item-content>
+
+                                </v-list-item>
+                                
+                            </v-list>
+                        </v-menu>
+                    </v-col>
+
+                    <v-col>
+                        <v-menu offset-y >
+                            <template v-slot:activator="{ on }">
+                                <v-btn v-on="on" text small color="cyan darken-3" @click="horario=!horario">
+                                    <v-icon color="error" class="mr-2">category</v-icon> categorias
+                                </v-btn>
+                            </template>
+                            <v-list dense class="pa-2">
+                                <v-list-item v-for="(categoria, i) in comercio.comercio_categoria" :key="i" >
+                                
+                                <v-list-item-avatar>
+                                    <v-icon dark class="grey lighten-1 white--text">{{getCategoriaById(categoria.id_categoria).tx_icono}}</v-icon>
+                                </v-list-item-avatar>
+                                
+                                <v-list-item-content>
+                                    <v-list-item-title>{{getCategoriaById(categoria.id_categoria).nb_categoria}}</v-list-item-title>
+                                </v-list-item-content>
+
+                                </v-list-item>
+                                
+                            </v-list>
+                        </v-menu>
+                    </v-col>
+
+                    <v-col>
+                        <v-menu offset-y v-model="telefono">
+                            <template v-slot:activator="{ on }">
+                                <v-btn v-on="on" text small color="cyan darken-3" @click="telefono=!telefono">
+                                    <v-icon color="success" class="mr-2">mdi-phone</v-icon> Telefonos
+                                </v-btn>
+                            </template>
+                            <v-list two-line dense nav class="pa-2">
+                                <v-list-item v-for="(telefono, i) in comercio.telefono" :key="i">
+                                
+                                <v-list-item-avatar>
+                                    <v-icon dark class="grey lighten-1 white--text">{{getPhoneIcon(telefono.id_tipo_telefono)}}</v-icon>
+                                </v-list-item-avatar>
+                                
+                                <v-list-item-content>
+                                    <v-list-item-title><a class="phone-link"  :href="`tel:+57${telefono.tx_telefono}`">+57{{telefono.tx_telefono}}</a></v-list-item-title>
+                                    <v-list-item-subtitle>{{getPhoneType(telefono.id_tipo_telefono)}}</v-list-item-subtitle>
+                                </v-list-item-content>
+
+                                <v-list-item-action v-if="telefono.bo_whatsapp==1">
+                                    <v-btn class="grey lighten-4" link :href="`https://wa.me/${telefono.tx_telefono}`" target="_blank" icon>
+                                        <v-icon color="green" size="32">mdi-whatsapp</v-icon>
+                                    </v-btn>
+                                </v-list-item-action>
+
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
+                    </v-col>
+
+                    <v-col cols="12" class="text-right" >
+                        <v-btn v-if="comercio.tx_sitio_web" icon class="grey lighten-4" link target="_blank" :href="`https://${comercio.tx_sitio_web}`"> 
+                            <v-icon color="green">mdi-web</v-icon>
+                        </v-btn>
+                        <v-btn v-if="comercio.tx_instagram" icon class="grey lighten-4" link target="_blank" :href="`https://www.instagram.com/${comercio.tx_instagram}`"> 
+                            <v-icon color="#c32aa3">mdi-instagram</v-icon>
+                        </v-btn>
+                        <v-btn v-if="comercio.tx_youtube" icon class="grey lighten-4" link target="_blank" :href="`https://www.youtube.com/user/${comercio.tx_youtube}`"> 
+                            <v-icon color="#ff0000">mdi-youtube</v-icon>
+                        </v-btn>
+                        <v-btn v-if="comercio.tx_twitter" icon class="grey lighten-4" link target="_blank" :href="`https://twitter.com/${comercio.tx_twitter}`"> 
+                            <v-icon color="#1da1f2">mdi-twitter</v-icon>
+                        </v-btn>
+                        <v-btn v-if="comercio.tx_facebook" icon class="grey lighten-4" link target="_blank" :href="`https://www.facebook.com/${comercio.tx_facebook}`">
+                             <v-icon color="#3b5998">mdi-facebook</v-icon> 
+                        </v-btn>
+                    </v-col>
+
+                </v-row>
             
         </v-card-text>
         
-        <v-card-actions>
-
+        <v-card-actions class="px-5">
+            
             <v-badge bordered color="info" overlap :content="comercio.nu_valoracion">
-                <v-btn icon color="primary">
+                <v-btn icon color="primary" @click="dialog=!dialog">
                     <v-icon>mdi-message-plus-outline</v-icon>
                 </v-btn>
             </v-badge>
+
+            <v-dialog :value="dialog"  persistent max-width="500" v-if="dialog">
+
+                <template v-if="getUserid"> 
+                    <form-valoration :id_comercio="comercio.id" @close="dialog = false"></form-valoration>
+               </template>
+               <template v-else>
+
+                   <v-card class="mx-auto elevation-8" color="rgba(255,255,255,0.9)">
+            
+                        <v-card-title primary-title class="cyan darken-3 white--text">
+                         No se encuentra Registrado<v-icon class="mx-2" color="white">mdi-account-cancel</v-icon>
+                        </v-card-title>
+                    
+                        <v-card-text class="pa-5">
+                
+                            <v-alert type="warning" icon="mdi-account-cancel">
+                               Favor Ingresar para poder relizar comentarios  y seguir usando nuestros servicios
+                            </v-alert>
+
+                        </v-card-text>
+
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn text block large color="cyan darken-3" @click="$router.push('login')">
+                                Ingresar<v-icon>mdi-login-variant</v-icon>
+                            </v-btn>
+                        </v-card-actions>
+                
+                    </v-card>
+
+                   
+               </template>
+               
+            </v-dialog>
             
             <v-spacer></v-spacer>
 
-            <span>({{ comercio.nu_valoracion }}-5)</span>
+            <span class="caption" v-if="comercio.nu_valoracion">({{ comercio.nu_valoracion }}-5)</span>
+            <span class="caption" v-else>(sin valoraciones)</span>
 
             <v-rating
-                v-model="comercio.nu_valoracion"
                 color="amber"
+                :value="comercio.nu_valoracion"
                 background-color="amber"
                 dense
                 hover
                 ripple
+                readonly
             ></v-rating>
            
         </v-card-actions>
-        <pre>{{$props}}</pre>
     </v-card>
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex';
+import FormValoration from './FormValoration'
 export default 
 {
+    components:{
+        'form-valoration' : FormValoration
+    },
+
     props:
     {
         comercio:{
@@ -71,11 +241,68 @@ export default
             default:    null
         },
     },
+    computed:
+    {
+        ...mapGetters(['getCategoriaById']),
+
+        getUserid()
+        {
+            return this.$store.getters['getUserid']
+        }
+    },
     data () 
 	{
         return {
             rating: 0,
+            telefono: false,
+            horario:  false,
+            categoria: false,
+            dialog: false
         }
     },
+    methods: {
+        getPhoneIcon(id_tipo_telefono)
+        {
+            switch (parseInt(id_tipo_telefono)) {
+                case 1:
+                    return 'mdi-phone-classic' 
+                    break;
+                case 2:
+                    return 'mdi-cellphone-android'
+                    break;
+                case 3:
+                    return 'mdi-printer'
+                    break;
+                default:
+                    return 'mdi-phone'
+                    break
+            }
+        },
+        getPhoneType(id_tipo_telefono)
+        {
+            switch (parseInt(id_tipo_telefono)) {
+                case 1:
+                    return 'Local' 
+                    break;
+                case 2:
+                    return 'Celular'
+                    break;
+                case 3:
+                    return 'Fax'
+                    break;
+                default:
+                    return 'Telefono'
+                    break
+            }
+        },
+    }
 }
 </script>
+
+<style>
+ .phone-link{
+     text-decoration: none !important;
+     color: rgba(0,0,0,.87) !important;
+ }
+
+</style>

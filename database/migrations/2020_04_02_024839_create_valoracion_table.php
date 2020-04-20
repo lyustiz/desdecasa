@@ -15,7 +15,8 @@ class CreateValoracionTable extends Migration
     {
         Schema::create('valoracion', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('id_comercio');
+            $table->integer('id_comercio');
+            $table->string('tx_valoracion', 200);
 			$table->integer('nu_valoracion');
 			$table->string('tx_observaciones', 100)->nullable();
 			$table->integer('id_status');

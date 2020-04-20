@@ -21,6 +21,48 @@ class ValoracionController extends Controller
 
     }
 
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function valoracionComercio($id_comercio, $id_usuario)
+    {
+        $valoracionComercio =   Valoracion::select( 
+                                   'valoracion.id', 
+                                   'valoracion.id_comercio',
+                                   'valoracion.tx_valoracion',
+                                   'valoracion.nu_valoracion',
+                                   'valoracion.created_at',
+                                   'valoracion.updated_at',
+                                   'usuario.nb_usuario'
+                                )
+                                ->join('usuario', 'valoracion.id_usuario', '=', 'usuario.id')
+                                ->where('valoracion.id_comercio', $id_comercio)
+                                ->where('valoracion.id_usuario','<>', $id_usuario)
+                                ->latest('valoracion.updated_at')
+                                ->take(10)
+                                ->get();
+        
+        $valoracionUsuario =   Valoracion::select( 
+                                    'valoracion.id', 
+                                    'valoracion.id_comercio',
+                                    'valoracion.tx_valoracion',
+                                    'valoracion.nu_valoracion',
+                                    'valoracion.created_at',
+                                    'valoracion.updated_at',
+                                )
+                                ->where('valoracion.id_comercio', $id_comercio)
+                                ->where('valoracion.id_usuario', $id_usuario)
+                                ->first();
+
+        return  [
+                    'valoracionComercio' => $valoracionComercio, 
+                    'valoracionUsuario'  => $valoracionUsuario
+                ];
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -32,12 +74,13 @@ class ValoracionController extends Controller
         $validate = request()->validate([
 
             'id_comercio'      => 'required',
+            'tx_valoracion'    => 'required|max:200',
             'nu_valoracion'    => 'required',
-            'tx_observaciones' => 'required',
-            'id_status'        => 'required',
             'id_usuario'       => 'required',
-            
+
         ]);
+
+        $request->merge(['id_status' => 1]);
 
         $valoracion = Valoracion::create($request->all());
 
@@ -69,11 +112,10 @@ class ValoracionController extends Controller
         $validate = request()->validate([
 
             'id_comercio'      => 'required',
+            'tx_valoracion'    => 'required|max:200',
             'nu_valoracion'    => 'required',
-            'tx_observaciones' => 'required',
-            'id_status'        => 'required',
             'id_usuario'       => 'required',
-            
+
         ]);
         
         $valoracion = $valoracion->update($request->all());

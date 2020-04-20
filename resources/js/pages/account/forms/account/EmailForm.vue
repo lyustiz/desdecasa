@@ -63,7 +63,6 @@
 <script>
 
 import AppForm from '@mixins/AppForm'
-import AppData from '@mixins/AppData'
 
 export default {
 
