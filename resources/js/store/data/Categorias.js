@@ -11,7 +11,10 @@ export default
 		getCategorias: state => state.categorias,
 
 		getCategoriaById: (state) => (id) => {
-			return state.categorias.find(categoria => categoria.id === id)
+
+			let category = state.categorias.find(categoria => categoria.id === id)
+
+			return (category) ? category : {tx_icono: 'mdi-close-outline', nb_categoria: 'no-valid' + id}
 		}
 	},
 
