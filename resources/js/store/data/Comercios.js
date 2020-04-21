@@ -43,6 +43,12 @@ export default
 
 		apiComerciosCategoria( { commit }, categoria )
 		{
+			if(!categoria)
+			{
+				commit('setComercios', [])
+				return
+			}
+
 			axios.get('/api/v1/' + 'comercio/categoria/' + categoria)
 			.then( response =>
 			{

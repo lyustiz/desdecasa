@@ -1,12 +1,12 @@
 <template>
 
     <v-form v-model="valid" ref="form" >
-    <v-card :loading="loading">
+    <v-card :loading="loading" class="ma-1">
         <v-card-title
             class="headline cyan darken-3 white--text"
             primary-title
         >
-            Valoracion del Comercio
+            Comentario de <span class="ml-2 font-weight-bold">{{ userName }} </span> 
         </v-card-title>
 
         <v-card-text class="py-3">
@@ -19,13 +19,13 @@
                         prepend-inner-icon="mdi-comment-edit"
                         placeholder=" Cuenta a los demás qué opinas de este Comercio. ¿Lo recomendarías? ¿Por qué?"
                         label="Opinion/Valoracion"
-                        hint="maximo 250 caracteres"
+                        hint="maximo 200 caracteres"
                         v-model="form.tx_valoracion"
                         :rules="rules.required"
                         dense
                         outlined
                         filled
-                        rows="5"
+                        rows="4"
                         counter="200"
                         auto-grow
                         autofocus
@@ -38,9 +38,9 @@
                         background-color="amber"
                         hover
                         ripple
-                        size="32"
+                        size="24"
                     ></v-rating>
-                    <div class="py-4 px-3" >
+                    <div class="py-3 px-1" >
                          <v-input readonly  :rules="rules.required" :value="textValue(form.nu_valoracion)">
                             {{textValue(form.nu_valoracion)}}
                          </v-input>
@@ -49,19 +49,22 @@
             
         </v-card-text>
 
-        <v-divider></v-divider>
-
         <v-card-actions>
 
             <v-spacer></v-spacer>
-            <v-btn small dark fab color="amber" @click="cancel()" :loading="loading"><v-icon>mdi-restore</v-icon></v-btn>
-            <v-btn small dark fab color="primary" @click="setData()" :loading="loading"><v-icon>mdi-content-save</v-icon></v-btn>
+            <v-btn small  fab color="error" @click="cancel()" :loading="loading"><v-icon>mdi-restore</v-icon></v-btn>
+            <v-btn small dark fab color="success" @click="setData()" :loading="loading"><v-icon>mdi-content-save-edit</v-icon></v-btn>
         </v-card-actions>
+
+        <v-divider></v-divider>
 
         <v-card-text>
 
 
-            <v-card>
+            <v-card  >
+                <v-card-title class="caption grey lighten-3">
+                    Comentarios de otros usuarios
+                </v-card-title>
             <v-list three-line dense >
                 <v-list-item v-for="(valoration, i) in valorations" :key="i">
                 
@@ -126,6 +129,11 @@ export default {
         getUserid()
         {
             return this.$store.getters['getUserid']
+        },
+
+        userName()
+        {
+            return this.$store.getters['getUsername']
         }
     },
 

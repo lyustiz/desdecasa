@@ -31,12 +31,12 @@ let productionSourceMaps = !mix.inProduction(); productionSourceMaps, 'source-ma
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .sourceMaps(productionSourceMaps, 'source-map')
-    .version();
+    .version()
 
-   /*  
+    
   if (mix.inProduction()) {
       mix.version()
-  } */
+  } 
 
 //mix.copyDirectory('resources/img', 'public/images');
 

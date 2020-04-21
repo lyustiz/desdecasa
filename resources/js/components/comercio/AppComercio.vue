@@ -1,23 +1,17 @@
 <template>
 
-   <v-card class="ma-3">
+   <v-card shaped class="ma-3">
 
         <v-img class="white--text align-end" height="200px" :src="`/storage/commerce/${comercio.tx_foto}`"></v-img>
         
-        <v-card-title class="subtitle-1 font-weight-bold pl-7 cyan-darken-3--text grey lighten-5"> 
-            <v-icon color="cyan darken-3" class="mr-2">mdi-storefront</v-icon> {{ comercio.nb_comercio }}  
-        </v-card-title>
-        
-        <v-card-text>
-            
-            <v-row >
+        <v-card-title class="pl-7">
 
+            <v-row no-gutters>
             <v-col> 
                 <v-menu offset-y >
                     <template v-slot:activator="{ on }">
-                        <v-btn v-on="on" text small color="cyan darken-3">
-                            <v-icon color="info" class="mr-2">mdi-map-marker</v-icon> {{ comercio.tx_direccion }} 
-                        </v-btn> 
+                            <v-icon v-on="on" color="info" class="mr-2">mdi-map-marker</v-icon> 
+                            <span class="subtitle-1 font-weight-bold"> {{ comercio.nb_comercio }} </span>
                     </template>
                     <v-list two-line dense class="pa-2">
                         <v-list-item>
@@ -59,14 +53,23 @@
                     </v-list>
                 </v-menu>
             </v-col>
-            </v-row>
+            </v-row> 
+        </v-card-title>
 
-                <v-row >
+        <v-card-subtitle class="pl-9 pb-2">
+            {{ comercio.tx_direccion }} 
+        </v-card-subtitle>
+        
+        <v-card-text>
+            
+            
+
+                <v-row no-gutters>
 
                     <v-col>
                         <v-menu offset-y >
                             <template v-slot:activator="{ on }">
-                                <v-btn v-on="on" text small color="cyan darken-3" @click="horario=!horario">
+                                <v-btn v-on="on" text small color="cyan darken-3" class="mb-2" @click="horario=!horario">
                                     <v-icon color="amber" class="mr-2">mdi-clock</v-icon> horarios
                                 </v-btn>
                             </template>
@@ -87,10 +90,10 @@
                         </v-menu>
                     </v-col>
 
-                    <v-col>
+                    <!-- <v-col>
                         <v-menu offset-y >
                             <template v-slot:activator="{ on }">
-                                <v-btn v-on="on" text small color="cyan darken-3" @click="horario=!horario">
+                                <v-btn v-on="on" text small color="cyan darken-3" class="my-2" @click="horario=!horario">
                                     <v-icon color="error" class="mr-2">category</v-icon> categorias
                                 </v-btn>
                             </template>
@@ -110,11 +113,11 @@
                             </v-list>
                         </v-menu>
                     </v-col>
-
+ -->
                     <v-col>
                         <v-menu offset-y v-model="telefono">
                             <template v-slot:activator="{ on }">
-                                <v-btn v-on="on" text small color="cyan darken-3" @click="telefono=!telefono">
+                                <v-btn v-on="on" text small color="cyan darken-3" class="mb-2" @click="telefono=!telefono">
                                     <v-icon color="success" class="mr-2">mdi-phone</v-icon> Telefonos
                                 </v-btn>
                             </template>
@@ -142,6 +145,10 @@
                     </v-col>
 
                     <v-col cols="12" class="text-right" >
+                        
+                        <v-btn icon class="grey lighten-4" link target="_blank" :href="`mailto:${comercio.tx_email}`"> 
+                            <v-icon color="purple">mdi-email</v-icon> 
+                        </v-btn>
                         <v-btn v-if="comercio.tx_sitio_web" icon class="grey lighten-4" link target="_blank" :href="`https://${comercio.tx_sitio_web}`"> 
                             <v-icon color="green">mdi-web</v-icon>
                         </v-btn>
@@ -165,9 +172,9 @@
         
         <v-card-actions class="px-5">
             
-            <v-badge bordered color="info" overlap :content="comercio.nu_valoracion">
-                <v-btn icon color="primary" @click="dialog=!dialog">
-                    <v-icon>mdi-message-plus-outline</v-icon>
+            <v-badge bordered color="info" overlap :content="numberValoration">
+                <v-btn icon class="grey lighten-4" @click="dialog=!dialog">
+                    <v-icon size="30" color="green">mdi-message-plus-outline</v-icon>
                 </v-btn>
             </v-badge>
 
@@ -208,14 +215,15 @@
             
             <v-spacer></v-spacer>
 
-            <span class="caption" v-if="comercio.nu_valoracion">({{ comercio.nu_valoracion }}-5)</span>
+            <span class="caption" v-if="comercio.nu_pc_valoracion">({{ percentValoration }})</span>
             <span class="caption" v-else>(sin valoraciones)</span>
 
             <v-rating
-                color="amber"
-                :value="comercio.nu_valoracion"
-                background-color="amber"
+                color="yellow accent-4"
+                :value="percentValoration"
+                background-color="yellow accent-4"
                 dense
+                half-increments
                 hover
                 ripple
                 readonly
@@ -248,6 +256,16 @@ export default
         getUserid()
         {
             return this.$store.getters['getUserid']
+        },
+
+        numberValoration()
+        {
+            return (this.comercio.nu_pc_valoracion) ? parseInt(this.comercio.nu_pc_valoracion.split('-')[0]) : 0
+        },
+
+        percentValoration()
+        {
+            return (this.comercio.nu_pc_valoracion) ? parseFloat(this.comercio.nu_pc_valoracion.split('-')[1]) : 0
         }
     },
     data () 

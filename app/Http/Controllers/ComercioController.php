@@ -64,8 +64,12 @@ class ComercioController extends Controller
                                          'contacto.tx_facebook',
                                          'contacto.tx_twitter',
                                          'contacto.tx_instagram',
-                                         'contacto.tx_youtube'
+                                         'contacto.tx_youtube',
                                         ) 
+                                ->selectRaw('(SELECT concat(count(valoracion.id), "-", sum(valoracion.nu_valoracion)/5) 
+                                                FROM valoracion 
+                                                WHERE valoracion.id_comercio = comercio.id) AS nu_pc_valoracion' 
+                                            )
                                 ->join('departamento', 'comercio.id_departamento', '=', 'departamento.id')  
                                 ->join('ciudad', 'comercio.id_ciudad', '=', 'ciudad.id')  
                                 ->join('zona', 'comercio.id_zona', '=', 'zona.id') 
@@ -79,7 +83,8 @@ class ComercioController extends Controller
                                 })
                                 //->take(1)
                                 ->get();
-                    
+        
+
         return $result;
     }
 
