@@ -26,11 +26,17 @@ mix.webpackConfig({
    },
  })
 
-//let productionSourceMaps = !mix.inProduction(); productionSourceMaps, 'source-map'
+let productionSourceMaps = !mix.inProduction(); productionSourceMaps, 'source-map'
 
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
-    .sourceMaps();
+    .sourceMaps(productionSourceMaps, 'source-map')
+    .version();
+
+   /*  
+  if (mix.inProduction()) {
+      mix.version()
+  } */
 
 //mix.copyDirectory('resources/img', 'public/images');
 
