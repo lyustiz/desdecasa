@@ -2,8 +2,12 @@ export default
 {
 	state(){
 		return	{
+
 			comercio: null,
-			comercios: [ ],
+
+			comercios: [],
+
+			comercioById: null
 		}
 	},
 
@@ -14,6 +18,8 @@ export default
 		countComercios: state => state.comercios.length,
 		
 		getComercio: state => state.comercio,
+
+		getComercioById: state => state.comercioById,
 	},
 
 	mutations:
@@ -32,10 +38,16 @@ export default
         {
             state.comercios 	= comercios
 		},
+
 		setComercio (state, comercio)
         {
             state.comercio 	= comercio
-        },
+		},
+		
+		setComerciobyId (state, comercio)
+        {
+            state.comercioById 	= comercio
+		},
 	},
 
 	actions:
@@ -75,7 +87,45 @@ export default
 					reject(error)
 				})
 			})
-		}
+		},
+
+		apiComerciosNombre( { commit }, barrio )
+		{
+			if(!barrio)
+			{
+				commit('setComercios', [])
+				return
+			}
+
+			axios.get('/api/v1/' + 'comercio/barrio/' + barrio)
+			.then( response =>
+			{
+				commit('setComercios', response.data)
+			})
+            .catch( error =>
+            {
+              console.log(error)
+            })
+		},
+
+		apiComercioById( { commit }, comercioId )
+		{
+			if(!comercioId)
+			{
+				commit('setComerciobyId', null)
+				return
+			}
+
+			axios.get('/api/v1/' + 'comercio/' + comercioId)
+			.then( response =>
+			{
+				commit('setComerciobyId', response.data)
+			})
+            .catch( error =>
+            {
+              console.log(error)
+            })
+		},
 
 	}
 }

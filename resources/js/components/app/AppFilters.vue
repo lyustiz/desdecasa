@@ -20,25 +20,11 @@
                     </v-card-title>
 
                     <v-card-text>
-
-                        <v-flex md12>
-                            <v-text-field   
-                                dense
-                                outlined
-                                append-icon="mdi-home-search-outline"
-                                label="Buscar Comercios"
-                                v-model="buscar"
-                                hint="Indique Nombre del Comercio"
-                                color="purple darken-1"
-                                >
-                            </v-text-field>
-                        </v-flex>
-
+ 
                         <v-flex md12>
                             <v-select
                                 dense
                                 outlined
-                                clearable
                                 label="Zona"
                                 v-model="filterZona" 
                                 :items="getZonas"
@@ -52,7 +38,6 @@
                             <v-select
                                 dense
                                 outlined
-                                clearable
                                 label="Barrio"
                                 v-model="filterBarrio" 
                                 :items="selects.barrios"
@@ -61,6 +46,23 @@
                                 item-text="nb_barrio"
                                 append-icon="mdi-home-city"
                             ></v-select>
+                        </v-flex>
+
+                        <v-flex md12>
+                            <v-select
+                                dense
+                                outlined
+                                label="Comercios"
+                                v-model="filterComercioById"
+                                :items="selects.comerciosList"
+                                :loading="comerciosLoad"
+                                item-value="id"
+                                item-text="nb_comercio"
+                                append-icon="mdi-storefront"
+                                placeholder="Indique Zona/Barrio"
+                                no-data-text="No existen coincidencias"
+                            ></v-select>
+
                         </v-flex>
 
                     </v-card-text>
@@ -81,14 +83,23 @@
                     <v-card-text>
 
                         <v-flex md12 class="mt-5">
-                            <v-text-field 
+
+                            <v-autocomplete
+                                v-model="comercioIdSearch"
+                                :items="selects.comerciosSearch"
+                                item-value="id"
+                                item-text="nb_comercio"
+                                :loading="comerciosSearchLoad"
+                                :search-input.sync="search"
+                                hide-no-data
+                                label="Buscar Comercio"
+                                placeholder="Tipea para Buscar"
                                 dense
                                 outlined
-                                append-icon="mdi-home-search-outline"
-                                label="Buscar Comercio"
-                                v-model="filterNombre"
-                                hint="Indique Comercio">
-                            </v-text-field>
+                                cache-items
+                                clearable
+                            ></v-autocomplete>
+             
                         </v-flex>
 
                         <v-flex md12>
@@ -160,6 +171,7 @@ export default {
             },
             set(barrio) {
                 this.$store.commit('setBarrio', barrio)
+                this.getListComercios(barrio);
             }
         },
         filterCategoria:
@@ -168,22 +180,78 @@ export default {
                 return this.$store.getters['getCategoria']
             },
             set(categoria) {
+                this.comercioIdSearch = null
                 this.$store.commit('setCategoria', categoria)
-                this.getComerciosCategoria(categoria);
+                this.$store.dispatch('apiComerciosCategoria',  categoria )
             }
         },
+        filterComercioById:
+        {
+            get() {
+                return this.comercioId
+            },
+            set(comercioId) {
+                this.$store.commit('setCategoria', null)
+                this.$store.dispatch('apiComercioById',  comercioId )
+            }
 
+        }
     },
+
+    watch: {
+
+        search(nombre)
+        {
+            if(!nombre){
+                return
+            }else{
+                if ( nombre.trim().length < 3 ) return
+            }
+            
+            if ( this.comerciosSearchLoad ) return
+            
+            this.comerciosSearchLoad = true
+            
+            axios.post('/api/v1/' + 'comercio/search', { nombre } )
+			.then( response =>
+			{
+                this.selects.comerciosSearch  = response.data;
+			})
+            .catch( error =>
+            {
+                console.log(error)
+            })
+            .finally(() => (this.comerciosSearchLoad = false))
+        },
+
+        comercioIdSearch(comercioId)
+        {
+            if(comercioId)
+            {
+                this.$store.commit('setCategoria', null)
+                this.comercioId = null
+            }
+
+            this.$store.dispatch('apiComercioById',  comercioId )
+
+        }
+    },
+
     data()
     {
         return {
-                buscar: null,
-                barriosLoad: false,
+                comercioId:          '',
+                comercioIdSearch:    '',
+                search:              null, 
+                barriosLoad:         false,
+                comerciosLoad:       false,
+                comerciosSearchLoad: false,
                 selects: {
-
-                    barrios: [], 
-
-                }
+                    barrios:          [], 
+                    comerciosList:    [], 
+                    comerciosSearch:  [], 
+                },
+                selectComercio: false
         }
     }, 
     methods: 
@@ -195,21 +263,68 @@ export default {
             this.selects.barrios = [];
             this.barriosLoad = true;
 
+            if(!zona)
+            {
+                this.barriosLoad = false;
+                return
+            }
+
             axios.get('/api/v1/' + 'barrio/zona/' + zona)
 			.then( response =>
 			{
                 this.selects.barrios = response.data;
-                this.barriosLoad = false;
 			})
             .catch( error =>
             {
-              console.log(error)
+                console.log(error)
             })
+            .finally(() => (this.barriosLoad = false))
         },
 
-        getComerciosCategoria(categoria)
+        getListComercios(barrio){
+
+            this.selects.comerciosList = [];
+            this.comerciosLoad = true;
+
+            if(!barrio)
+            {
+                this.comerciosLoad = false;
+                this.comercio = '';
+                return
+            }
+
+            axios.get('/api/v1/' + 'comercio/barrio/' + barrio)
+			.then( response =>
+			{
+                this.selectComercio = true;
+                this.selects.comerciosList = response.data;
+			})
+            .catch( error =>
+            {
+                console.log(error)
+            })
+            .finally(() => (this.comerciosLoad = false))
+        },
+
+        searchComercio(nombre)
         {
-            this.$store.dispatch('apiComerciosCategoria',  categoria )
+            if ( trim(nombre).length < 3 ) return
+
+            if ( this.comerciosSearchLoad ) return
+            
+            this.comerciosSearchLoad = true
+            
+            axios.post('/api/v1/' + 'comercio/search', { nombre } )
+			.then( response =>
+			{
+                this.comerciosSearch        = true;
+                this.selects.comerciosList  = response.data;
+			})
+            .catch( error =>
+            {
+                console.log(error)
+            })
+            .finally(() => (this.comerciosSearchLoad = false))
         }
     }
 }

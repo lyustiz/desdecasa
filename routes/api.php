@@ -80,8 +80,8 @@ Route::group(['prefix'=>'v1'], function() {
 
     Route::get('/comercio/categoria/{id_categoria}', 'ComercioController@comercioCategoria');
     Route::get('/comercio/barrio/{id_barrio}',       'ComercioController@comercioBarrio');
-    Route::get('/comercio/filters/{filters}',        'ComercioController@comercioFilters');
     Route::get('/comercio/usuario/{id_usuario}',     'ComercioController@comercioUsuario');
+    Route::post('/comercio/search',                  'ComercioController@comercioSearch');
 
     Route::get('/valoracion/comercio/{id_comercio}/{id_usuario}', 'ValoracionController@valoracionComercio');
 

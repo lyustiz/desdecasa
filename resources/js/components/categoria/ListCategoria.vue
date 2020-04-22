@@ -26,18 +26,25 @@
         </v-slide-group>
 
     <v-expand-transition>
-      
-        <v-sheet v-if="categoria != null" color="grey lighten-4" min-height="400" tile>
+        <v-sheet v-if="categoria" color="grey lighten-4" min-height="400" tile>
 
             <v-fade-transition>
-
-                <list-comercio :filtros="{ nombre: getNombre, categoria: categoria }"></list-comercio>
-
+                <list-comercio></list-comercio>
             </v-fade-transition>
 
         </v-sheet>
-
     </v-expand-transition>
+
+    <v-expand-transition>
+        <v-sheet v-if="!categoria && getComercioById" color="grey lighten-4" min-height="400" tile>
+            
+            <v-fade-transition>
+                <show-comercio></show-comercio>
+            </v-fade-transition>
+
+        </v-sheet>
+    </v-expand-transition>
+    
 
     </v-sheet>
 
@@ -47,13 +54,15 @@
 
 import { mapGetters } from 'vuex';
 import ListComercio from '@components/comercio/ListComercio';
+import ShowComercio from '@components/comercio/ShowComercio';
 
 export default {
     components: { 
         'list-comercio': ListComercio,
+        'show-comercio': ShowComercio
     },
     computed: {
-        ...mapGetters(['getCategorias', 'getNombre']),
+        ...mapGetters(['getCategorias', 'getNombre', 'getComercioById']),
         categoria:
         {
             get() {
