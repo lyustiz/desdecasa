@@ -93,7 +93,8 @@ export default {
             rules: {
                 new_password: [
                     v => !!v || 'La Contraseña es Requerida',
-                    v => !!v && v.length > 7 || 'La contraseña debe tener almenos 6 caracteres'
+                    v => !!v && v.length > 7 || 'La contraseña debe tener almenos 6 caracteres',
+                    v => !!v && v.length <= 15 || 'La contraseña debe tener maximo 15 caracteres'
                 ],
                 ret_password: [
                     v => this.form.tx_new_pass === v || 'Las contraseñas no coinciden'

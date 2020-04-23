@@ -13,12 +13,16 @@ export default
 
 	getters:
 	{
-        getComercios: state => state.comercios,
+		getComercios: state => state.comercios,
                 
 		countComercios: state => state.comercios.length,
 		
 		getComercio: state => state.comercio,
 
+		getComercioId: state =>  (state.comercio) ? state.comercio.id : null,
+
+		getComercioOpen:  state => (state.comercio) ? state.comercio.bo_abierto : null,
+	
 		getComercioById: state => state.comercioById,
 	},
 
@@ -42,6 +46,11 @@ export default
 		setComercio (state, comercio)
         {
             state.comercio 	= comercio
+		},
+
+		setOpenCloseComercio (state, openClose)
+		{
+			state.comercio.bo_abierto = openClose
 		},
 		
 		setComerciobyId (state, comercio)
@@ -126,6 +135,23 @@ export default
               console.log(error)
             })
 		},
+
+		apiOpenCloseComercio({ commit }, openclose )
+		{
+			return new Promise((resolve, reject) => 
+			{
+				axios.put('/api/v1/' + 'comercio/' + openclose.id_comercio + '/openclose', openclose)
+				.then(response => 
+				{
+					commit('setOpenCloseComercio', response.data.openclose)
+					resolve(response)
+				})
+				.catch(error => 
+				{
+					reject(error)
+				})
+			})
+		}
 
 	}
 }

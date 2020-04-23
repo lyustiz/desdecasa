@@ -64,10 +64,6 @@ export default {
         }
 
         let user = this.$store.getters['getUser']
-        
-        this.apiComercioUsuario(user.id).then( ()=> {
-           // this.expand(2) 
-        })
 
         this.cardSections = this.sectionsByUser(user.id_tipo_usuario)
 

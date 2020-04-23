@@ -19,22 +19,22 @@ class CreateComercioTable extends Migration
 			$table->string('nb_fiscal', 100);
 			$table->string('tx_nit', 12)->nullable();
 			$table->string('tx_descripcion', 200)->nullable();
-			$table->integer('id_departamento')->nullable();
-			$table->integer('id_ciudad')->nullable();
-			$table->integer('id_zona')->nullable();
-			$table->integer('id_comuna')->nullable();
-			$table->integer('id_barrio')->nullable();
-			$table->string('tx_direccion', 100)->nullable();
-			$table->integer('id_tipo_comercio')->nullable();
-            $table->integer('id_tipo_pago')->nullable();
-            $table->integer('tx_foto',80)->nullable();
+			$table->integer('id_departamento')->unsigned()->nullable();
+			$table->integer('id_ciudad')->unsigned()->nullable();
+			$table->integer('id_zona')->unsigned()->nullable();
+			$table->integer('id_comuna')->unsigned()->nullable();
+			$table->integer('id_barrio')->unsigned()->nullable();
+			$table->string('tx_direccion', 50)->nullable();
+			$table->integer('id_tipo_comercio')->unsigned()->nullable();
+            $table->integer('id_tipo_pago')->unsigned()->nullable();
+            $table->integer('tx_foto',100)->nullable();
 			$table->string('tx_latitud', 20)->nullable();
-			$table->string('tx_longitud', 20)->nullable();
+            $table->string('tx_longitud', 20)->nullable();
+            $table->boolean('bo_abierto')->default(1)->comment('Comercio Abierto o cerrado');
 			$table->string('tx_observaciones', 100)->nullable();
-			$table->integer('id_status');
-			$table->integer('id_usuario');
+			$table->integer('id_status')->unsigned();
+			$table->integer('id_usuario')->unsigned();
 			$table->timestamps();
-
         });
     }
 

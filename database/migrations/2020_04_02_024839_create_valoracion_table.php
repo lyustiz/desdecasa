@@ -15,12 +15,12 @@ class CreateValoracionTable extends Migration
     {
         Schema::create('valoracion', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_comercio');
+            $table->integer('id_comercio')->unsigned();
             $table->string('tx_valoracion', 200);
-			$table->integer('nu_valoracion');
+			$table->integer('nu_valoracion')->unsigned();
 			$table->string('tx_observaciones', 100)->nullable();
-			$table->integer('id_status');
-			$table->integer('id_usuario');
+			$table->integer('id_status')->unsigned();
+			$table->integer('id_usuario')->unsigned();
 			$table->timestamps();
 
         });

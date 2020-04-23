@@ -6,7 +6,10 @@
             class="headline cyan darken-3 white--text"
             primary-title
         >
-            Comentario de <span class="ml-2 font-weight-bold">{{ userName }} </span> 
+           <div> Comentario de <span class="ml-2 font-weight-bold">{{ userName }} </span> </div> <v-spacer></v-spacer>
+           <v-btn icon x-small="" color="white" @click="cancel()">
+               <v-icon>mdi-close-circle</v-icon>
+           </v-btn>
         </v-card-title>
 
         <v-card-text class="py-3">
@@ -21,7 +24,7 @@
                         label="Opinion/Valoracion"
                         hint="maximo 200 caracteres"
                         v-model="form.tx_valoracion"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         dense
                         outlined
                         filled
@@ -41,7 +44,7 @@
                         size="24"
                     ></v-rating>
                     <div class="py-3 px-1" >
-                         <v-input readonly  :rules="rules.required" :value="textValue(form.nu_valoracion)">
+                         <v-input readonly  :rules="[rules.required]" :value="textValue(form.nu_valoracion)">
                             {{textValue(form.nu_valoracion)}}
                          </v-input>
                     </div>

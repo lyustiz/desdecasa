@@ -12,7 +12,7 @@
                     prepend-inner-icon="mdi-phone"
                     append-outer-icon="mdi-phone-plus"
                     @click:append-outer="addPhone()"
-                    :rules="rules.mutiple"
+                    :rules="[rules.mutiple]"
                     :value="form.telefonos"
                     :items="form.telefonos"
                     readonly
@@ -54,6 +54,9 @@
                     label="Sitio Web"
                     type="text"
                     v-model="form.tx_sitio_web"
+                    :rules="[rules.maxlength(50)]"
+                    hint='url del sitio web Ej: "www.desdecasaweb.com"'
+                    persistent-hint
                     dense
                     outlined
                     filled >
@@ -65,9 +68,10 @@
                     prepend-inner-icon="mdi-facebook"
                     label="Facebook"
                     type="text"
-                    hint="Ej: https://www.facebook.com/desdecasaweb"
+                    hint='Indique solo el usuario Ej: "desdecasaweb"'
                     persistent-hint
                     v-model="form.tx_facebook"
+                    :rules="[rules.maxlength(30)]"
                     dense
                     outlined
                     filled >
@@ -79,9 +83,10 @@
                     prepend-inner-icon="mdi-twitter"
                     label="Twitter"
                     type="text"
-                    hint="Ej: @desdecasaweb"
+                    hint='Indique solo el usuario Ej: "@desdecasaweb"'
                     persistent-hint
                     v-model="form.tx_twitter"
+                    :rules="[rules.maxlength(30)]"
                     dense
                     outlined
                     filled >
@@ -93,9 +98,10 @@
                     prepend-inner-icon="mdi-instagram"
                     label="Instagram"
                     type="text"
-                    hint="Ej: @desdecasaweb"
+                    hint='Indique solo el usuario Ej: "@desdecasaweb"'
                     persistent-hint
                     v-model="form.tx_instagram"
+                    :rules="[rules.maxlength(30)]"
                     dense
                     outlined
                     filled >
@@ -107,9 +113,10 @@
                     prepend-inner-icon="mdi-youtube"
                     label="Youtube"
                     type="text"
-                    hint="Ej: https://www.youtube.com/channel/UCeG2aGmZ2"
+                    hint='Indique solo el usuario Ej: "desdecasaweb" o el codigo del canal Ej: "UCeG2aGmZ2" '
                     persistent-hint
                     v-model="form.tx_youtube"
+                    :rules="[rules.maxlength(30)]"
                     dense
                     outlined
                     filled >

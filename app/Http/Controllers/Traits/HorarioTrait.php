@@ -17,7 +17,7 @@ trait HorarioTrait
     {
         $validate = Validator::make($data,[
 
-            'nb_horario'        => 'required',
+            'nb_horario'        => 'required|max:80',
             'id_comercio'       => 'required',
             'tx_entrada'        => 'nullable',
             'tx_salida'         => 'nullable',
@@ -74,7 +74,7 @@ trait HorarioTrait
     {
         $validate = request()->validate([
 
-            'nb_Horario'      => 'required',
+            'nb_horario'      => 'required|max:80',
             'tx_icono'          => 'required',
             'tx_foto'           => 'required',
             'tx_observaciones'  => 'required',

@@ -53,7 +53,7 @@
                         <v-text-field
                         label="Longitud"
                         :value="getCoordinates[0].toFixed(5)"
-                        :rules="rules.coordinate"
+                        :rules="[rules.coordinate]"
                         readonly
                         hint="Seleccione una ubicacion en el mapa"
                         persistent-hint
@@ -63,7 +63,7 @@
                         <v-text-field
                         label="Latitud"
                         :value="getCoordinates[1].toFixed(5)"
-                        :rules="rules.coordinate"
+                        :rules="[rules.coordinate]"
                         readonly
                         ></v-text-field>
                     </v-col>

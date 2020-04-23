@@ -13,8 +13,8 @@
                         color="cyan darken-3"
                         prepend-inner-icon="mdi-gavel"
                         label="Nit"
-                        hint=""
-                        :rules="rules.required"
+                        hint="NIT del Comercio Ej: 123123123-1"
+                        :rules="rules.nit"
                         v-model="form.tx_nit"
                         dense
                         outlined
@@ -28,7 +28,7 @@
                         prepend-inner-icon="mdi-storefront-outline"
                         label="Nombre Fiscal"
                         type="text"
-                        :rules="rules.required"
+                        :rules="[rules.required, rules.maxlength(50)]"
                         v-model="form.nb_fiscal"
                         dense
                         outlined
@@ -42,7 +42,7 @@
                         prepend-inner-icon="mdi-storefront-outline"
                         label="Nombre Comercial"
                         type="text"
-                        :rules="rules.required"
+                        :rules="[rules.maxlength(50), rules.required]"
                         v-model="form.nb_comercio"
                         dense
                         outlined
@@ -54,7 +54,7 @@
                     <v-select
                         label="Tipo Comercio*"
                         prepend-inner-icon="mdi-storefront-outline"
-                        :rules="rules.select"
+                        :rules="[rules.select]"
                         v-model="form.id_tipo_comercio" 
                         :items="selects.tipoComercio"
                         item-value="id"
@@ -69,7 +69,7 @@
                     <v-select
                         label="Categorias del Comercio*"
                         prepend-inner-icon="mdi-storefront-outline"
-                        :rules="rules.mutiple"
+                        :rules="[rules.mutiple]"
                         v-model="form.categorias" 
                         :items="getCategorias"
                         item-value="id"
@@ -87,7 +87,7 @@
                         prepend-inner-icon="credit_card"
                         label="Medios de Pago*"
                         v-model="form.id_tipo_pago" 
-                        :rules="rules.select"
+                        :rules="[rules.select]"
                         :items="selects.tipoPago"
                         item-value="id"
                         item-text="nb_tipo_pago"
@@ -104,7 +104,7 @@
                         label="Horarios*"
                         hint="Seleccione o escriba los horarios de trabajo"
                         v-model="form.horarios" 
-                        :rules="rules.select"
+                        :rules="[rules.select]"
                         :items="selects.horarios"
                         multiple
                         chips
@@ -120,10 +120,14 @@
                         label="Actividad Comercial"
                         hint="Detalle la Actvidad Comercial de la Empresa"
                         v-model="form.tx_descripcion"
+                        :items="selects.horarios"
+                        :rules="[rules.maxlength(180)]"
                         dense
                         outlined
+                        auto-grow
                         filled
                         rows="2"
+                        counter="150"
                     ></v-textarea>
                 </v-flex>
                 
@@ -245,17 +249,17 @@ export default {
         return{
             resource: 'comercio', 
             form: {
-                id:               '',
-                nb_comercio:      '',
-                nb_fiscal:        '',
-                tx_nit:           '',
-                tx_descripcion:   '',
-                id_tipo_comercio: '',
-                categorias:       '',
-                id_tipo_pago:     '',
-                horarios:         '',
-                id_usuario:       '',
-                tx_foto:          ''
+                id:               null,
+                nb_comercio:      null,
+                nb_fiscal:        null,
+                tx_nit:           null,
+                tx_descripcion:   null,
+                id_tipo_comercio: null,
+                categorias:       null,
+                id_tipo_pago:     null,
+                horarios:         null,
+                id_usuario:       null,
+                tx_foto:          null
             },
             file: null,
             selects: {

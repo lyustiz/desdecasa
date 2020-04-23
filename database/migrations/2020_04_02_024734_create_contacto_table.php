@@ -15,16 +15,16 @@ class CreateContactoTable extends Migration
     {
         Schema::create('contacto', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_comercio');
-            $table->string('tx_email', 30);
-			$table->string('tx_sitio_web', 30)->nullable();
+            $table->integer('id_comercio')->unsigned();
+            $table->string('tx_email', 80);
+			$table->string('tx_sitio_web', 80)->nullable();
 			$table->string('tx_facebook', 30)->nullable();
 			$table->string('tx_twitter', 30)->nullable();
 			$table->string('tx_instagram', 30)->nullable();
 			$table->string('tx_youtube', 30)->nullable();
 			$table->string('tx_observaciones', 100)->nullable();
-			$table->integer('id_status');
-			$table->integer('id_usuario');
+			$table->integer('id_status')->unsigned();
+			$table->integer('id_usuario')->unsigned();
 			$table->timestamps();
 
         });

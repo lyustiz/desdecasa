@@ -13,7 +13,7 @@
                     label="Correo Actual"
                     type="text"
                     v-model="form.tx_email"
-                    :rules="rules.required"
+                    :rules="[rules.required]"
                     readonly
                     dense
                     outlined
@@ -42,7 +42,7 @@
                     label="Reescribir Correo"
                     type="text"
                     v-model="form.tx_ret_email"
-                    :rules="rules.email_confirmation"
+                    :rules="[rules.email_confirmation]"
                     dense
                     outlined
                     filled  >

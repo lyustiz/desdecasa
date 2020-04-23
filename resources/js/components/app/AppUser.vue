@@ -18,8 +18,7 @@
         </v-card-title>
 
         <v-list nav>
-
-            <v-list-item-group>
+        <v-list-item-group>
 
             <v-list-item disabled class="grey lighten-3">
                 <v-list-item-avatar>
@@ -30,9 +29,7 @@
                     <v-list-item-title>{{ user.nb_usuario }}</v-list-item-title>
                     <v-list-item-subtitle>{{ user.tx_email }}</v-list-item-subtitle>
                 </v-list-item-content>
-
             </v-list-item>
-
 
             <v-list-item ripple @click="administrar()">
                 <v-list-item-avatar>
@@ -50,8 +47,25 @@
                 </v-list-item-action>
             </v-list-item>
 
-            </v-list-item-group>
-            
+            <v-list-item>
+                <v-list-item-avatar>
+                    <v-icon 
+                    :color="(getComercioOpen==1) ? 'green': 'red' " 
+                    size="38">
+                        {{(getComercioOpen==1) ? 'mdi-garage-open': 'mdi-garage' }}
+                    </v-icon> 
+                </v-list-item-avatar>
+
+                <v-list-item-content>
+                    <v-list-item-title>Abrir/Cerrar Comercio </v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-action>
+                    <v-switch v-model="getComercioOpen" inset :loading="loading" color="green"></v-switch>
+                </v-list-item-action>
+            </v-list-item>
+
+        </v-list-item-group>
         </v-list>
 
         <v-divider></v-divider>
@@ -78,20 +92,40 @@
         data () {
             return {
                 showDialog: false,
-                loading: false
+                loading: false,
+                comercioActivo: false,
             }
         },
         computed:
         {
             user(){
                 return this.$store.getters['getUser']
+            },
+            
+            getComercioOpen:
+            {
+                get(){
+                    return this.$store.getters['getComercioOpen']
+                },
+                set(openclose) {
+                    this.openCloseComercio(openclose)
+                }
+            },
+
+            getComercioId()
+            {
+                return this.$store.getters['getComercioId'] 
             }
+            
+
         },
 
         methods: 
         {
             logout()
             {
+                if(this.loading) return
+                
                 this.loading = true
             
                 this.$store.dispatch('logout')
@@ -107,16 +141,40 @@
                 {
                     console.log(error);
                 })
-                .then(() => 
-                {
-                    this.loading = false
-                })
+                .finally(() => (this.loading = false))
 
             },
             administrar()
             {
                 this.$router.push('/cuenta').catch(()=>{});
                 this.showDialog = false
+            },
+
+            openCloseComercio(open)
+            {
+                if(this.loading) return                
+                
+                const openclose = {
+                    id_comercio: this.getComercioId,
+                    bo_abierto: (open) ? 1 : 0,
+                }
+
+                this.loading = true;
+
+                this.$store.dispatch('apiOpenCloseComercio', openclose)
+                .then(response => {
+                
+                    if(response.status == 200)
+                    {
+                        this.showMessage(response.data.msj)
+                    }
+
+                }).catch(error =>
+                {
+                    console.log(error);
+                })
+                .finally(() => (this.loading = false))
+  
             }
         }
     }

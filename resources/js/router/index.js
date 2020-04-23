@@ -14,6 +14,7 @@ import RegistroComercio from  '@pages/registro/RegistroComercio.vue';
 import RegistroUsuario  from  '@pages/registro/RegistroUsuario.vue';
 import Verify           from  '@pages/registro/Verify.vue';
 import Login            from  '@pages/login/Login.vue';
+import Authentication   from  '@pages/login/Authentication.vue';
 import RecoverPassword  from  '@pages/login/RecoverPassword.vue';
 
 import PageNotFound     from  '@pages/404/NotFound.vue'
@@ -70,6 +71,12 @@ export default new Router({
           name: 'login',
           icon: 'bubble_chart',
           component: Login,
+        },
+        {
+          path: '/authentication',
+          name: 'login',
+          icon: 'bubble_chart',
+          component: Authentication,
         },
         {
           path: '/recover-password',

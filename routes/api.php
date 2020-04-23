@@ -44,9 +44,11 @@ Route::post('logout',         'Auth\LoginController@logout');
 
 Route::group(['prefix'=>'v1'], function() {
 
-    Route::post('/comercio/info',                    'ComercioController@comercioInfo');
-    Route::put('/comercio/info',                     'ComercioController@comercioInfoUpdate');
-    Route::put('/comercio/location',                 'ComercioController@comercioLocation');
+    Route::post('/comercio/info',           'ComercioController@comercioInfo');
+    Route::put('/comercio/info',            'ComercioController@comercioInfoUpdate');
+    Route::put('/comercio/location',        'ComercioController@comercioLocation');
+    Route::post('/comercio/search',         'ComercioController@comercioSearch');
+    Route::put('/comercio/{comercio}/openclose',      'ComercioController@comercioOpenClose');
     
     Route::apiResource('/usuario',          'UsuarioController');
     Route::apiResource('/status',           'StatusController');
@@ -81,7 +83,6 @@ Route::group(['prefix'=>'v1'], function() {
     Route::get('/comercio/categoria/{id_categoria}', 'ComercioController@comercioCategoria');
     Route::get('/comercio/barrio/{id_barrio}',       'ComercioController@comercioBarrio');
     Route::get('/comercio/usuario/{id_usuario}',     'ComercioController@comercioUsuario');
-    Route::post('/comercio/search',                  'ComercioController@comercioSearch');
 
     Route::get('/valoracion/comercio/{id_comercio}/{id_usuario}', 'ValoracionController@valoracionComercio');
 

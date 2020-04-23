@@ -73,6 +73,7 @@
                         label="Codigo Recuperacion"
                         hint="Codigo de recuperacion enviado al Correo"
                         v-model="form.hash"
+                        :rules="[rules.required]"
                         dense
                         outlined
                         filled

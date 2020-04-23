@@ -31,7 +31,7 @@ class HorarioController extends Controller
     {
         $validate = request()->validate([
 
-            'nb_horario'        => 'required',
+            'nb_horario'        => 'required|60',
             'id_comercio'       => 'required',
             'tx_entrada'        => 'required',
             'tx_salida'         => 'required',
@@ -44,7 +44,6 @@ class HorarioController extends Controller
         $horario = Horario::create($request->all());
 
         return [ 'msj' => 'Registro Agregado Correctamente', compact('horario') ];
-    
     }
 
     /**

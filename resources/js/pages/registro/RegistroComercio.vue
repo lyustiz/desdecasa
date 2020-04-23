@@ -25,7 +25,7 @@
                         label="Nombre del Comercio"
                         type="text"
                         v-model="form.nb_comercio"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         dense
                         rounded
                         filled >
@@ -41,7 +41,7 @@
                         persistent-hint
                         type="text"
                         v-model="form.tx_nit"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         dense
                         rounded
                         filled >
@@ -57,7 +57,7 @@
                         label="Nombre Usuario"
                         type="text"
                         v-model="form.nb_usuario"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         dense
                         rounded
                         filled >
@@ -103,7 +103,7 @@
                         label="Reescribir password"
                         :type="show ? 'text' : 'password'"
                         v-model="form.passwordRew"
-                        :rules="rules.password_confirmation"
+                        :rules="[rules.password_confirmation]"
                         :disabled="passwordValid"
                         dense
                         rounded

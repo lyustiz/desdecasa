@@ -65,7 +65,6 @@
             
 
                 <v-row no-gutters>
-
                     <v-col>
                         <v-menu offset-y >
                             <template v-slot:activator="{ on }">
@@ -88,6 +87,20 @@
                                 
                             </v-list>
                         </v-menu>
+                    </v-col>
+
+                    <v-col>
+
+                        <v-tooltip top open-on-click :color="getStatusOpen().color">
+                            <template v-slot:activator="{ on }">
+                                <v-btn small icon v-on="on" :class="`${getStatusOpen().color} lighten-5`">
+                                    <v-icon  size="28" :color="getStatusOpen().color">
+                                        {{getStatusOpen().icon}}
+                                    </v-icon> 
+                                </v-btn>
+                            </template>
+                            <span>{{getStatusOpen().text}}</span>
+                        </v-tooltip>
                     </v-col>
 
                     <!-- <v-col>
@@ -228,7 +241,6 @@
                 ripple
                 readonly
             ></v-rating>
-           
         </v-card-actions>
     </v-card>
 </template>
@@ -266,7 +278,8 @@ export default
         percentValoration()
         {
             return (this.comercio.nu_pc_valoracion) ? parseFloat(this.comercio.nu_pc_valoracion.split('-')[1]) : 0
-        }
+        },
+
     },
     data () 
 	{
@@ -296,6 +309,26 @@ export default
                     break
             }
         },
+
+        getStatusOpen()
+        {
+            if(this.comercio.bo_abierto == '1')
+            {
+                return {
+                    color: 'green',
+                    icon:  'mdi-garage-open',
+                    text:  'Abierto'
+                }
+            }
+
+            return {
+                    color: 'red',
+                    icon:  'mdi-garage',
+                    text:  'Cerrado'
+                }
+
+        },
+
         getPhoneType(id_tipo_telefono)
         {
             switch (parseInt(id_tipo_telefono)) {

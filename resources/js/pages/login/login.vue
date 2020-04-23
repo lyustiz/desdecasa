@@ -26,7 +26,7 @@
                         hint="Indique el usuario Registrado"
                         type="text"
                         v-model="form.nb_usuario"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         dense
                         rounded
                         filled  >

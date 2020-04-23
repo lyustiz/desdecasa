@@ -24,6 +24,7 @@ class Comercio extends Model
                             'tx_foto',
                             'tx_latitud',
                             'tx_longitud',
+                            'bo_abierto',
                             'tx_observaciones',
                             'id_status',
                             'id_usuario',

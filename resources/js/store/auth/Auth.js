@@ -208,12 +208,14 @@ export default
             })
 		},
 
-		autenticate({ commit }, data)
+		autenticate({ commit, dispatch }, data)
 		{
 			commit('setUser'  , data.user);
 			commit('setAuth'  , true);
 			commit('setToken' , data.token);
 			commit('setExpire', data.expire);
+
+			dispatch('apiComercioUsuario', data.user.id)
 		},
 
 		unatenticate({ commit })
@@ -227,6 +229,8 @@ export default
 			localStorage.removeItem("user")
 			localStorage.removeItem("expire")
 			localStorage.setItem("auth", 	false)
+
+			commit('setComercio', null)
 		}
 
     }

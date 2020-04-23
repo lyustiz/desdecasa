@@ -12,7 +12,7 @@
                 <v-select
                     label="Departamento*"
                     prepend-inner-icon="mdi-map-search"
-                    :rules="rules.select"
+                    :rules="[rules.select]"
                     v-model="departamentoCiudad" 
                     :items="[{ id: 76, nb_departamento: 'Valle del Cauca'}]"
                     item-value="id"
@@ -27,7 +27,7 @@
                 <v-select
                     label="Ciudad (*)"
                     prepend-inner-icon="mdi-city-variant" 
-                    :rules="rules.select"
+                    :rules="[rules.select]"
                     v-model="departamentoCiudad" 
                     :items="[{ id: 76, nb_municipio: 'Cali'}]"
                     item-value="id"
@@ -43,7 +43,7 @@
                 <v-select
                     label="Zona*"
                     prepend-inner-icon="mdi-select-marker" 
-                    :rules="rules.select"
+                    :rules="[rules.select]"
                     v-model="form.id_zona" 
                     :items="zonas"
                     item-value="id"
@@ -60,7 +60,7 @@
                 <v-select
                     prepend-inner-icon="mdi-map-marker-radius" 
                     label="Comuna*"
-                    :rules="rules.select"
+                    :rules="[rules.select]"
                     v-model="form.id_comuna" 
                     :items="selects.comunas"
                     item-value="id"
@@ -78,7 +78,7 @@
                 <v-select
                     label="Barrio*"
                     prepend-inner-icon="mdi-home-modern" 
-                    :rules="rules.select"
+                    :rules="[rules.select]"
                     v-model="form.id_barrio" 
                     :items="selects.barrios"
                     item-value="id"
@@ -97,7 +97,7 @@
                     prepend-inner-icon="mdi-sign-direction"
                     label="Direccion"
                     type="text"
-                    :rules="rules.required"
+                    :rules="[rules.required, rules.maxlength(45)]"
                     v-model="form.tx_direccion"
                     dense
                     outlined
@@ -177,16 +177,16 @@ export default {
         return{
             resource: 'comercio', 
             form: {
-                id:              '',
+                id:              null,
                 id_departamento: 76,
                 id_ciudad:       76,
-                id_zona:         '',
-                id_comuna:       '',
-                id_barrio:       '',
-                tx_longitud:     '',
-                tx_latitud:      '',
-                tx_direccion:    '',
-                id_usuario:      ''
+                id_zona:         null,
+                id_comuna:       null,
+                id_barrio:       null,
+                tx_longitud:     null,
+                tx_latitud:      null,
+                tx_direccion:    null,
+                id_usuario:      null
             },
             departamentoCiudad: '', 
             selects: {

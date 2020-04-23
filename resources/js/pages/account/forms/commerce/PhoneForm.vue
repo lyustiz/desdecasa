@@ -11,8 +11,10 @@
                     color="cyan darken-3"
                     prepend-inner-icon="mdi-phone-plus"
                     label="Numero de Telefono"
-                    :rules="rules.required"
+                    hint="Ej 23968589"
+                    :rules="[rules.maxlength(12), rules.required]"
                     v-model="form.tx_telefono"
+                    prefix="+57"
                     dense
                     outlined
                     filled >
@@ -23,7 +25,7 @@
                 <v-select
                     label="Tipo Telefono*"
                     prepend-inner-icon="mdi-phone-log"
-                    :rules="rules.select"
+                    :rules="[rules.select]"
                     v-model="form.id_tipo_telefono" 
                     :items="selects.tipoTelefonos"
                     item-value="id"
@@ -107,7 +109,7 @@ export default {
             form:
             {
                 id_comercio:      '',
-                tx_telefono:      '',
+                tx_telefono:      null,
                 id_tipo_telefono: '',
                 bo_whatsapp:       0,
                 id_usuario:       '',   

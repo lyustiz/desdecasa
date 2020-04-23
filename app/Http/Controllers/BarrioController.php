@@ -32,6 +32,7 @@ class BarrioController extends Controller
         $barrios =  Barrio::select('id', 'nb_barrio', 'tx_latitud', 'tx_longitud')
                           ->where('id_comuna', $id_comuna)
                           ->where('id_status', 1)
+                          ->orderby('nb_barrio')
                           ->get();
 
         return $barrios;
@@ -49,6 +50,7 @@ class BarrioController extends Controller
                     })
                     ->select('id', 'nb_barrio')
                     ->where('id_status', 1)
+                    ->orderby('nb_barrio')
                     ->get();
 
         return $barrios;

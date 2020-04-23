@@ -55,9 +55,9 @@ class RegisterController extends Controller
     protected function validator(Request $request)
     {
         return request()->validate([
-            'nb_usuario' => 'required|max:255|unique:usuario,nb_usuario',
-            'email'      => 'required|email|max:255|unique:usuario,tx_email',
-            'password'   => 'required|min:8'
+            'nb_usuario' => 'required|max:50|unique:usuario,nb_usuario',
+            'email'      => 'required|email|max:80|unique:usuario,tx_email',
+            'password'   => 'required|min:8|max:15'
         ],
         [
             'nb_usuario.unique' => 'El usuario ya está en uso.',
@@ -111,14 +111,15 @@ class RegisterController extends Controller
     {
         return request()->validate([
             'nb_comercio' => 'bail|required|max:100|unique:comercio,nb_comercio',
-            'tx_nit'      => 'bail|required|max:12|unique:comercio,tx_nit',
+            'tx_nit'      => 'bail|required|max:12|unique:comercio,tx_nit|regex:/(^[0-9]+-{1}[0-9]{1})/',
             'nb_usuario'  => 'bail|required|max:255|unique:usuario,nb_usuario',
             'email'       => 'required|email|max:255|unique:usuario,tx_email',
-            'password'    => 'required|min:8'
+            'password'    => 'required|min:8|max:15'
         ],
         [
             'nb_comercio.unique' => 'El nombre del Comercio ya esta en uso',
             'tx_nit.unique'      => 'El nit del Comercio ya esta en uso',
+            'tx_nit.regex'       => 'Formato de NIT incorrecto Ej. 123123123-1',
             'nb_usuario.unique'  => 'El usuario ya está en uso.',
             'email.unique'       => 'El correo ya está en uso.',
         ]);

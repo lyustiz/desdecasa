@@ -15,15 +15,14 @@ class CreateHorarioTable extends Migration
     {
         Schema::create('horario', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('nb_horario', 80);
-			$table->integer('id_comercio');
+			$table->string('nb_horario', 100);
+			$table->integer('id_comercio')->unsigned();
 			$table->string('tx_entrada', 7)->nullable();
 			$table->string('tx_salida', 7)->nullable();
 			$table->string('tx_observaciones', 100)->nullable();
-			$table->integer('id_status');
-			$table->integer('id_usuario');
+			$table->integer('id_status')->unsigned();
+			$table->integer('id_usuario')->unsigned();
 			$table->timestamps();
-
         });
     }
 

@@ -31,7 +31,7 @@ class TelefonoController extends Controller
     {
         $validate = request()->validate([
 
-            'tx_telefono'       => 'required',
+            'tx_telefono'       => 'required|max:12',
             'id_comercio'       => 'required',
             'id_tipo_telefono'  => 'required',
             'bo_whatsapp'       => 'required',
@@ -68,7 +68,7 @@ class TelefonoController extends Controller
     {
         $validate = request()->validate([
 
-            'tx_telefono'       => 'required',
+            'tx_telefono'       => 'required|max:12',
             'id_comercio'       => 'required',
             'id_tipo_telefono'  => 'required',
             'bo_whatsapp'      => 'required',

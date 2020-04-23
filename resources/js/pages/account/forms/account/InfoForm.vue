@@ -14,7 +14,7 @@
                     label="Nombre"
                     type="text"
                     v-model="form.nb_nombres"
-                    :rules="rules.required"
+                    :rules="[rules.required, rules.maxlength(50)]"
                     dense
                     outlined
                     filled >
@@ -33,7 +33,7 @@
                     <template v-slot:activator="{ on }">
                     <v-text-field
                         v-model="dates.fe_nacimiento"
-                        :rules="rules.fecha"
+                        :rules="[rules.fecha]"
                         label="Fecha de Nacimiento"
                         prepend-inner-icon="event"
                         readonly

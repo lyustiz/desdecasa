@@ -51,6 +51,7 @@ class ComercioController extends Controller
                                          'comercio.tx_foto',
                                          'comercio.tx_longitud',
                                          'comercio.tx_latitud',
+                                         'comercio.bo_abierto',
                                          'comercio.id_departamento',
                                          'departamento.nb_departamento',
                                          'comercio.id_ciudad',
@@ -66,7 +67,7 @@ class ComercioController extends Controller
                                          'contacto.tx_instagram',
                                          'contacto.tx_youtube',
                                         ) 
-                                ->selectRaw('(SELECT concat(count(valoracion.id), "-", sum(valoracion.nu_valoracion)/5) 
+                                ->selectRaw('(SELECT concat(count(valoracion.id), "-", sum(valoracion.nu_valoracion)/count(valoracion.id)) 
                                                 FROM valoracion 
                                                 WHERE valoracion.id_comercio = comercio.id) AS nu_pc_valoracion' 
                                             )
@@ -117,6 +118,7 @@ class ComercioController extends Controller
                         ->whereNotNull('tx_foto')
                         ->whereRaw('LOWER(`nb_comercio`) LIKE ? ','%'.trim(strtolower($nb_comercio)).'%')
                         ->where('comercio.id_status', 1)
+                        ->take(20)
                         ->get();
         
     }
@@ -194,21 +196,24 @@ class ComercioController extends Controller
     {
         return request()->validate([
 
-            'nb_comercio'       => 'bail|required|max:50',
-            'nb_fiscal'         => 'bail|required|max:50',
-            'tx_nit'            => 'bail|required|max:12',
-            'tx_descripcion'    => 'bail|required',
+            'nb_comercio'       => 'bail|required|max:100',
+            'nb_fiscal'         => 'bail|required|max:100',
+            'tx_nit'            => 'bail|required|unique:comercio,tx_nit|max:12|regex:/(^[0-9]+-{1}[0-9]{1})/',
+            'tx_descripcion'    => 'bail|required|max:200',
             'id_tipo_comercio'  => 'bail|required',
             'categorias'        => 'bail|required|array',
             'id_tipo_pago'      => 'bail|required',
             'horarios'          => 'bail|required|array',
-            'tx_foto'           => 'bail|required',
+            'tx_foto'           => 'bail|required|max:100',
             'tx_src'            => 'bail|nullable',
             'id_usuario'        => 'bail|required',
             
         ],
         [
             'tx_foto.required'   => 'La Foto es requerida',
+            'tx_foto.max'        => 'El nombre de la imagen es muy largo max: 100',
+            'tx_nit.unique'      => 'El nit del Comercio ya esta en uso',
+            'tx_nit.regex'       => 'Formato de NIT incorrecto Ej. 123123123-1',
         ]
         );
     }
@@ -364,6 +369,27 @@ class ComercioController extends Controller
 
 
 
+       /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function comercioOpenClose(Request $request, Comercio $comercio)
+    {
+        request()->validate([
+            "bo_abierto"        => 'bail|required|integer',
+        ]);
+
+        $comercio = $comercio->update($request->only('bo_abierto'));
+
+        if($request->input('bo_abierto') == 1)
+        {
+            return  [ 'msj' => 'Comercio Abierto Correctamente', 'openclose' => 1];
+        }
+
+        return [ 'msj' => 'Comercio Cerrado Correctamente', 'openclose' => 0];
+    }
 
     /**
      * Display the specified resource.
@@ -385,6 +411,7 @@ class ComercioController extends Controller
                                 'comercio.tx_foto',
                                 'comercio.tx_longitud',
                                 'comercio.tx_latitud',
+                                'comercio.bo_abierto',
                                 'comercio.id_departamento',
                                 'departamento.nb_departamento',
                                 'comercio.id_ciudad',
@@ -414,42 +441,6 @@ class ComercioController extends Controller
                         ->first();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comercio  $comercio
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Comercio $comercio)
-    {
-        $validate = request()->validate([
-
-            'nb_comercio'       => 'required',
-            'nb_fiscal'        => 'required',
-            'tx_nit'           => 'required',
-            'tx_descripcion'   => 'required',
-            'id_departamento'  => 'required',
-            'id_ciudad'        => 'required',
-            'id_zona'          => 'required',
-            'id_comuna'        => 'required',
-            'id_barrio'        => 'required',
-            'tx_direccion'     => 'required',
-            'id_tipo_comercio' => 'required',
-            'id_tipo_pago'     => 'required',
-            'tx_latitud'       => 'required',
-            'tx_longitud'      => 'required',
-            'tx_observaciones' => 'required',
-            'id_status'        => 'required',
-            'id_usuario'       => 'required',
-
-        ]);
-        
-        $comercio = $comercio->update($request->all());
-
-        return [ 'msj' => 'Registro Editado' , compact('comercio')];
-    
-    }
 
     /**
      * Remove the specified resource from storage.
