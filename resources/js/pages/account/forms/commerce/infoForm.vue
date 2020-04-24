@@ -402,9 +402,9 @@ export default {
      font-size: 60px !important;
      color: var(--v-info-base);
      margin: 8px;
-     opacity: 0.3;
+     opacity: 0.8;
  }
   .v-file-input .v-icon:hover{
-     opacity: 0.7;
+     opacity: 1;
  }
 </style>

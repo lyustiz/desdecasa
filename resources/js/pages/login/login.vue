@@ -22,8 +22,8 @@
                     <v-text-field
                         color="cyan darken-3"
                         prepend-inner-icon="mdi-account"
-                        label="Usuario"
-                        hint="Indique el usuario Registrado"
+                        label="Usuario o Email"
+                        hint="Indique el usuario o correo registrado"
                         type="text"
                         v-model="form.nb_usuario"
                         :rules="[rules.required]"

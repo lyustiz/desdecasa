@@ -103,30 +103,6 @@
                         </v-tooltip>
                     </v-col>
 
-                    <!-- <v-col>
-                        <v-menu offset-y >
-                            <template v-slot:activator="{ on }">
-                                <v-btn v-on="on" text small color="cyan darken-3" class="my-2" @click="horario=!horario">
-                                    <v-icon color="error" class="mr-2">category</v-icon> categorias
-                                </v-btn>
-                            </template>
-                            <v-list dense class="pa-2">
-                                <v-list-item v-for="(categoria, i) in comercio.comercio_categoria" :key="i" >
-                                
-                                <v-list-item-avatar>
-                                    <v-icon dark class="grey lighten-1 white--text">{{getCategoriaById(categoria.id_categoria).tx_icono}}</v-icon>
-                                </v-list-item-avatar>
-                                
-                                <v-list-item-content>
-                                    <v-list-item-title>{{getCategoriaById(categoria.id_categoria).nb_categoria}}</v-list-item-title>
-                                </v-list-item-content>
-
-                                </v-list-item>
-                                
-                            </v-list>
-                        </v-menu>
-                    </v-col>
- -->
                     <v-col>
                         <v-menu offset-y v-model="telefono">
                             <template v-slot:activator="{ on }">
@@ -162,7 +138,7 @@
                         <v-btn icon class="grey lighten-4" link target="_blank" :href="`mailto:${comercio.tx_email}`"> 
                             <v-icon color="purple">mdi-email</v-icon> 
                         </v-btn>
-                        <v-btn v-if="comercio.tx_sitio_web" icon class="grey lighten-4" link target="_blank" :href="`https://${comercio.tx_sitio_web}`"> 
+                        <v-btn v-if="comercio.tx_sitio_web" icon class="grey lighten-4" link target="_blank" :href="`http://${comercio.tx_sitio_web}`"> 
                             <v-icon color="green">mdi-web</v-icon>
                         </v-btn>
                         <v-btn v-if="comercio.tx_instagram" icon class="grey lighten-4" link target="_blank" :href="`https://www.instagram.com/${comercio.tx_instagram}`"> 
@@ -246,7 +222,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import FormValoration from './FormValoration'
 export default 
 {
@@ -263,8 +238,6 @@ export default
     },
     computed:
     {
-        ...mapGetters(['getCategoriaById']),
-
         getUserid()
         {
             return this.$store.getters['getUserid']

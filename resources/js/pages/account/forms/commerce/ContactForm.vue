@@ -50,7 +50,7 @@
 
             <v-flex xs12 >
                 <v-text-field
-                    prepend-inner-icon="mdi-tablet-dashboard"
+                    prepend-inner-icon="mdi-web"
                     label="Sitio Web"
                     type="text"
                     v-model="form.tx_sitio_web"

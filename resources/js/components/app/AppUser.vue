@@ -47,12 +47,12 @@
                 </v-list-item-action>
             </v-list-item>
 
-            <v-list-item>
+            <v-list-item v-if="user.id_tipo_usuario == 3">
                 <v-list-item-avatar>
                     <v-icon 
-                    :color="(getComercioOpen==1) ? 'green': 'red' " 
+                    :color="(getComercioOpen) ? 'green': 'red' " 
                     size="38">
-                        {{(getComercioOpen==1) ? 'mdi-garage-open': 'mdi-garage' }}
+                        {{(getComercioOpen) ? 'mdi-garage-open': 'mdi-garage' }}
                     </v-icon> 
                 </v-list-item-avatar>
 
@@ -105,7 +105,7 @@
             getComercioOpen:
             {
                 get(){
-                    return this.$store.getters['getComercioOpen']
+                    return (this.$store.getters['getComercioOpen'] == 1) ? true : false;
                 },
                 set(openclose) {
                     this.openCloseComercio(openclose)
@@ -116,8 +116,6 @@
             {
                 return this.$store.getters['getComercioId'] 
             }
-            
-
         },
 
         methods: 

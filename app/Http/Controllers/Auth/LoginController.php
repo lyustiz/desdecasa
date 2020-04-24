@@ -65,11 +65,20 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        
-        if (Auth::attempt([
-                'nb_usuario' => $request->get('nb_usuario'),
-                'password'   => $request->get('password')
-            ])) 
+        $credentials = [
+            'nb_usuario' => $request->input('nb_usuario'),
+            'password'   => $request->input('password')
+        ];
+
+        if(filter_var($request->input('nb_usuario'), FILTER_VALIDATE_EMAIL))
+        {
+            $credentials = [
+                'tx_email'   => $request->input('nb_usuario'),
+                'password'   => $request->input('password')
+            ];
+        } 
+
+        if (Auth::attempt($credentials)) 
         {
             
             $user    = Auth::user();
