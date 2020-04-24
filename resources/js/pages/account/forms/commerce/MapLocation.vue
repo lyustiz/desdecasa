@@ -87,7 +87,6 @@ import {    MglMap,
             MglGeojsonLayer  
         } from "vue-mapbox";
 
-import AppComercio from '@components/comercio/AppComercio';
 import AppRules from '@mixins/AppRules'
 
 export default {
@@ -97,7 +96,6 @@ export default {
        'app-map'      :  MglMap,
        'map-marker'   :  MglMarker, 
        'map-popup'    :  MglPopup,
-       'app-comercio' :  AppComercio,
        'map-layer'    :  MglGeojsonLayer 
     },
      props:

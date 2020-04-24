@@ -5,6 +5,16 @@
         <v-form>
         
         <v-row no-gutters justify="end" >
+
+                <v-btn x-small  dark color="red" @click="switchView()">
+                    <template v-if="$router.currentRoute.name=='welcome'">
+                        <v-icon size="14" class="mr-2" >mdi-map</v-icon> ver mapa
+                    </template>
+                    <template v-else>
+                        <v-icon size="14" class="mr-2" >mdi-view-dashboard</v-icon> ver lista
+                    </template>
+                </v-btn>
+                
                 <v-spacer></v-spacer>
                 <v-btn icon x-small  color="red" dark @click="toggleFilter()" v-if="resize" ><v-icon>mdi-close-circle</v-icon></v-btn> 
         </v-row>
@@ -143,6 +153,7 @@ export default {
         ...mapGetters(['getCategorias','getZonas']),
         resize()
         {
+            console.log(this.$router.currentRoute.name)
             return this.$store.getters['getResize']
         },
         filterNombre:
@@ -325,6 +336,13 @@ export default {
                 console.log(error)
             })
             .finally(() => (this.comerciosSearchLoad = false))
+        },
+
+        switchView()
+        {
+            const route = (this.$router.currentRoute.name=='welcome') ? 'mapview' : '/' ;
+            
+            this.$router.push(route).catch(err => {})
         }
     }
 }
