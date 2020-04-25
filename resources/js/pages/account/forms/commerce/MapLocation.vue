@@ -10,7 +10,8 @@
             :minZoom="minZoom"
             :maxZoom="maxZoom"
             @click="addMark($event)"
-            @load="onMapLoaded"> 
+            @load="onMapLoaded"
+            class="map-location-holder"> 
             
             <map-marker 
                 v-for="(coordinate, index) in coordinates" 
@@ -253,9 +254,15 @@ export default {
 </script>
 
 <style>
-    .mgl-map-wrapper
+
+.map-location-holder
+    {
+        height: 400px !important;
+        width: 400px !important;
+    }
+    /* .mgl-map-wrapper
     {
         max-height: 400px !important;
         max-width: 100% !important;
-    }
+    } */
 </style>

@@ -10,13 +10,22 @@
             :zoom="zoom" 
             :minZoom="minZoom"
             :maxZoom="maxZoom"
-            @load="onMapLoaded"> 
+            @load="onMapLoaded"
+            class="map-view-holder"> 
              
             <map-marker 
                 v-for="(comercio, index) in comercios" 
                 :coordinates="[ comercio.tx_longitud, comercio.tx_latitud ]" 
-                :color="(comercio.bo_abierto == 1) ? 'green' : 'red'"   
-                :key="index"> 
+                :key="index"
+                @click="centered($event)"
+                > 
+
+                <span slot="marker" > 
+                    <v-btn small icon class="grey lighten-4">
+                        <v-icon size="30" :color="(comercio.bo_abierto == 1) ? 'green' : 'red'">mdi-storefront</v-icon> 
+                    </v-btn>
+                </span>
+
                 <map-popup>
                     
                     <card-comercio :comercio="comercio"></card-comercio>
@@ -38,7 +47,7 @@
     </v-card>
 
     <!-- Contenedor de  Filtros -->
-    <v-navigation-drawer :value="true" app clipped right class="grey lighten-5">
+    <v-navigation-drawer :value="showFilter" app clipped right class="grey lighten-5">
         <app-filters></app-filters> 
     </v-navigation-drawer>
 
@@ -53,6 +62,7 @@ import {    MglMap,
             MglPopup, 
             MglGeojsonLayer  
         } from "vue-mapbox";
+import { mapGetters } from 'vuex';
 import CardComercio from './CardComercio'
 
 export default {
@@ -73,7 +83,7 @@ export default {
 
     computed: 
     {
-
+        ...mapGetters(['showFilter']),
         comercios()
         {
             return this.$store.getters['getComercios'];
@@ -92,14 +102,10 @@ export default {
             mapStyle:   'mapbox://styles/mapbox/streets-v11', 
             center:     [ -76.5231, 3.4314 ],
             mapbox:     '',
-            zoom :      10.97,
+            zoom :      12,
             minZoom:    12,
             maxZoom:    15,
             coordinates:[
-                [ -76.5231, 3.4314 ],
-                [ -76.5231, 3.4414 ],
-                [ -76.5331, 3.4314 ],
-                [ -76.5231, 3.4514 ],
             ],
             sources:    [],
             layer:  {
@@ -115,9 +121,11 @@ export default {
     },
     
     methods:
-    {
+    {        
         onMapLoaded(event)
         {
+            this.mapScope = event.map;
+                
             if(this.hasComuna)
             {
                 let center = this.comunas.filter(item => item.id == this.comuna)
@@ -140,7 +148,11 @@ export default {
                 this.mapScope = event.map;
             }
         },
-        
+        centered(mark)
+        {
+            
+            this.mapScope.easeTo({ center: mark.marker._lngLat, zoom: 13 }) 
+        }
     }
 
 
@@ -154,17 +166,13 @@ export default {
 </script>
 
 <style >
-
-.mgl-map-wrapper
-{
-    height: 600px !important;
-    width: 80vw !important;
+.map-view-holder{
+    height: 89.5vh !important;
 }
 
 .map-card
 {
   height: 89.5vh !important;
 }
-
 
 </style>

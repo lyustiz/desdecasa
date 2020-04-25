@@ -104,7 +104,7 @@
 
         <v-row no-gutters>
 
-            <v-col class="ml-2">
+            <v-col cols="3" class="ml-2">
 
                 <v-menu offset-y>
             
@@ -167,7 +167,7 @@
 
 
            
-              <v-col class="text-center" >
+              <v-col cols="8" class="text-center" >
                
                 <v-rating
                     small

@@ -101,7 +101,7 @@
             </v-tooltip>
         </template>
 
-         <v-app-bar-nav-icon @click="toggleFilter()" v-show="resize && isWelcome" ></v-app-bar-nav-icon>
+         <v-app-bar-nav-icon @click="toggleFilter()" v-show="resize && isFiltePage" ></v-app-bar-nav-icon>
 
     </v-app-bar>
 
@@ -121,9 +121,9 @@
                 return this.$store.getters['getResize']
             },
 
-            isWelcome()
+            isFiltePage()
             {
-                return this.$route.name  == 'welcome'
+                return ( ['welcome', 'mapview'].includes(this.$route.name) )
             },
             menus()
             {
@@ -135,15 +135,11 @@
                 if (this.$store.getters['getAuth'])
                 {
                     menus.push({ name: 'Cuenta', route: '/cuenta'})
-                    // administrator menus.push({ name: 'Admin', route: '/home'})
                 }
                 return menus;
             }
         },
-        created(){
 
-            
-        },
         data(){
             return {
                 loading : false,
