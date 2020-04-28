@@ -1,52 +1,68 @@
 <template>
-    <div class="pt-5 px-3 holder"> 
-    
-    <v-card color="rgba(0,0,0,0.3) " dark class="mx-auto mt-5 pa-3"  max-width="1000">
+<div class="holder-conocenos"> 
+   
+    <v-container >
+        <v-row no-gutters class="ml-lg-12">
+            <v-col cols="12" lg="6" class="text-conocenos d-flex align-md-end">
+              <div class="img-container">
+                <img src="/images/vision.png" alt="" srcset="" class="img-vision">
+              </div>
+            </v-col>
 
-      <v-card-title class="mb-4 display-1">
-        Conocenos
-      </v-card-title>
+            <v-col cols="12" lg="6" class="text-conocenos ml-lg-n12">
+              <div>
+                <img src="/images/mision.png" alt="" srcset="" class="img-mision">
+              </div>
+            </v-col>
+            
 
-      <v-card-subtitle >
-        <h3>Mision</h3>
-      </v-card-subtitle>
+        </v-row>
 
-      <p class="mx-4 mt-4 text-justify">
-        Mediante el compromiso, la ética y el profesionalismo “Desde Casa web” se enfocará en
-        entregar a la sociedad una herramienta que permita acercar a los pequeños comercios de barrio, 
-        un servicio comunitario dispuesto a apoyarse en estos tiempos donde la economía en el mundo está cambiando. 
-        Implementando el marketing solidario podremos apoyar a los pequeños comerciantes.
-      </p>
-
-      <v-card-subtitle >
-        <h3>Vision</h3>
-      </v-card-subtitle>
-
-      <p class="mx-4 mt-4 text-justify">
-          Ser, para el 2021, la red social de comercios de barrios más influyente, 
-          permitiéndole a cada uno de sus miembros surgir y crecer en medio de la crisis, 
-          convirtiéndonos en la principal opción para la resolución de las necesidades básicas de consumo, 
-          a través de las diferentes herramientas que ofrece el universo digital
-      </p>
-
-  </v-card>
+    </v-container>
+ 
   </div>
 </template>
 
 <script>
+
 export default {
-
-    data () 
-	{
-        return {
-            show: true,
-            logo: require('~/assets/img/publicidad/publicidad1.jpg'),
+    data(){
+        return{
+            path:1
         }
-    },
-
+    }
 }
 </script>
 
-<style>
+<style >
+.holder-conocenos {
+    min-height: 92vh;
+    background-image: url('/images/conocenos-background.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.text-conocenos {
+    height: 90vh;
+}
+
+.img-container
+{
+  width: 100%;
+}
+
+.img-vision{
+  width: 100%;
+  height: auto;
+}
+
+.img-mision {
+  width: 100%;
+  height: auto;
+}
+
+
 
 </style>

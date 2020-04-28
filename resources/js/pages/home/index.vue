@@ -24,7 +24,7 @@ export default
 	{
         return {
             Showfilter: true,
-            logo: require('~/assets/img/logo.jpg'),
+            logo: require('~/assets/img/logo.png'),
         }
     },
 }

@@ -5,30 +5,36 @@
     <v-container fluid>
 
         <!-- Title Despachos Barrio -->
-        <v-row no-gutters class="title-banner despacho-barrio" v-if="!small  "></v-row>
-        <div class="title-banner-m despacho-barrio-m ma-0 pa-0" v-else ></div>
+        <!-- <div class="title-banner-m despacho-barrio-m ma-0 pa-0" veelses ></div> -->
 
-        <v-row no-gutters class="my-2" >
-            
+         <v-row no-gutters class="mt-8">
+             <v-col cols="12" class="d-flex justify-center">
+                 <img :src="cali" alt="" srcset="" class="banner-image align-self-center">
+             </v-col>
+         </v-row>
+        <v-row no-gutters class="mt-6 mb-4" >
             <!-- Logo -->
-            <v-col md="3" class="d-none d-xs-none d-sm-none d-md-flex d-lg-flex">  
-                <v-img :src="logo" aspect-ratio="2" height="320"></v-img>
+            <v-col md="2"  class=" d-none d-xs-none d-sm-none d-md-flex d-lg-flex">  
+                <img :src="logo" alt="" srcset="" class="logo-ppal">
             </v-col>
 
             <!-- Publicidad-->
-            <v-col md="9" sm="12" xs="12" class="">  
+            <v-col md="10" sm="12" xs="12" class="">  
                 <list-publicidad></list-publicidad>
             </v-col>
 
         </v-row>
 
-        <!-- Title Despachos Cali -->
-        <v-row no-gutters class="title-banner despacho-cali" v-if="!small"></v-row>
+        <!-- Title Despachos Cali -
         <div class="title-banner-m despacho-cali-m" v-else></div>
-        
-
+         -->
+        <v-row no-gutters class="mt-10">
+             <v-col cols="12" class="d-flex justify-center">
+                 <img :src="barrio" alt="" srcset="" class="banner-image align-self-center">
+             </v-col>
+         </v-row>
         <!-- Categorias | Comercios -->
-        <v-row>
+        <v-row class="mt-3">
             <v-col>
                 <list-categoria></list-categoria>
             </v-col>
@@ -70,7 +76,9 @@ export default {
     data () 
 	{
         return {
-            logo: require('@images/logo.jpg'),
+            logo: require('~/assets/img/logo.png'),
+            barrio: require('~/assets/img/despacho-barrio.png'), 
+            cali: require('~/assets/img/despacho-cali.png'),
         }
     },
     
@@ -81,9 +89,21 @@ export default {
 
 .title-banner {
     background-repeat: no-repeat;
-    background-color: white;
-    background-size: 100% 100%; 
-    min-height: 10vh;
+    background-size: 26% 100%; 
+    height: 5vh;
+    width: 75vw;
+    z-index: 99;
+    position: absolute;
+    left: auto;
+    right: auto;
+}
+.banner-image
+{
+    height: auto;
+    width: 15rem;
+    z-index: 4;
+    position: absolute;
+
 }
 
 .title-banner-m {
@@ -93,21 +113,22 @@ export default {
     min-height: 2.9rem;
 }
 
-.despacho-barrio {
-    background-image: url('/images/despacho-barrio.png'); 
-    
-}
-
-.despacho-cali {
-    background-image: url('/images/despacho-cali.png'); 
-}
-
 .despacho-barrio-m {
     background-image: url('/images/despacho-barrio-m.jpg'); 
 }
 
 .despacho-cali-m {
     background-image: url('/images/despacho-barrio-m.jpg'); 
+}
+
+.logo-ppal{
+   /*  overflow: visible; */
+    /* width: 80vw; */
+    /* height: auto; */
+    position: absolute; 
+    z-index: 4;
+    width: 29vw;
+    height: auto;
 }
 
 </style>

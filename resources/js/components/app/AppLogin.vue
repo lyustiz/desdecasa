@@ -83,7 +83,7 @@ export default {
                 nb_usuario: '',
                 password:   ''
             },
-            ImgPanoramica: require('~/assets/img/logo.jpg'),
+            ImgPanoramica: require('~/assets/img/logo.png'),
         }
     },
     methods:

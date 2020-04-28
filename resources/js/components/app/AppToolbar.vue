@@ -143,7 +143,7 @@
         data(){
             return {
                 loading : false,
-                logo: require('~/assets/img/logo.jpg'),
+                logo: require('~/assets/img/logo.png'), 
             }
         },
         methods:{

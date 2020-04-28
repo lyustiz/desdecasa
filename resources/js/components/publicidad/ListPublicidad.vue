@@ -5,11 +5,13 @@
         :height="cardHeight"
         hide-delimiter-background
         show-arrows-on-hover
+        class="elevation-3 list-publicidad"
     >
         <v-carousel-item
             v-for="(item, i) in publicidad"
             :key="i"
             :src="item.src"
+            class="list-publicidad"
         >
         </v-carousel-item>
 
@@ -23,7 +25,6 @@ export default {
     {
        this.publicidad = [ 
                             { src: this.imgSmall             },
-                            { src: '/images/publicidad2.jpg' },
                             { src: '/images/publicidad3.jpg' }
                         ];
     },
@@ -48,5 +49,11 @@ export default {
 </script>
 
 <style>
+.list-publicidad .v-image__image {
+    border-radius: 20px;
+}
 
+.list-publicidad {
+    border-radius: 20px;
+}
 </style>
