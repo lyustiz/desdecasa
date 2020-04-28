@@ -117,6 +117,10 @@ class UsuarioController extends Controller
     {
         $extension = explode(".", $file)[1];
 
+        $filetypes = ['jpg', 'png', 'bmp'];
+
+        $extension = in_array($extension, $filetypes) ?  $extension : 'jpg'; 
+
         return "$id_usuario.$extension"; 
     }
 
