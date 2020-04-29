@@ -59,7 +59,7 @@
                         label="Reescribir password"
                         :type="show ? 'text' : 'password'"
                         v-model="form.passwordRew"
-                        :rules="rules.password_confirmation"
+                        :rules="[rules.password_confirmation]"
                         :disabled="passwordValid"
                         dense
                         rounded
@@ -125,7 +125,10 @@ export default {
                 hash:         ''
             },
             loading:    false,
-            resetForm:  false
+            resetForm:  false,
+            show: false,
+            passwordValid: false,
+
         }
     },
 

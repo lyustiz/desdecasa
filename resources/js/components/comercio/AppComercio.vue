@@ -171,13 +171,18 @@
 
                 <template v-if="getUserid"> 
                     <form-valoration :id_comercio="comercio.id" @close="dialog = false"></form-valoration>
+                    
                </template>
                <template v-else>
 
                    <v-card class="mx-auto elevation-8" color="rgba(255,255,255,0.9)">
             
                         <v-card-title primary-title class="cyan darken-3 white--text">
-                         No se encuentra Registrado<v-icon class="mx-2" color="white">mdi-account-cancel</v-icon>
+                         No se encuentra Registrado
+                         <v-spacer></v-spacer>
+                        <v-btn icon x-small="" color="white" @click="dialog =!dialog">
+                            <v-icon>mdi-close-circle</v-icon>
+                        </v-btn>
                         </v-card-title>
                     
                         <v-card-text class="pa-5">
@@ -188,10 +193,10 @@
 
                         </v-card-text>
 
-                        <v-card-actions>
+                        <v-card-actions class="mx-3 pb-4">
                             <v-spacer></v-spacer>
-                            <v-btn text block large color="cyan darken-3" @click="$router.push('login')">
-                                Ingresar<v-icon>mdi-login-variant</v-icon>
+                            <v-btn dark block color="cyan darken-3" @click="$router.push('login')">
+                                Ingresar
                             </v-btn>
                         </v-card-actions>
                 

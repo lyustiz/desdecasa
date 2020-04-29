@@ -197,15 +197,18 @@ export default
         
         resetPassword( { commit }, form )
 		{
-			axios.get('/api/' + 'reset/password' + form)
-			.then( response =>
+			return new Promise((resolve, reject) => 
 			{
-				resolve(response)
+				axios.post('/api/' + 'reset/password' , form) 
+				.then( response =>
+				{
+					resolve(response)
+				})
+				.catch( error =>
+				{
+					reject(error)
+				})
 			})
-            .catch( error =>
-            {
-				reject(error)
-            })
 		},
 
 		autenticate({ commit, dispatch }, data)

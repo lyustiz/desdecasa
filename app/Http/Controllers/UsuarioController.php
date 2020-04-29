@@ -151,6 +151,9 @@ class UsuarioController extends Controller
             'tx_new_pass'   => 'required',
             'tx_ret_pass'   => 'required',
             'id_usuario'    => 'required',
+        ],
+        [
+            'tx_password.required' => 'el password es obligatorio'
         ]);
 
         if (\Hash::check($request->input('tx_new_pass'), $usuario->password)) {
@@ -331,11 +334,14 @@ class UsuarioController extends Controller
         
         $validate = request()->validate([
             
-            'tx_password'   => 'required',
             'password'      => 'required',
             'passwordRew'   => 'required',
             'hash'          => 'required',
-        ]);
+        ],
+        [
+            'password.required' => 'el password es requerido'
+        ]
+        );
 
         $hash         = $this->decryptHash($request->input('hash'));
 

@@ -1,18 +1,22 @@
 <template>
-<div v-cloak>
+<div v-cloak class="welcome-holder">
 
     <!-- Contenido -->
     <v-container fluid>
 
-        <!-- Title Despachos Barrio -->
-        <!-- <div class="title-banner-m despacho-barrio-m ma-0 pa-0" veelses ></div> -->
+        <v-btn x-small fab top  absolute left dark color="#7c4fbc" class="mt-6" @click="showBarrio = !showBarrio">
+            <v-icon>{{ (showBarrio) ? "mdi-card-bulleted-off" : "mdi-card-bulleted"}}</v-icon>
+        </v-btn>
 
-         <v-row no-gutters class="mt-8">
+        <div v-if="showBarrio" transition="scale-transition" >
+        <!-- Title Despachos Barrio -->
+        <v-row no-gutters class="mt-7">
              <v-col cols="12" class="d-flex justify-center">
                  <img :src="cali" alt="" srcset="" class="banner-image align-self-center">
              </v-col>
          </v-row>
-        <v-row no-gutters class="mt-6 mb-4" >
+
+        <v-row no-gutters class="mt-5 mb-4" >
             <!-- Logo -->
             <v-col md="2"  class=" d-none d-xs-none d-sm-none d-md-flex d-lg-flex">  
                 <img :src="logo" alt="" srcset="" class="logo-ppal">
@@ -22,19 +26,18 @@
             <v-col md="10" sm="12" xs="12" class="">  
                 <list-publicidad></list-publicidad>
             </v-col>
-
         </v-row>
+        </div>
 
-        <!-- Title Despachos Cali -
-        <div class="title-banner-m despacho-cali-m" v-else></div>
-         -->
-        <v-row no-gutters class="mt-10">
+        <!-- Title Despachos Cali -->
+        <v-row no-gutters class="mt-9">
              <v-col cols="12" class="d-flex justify-center">
                  <img :src="barrio" alt="" srcset="" class="banner-image align-self-center">
              </v-col>
          </v-row>
+
         <!-- Categorias | Comercios -->
-        <v-row class="mt-3">
+        <v-row class="mt-2">
             <v-col>
                 <list-categoria></list-categoria>
             </v-col>
@@ -79,6 +82,7 @@ export default {
             logo: require('~/assets/img/logo.png'),
             barrio: require('~/assets/img/despacho-barrio.png'), 
             cali: require('~/assets/img/despacho-cali.png'),
+            showBarrio: true
         }
     },
     
@@ -122,13 +126,20 @@ export default {
 }
 
 .logo-ppal{
-   /*  overflow: visible; */
-    /* width: 80vw; */
-    /* height: auto; */
     position: absolute; 
     z-index: 4;
     width: 29vw;
     height: auto;
+}
+
+.welcome-holder{
+    min-height: 100vh;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: rgba(255, 255, 255, 0.5);
+    background: url('/images/welcome.jpg');
 }
 
 </style>
