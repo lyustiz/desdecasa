@@ -9,14 +9,13 @@
                 <v-card
                 :color="active ? 'primary' : 'grey lighten-1'"
                 class="ma-3"
-                height="200"
+                height="190"
                 width="200"
                 @click="toggle">
                 
                     <v-img class="white--text align-end" height="200px" :src="fotoUrl+categoria.tx_foto" align="center" justify="center">
                         <v-scale-transition>
                         <v-icon v-if="active" color="white" size="48">mdi-close-circle-outline</v-icon>
-                        
                         </v-scale-transition>
                     </v-img> 
                 </v-card>

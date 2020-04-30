@@ -87,7 +87,7 @@
                 <v-card color="purple" dark>
 
                     <v-card-title primary-title>
-                        <v-icon class="mr-1">mdi-truck-delivery</v-icon> Despachos en Cali
+                        Busqueda Rapida
                     </v-card-title>
 
                     <v-card-text>

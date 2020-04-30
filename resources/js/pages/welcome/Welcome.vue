@@ -9,14 +9,15 @@
         </v-btn>
 
         <div v-if="showBarrio" transition="scale-transition" >
-        <!-- Title Despachos Barrio -->
-        <v-row no-gutters class="mt-7">
+        
+        <!-- Title Despachos Cali -->
+        <!-- <v-row no-gutters class="mt-7">
              <v-col cols="12" class="d-flex justify-center">
                  <img :src="cali" alt="" srcset="" class="banner-image align-self-center">
              </v-col>
-         </v-row>
+         </v-row> -->
 
-        <v-row no-gutters class="mt-5 mb-4" >
+        <v-row no-gutters class="mb-4" >
             <!-- Logo -->
             <v-col md="2"  class=" d-none d-xs-none d-sm-none d-md-flex d-lg-flex">  
                 <img :src="logo" alt="" srcset="" class="logo-ppal">
@@ -28,8 +29,8 @@
             </v-col>
         </v-row>
         </div>
-
-        <!-- Title Despachos Cali -->
+    
+        <!-- Title Despachos Barrio -->
         <v-row no-gutters class="mt-9">
              <v-col cols="12" class="d-flex justify-center">
                  <img :src="barrio" alt="" srcset="" class="banner-image align-self-center">
@@ -37,7 +38,7 @@
          </v-row>
 
         <!-- Categorias | Comercios -->
-        <v-row class="mt-2">
+        <v-row class="mt-n1">
             <v-col>
                 <list-categoria></list-categoria>
             </v-col>
@@ -69,7 +70,7 @@ export default {
         'list-publicidad': ListPublicidad,
     },
     computed: 
-    {
+    { 
         ...mapGetters(['showFilter']),
         small()
         {
@@ -80,8 +81,8 @@ export default {
 	{
         return {
             logo: require('~/assets/img/logo.png'),
-            barrio: require('~/assets/img/despacho-barrio.png'), 
-            cali: require('~/assets/img/despacho-cali.png'),
+            barrio: require('~/assets/img/welcome/despacho-barrio.png'), 
+            cali:   require('~/assets/img/welcome/despacho-cali.png'),
             showBarrio: true
         }
     },

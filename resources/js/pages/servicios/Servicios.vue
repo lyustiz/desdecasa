@@ -1,12 +1,32 @@
 <template>
-
 <div class="holder-servicios">
-<v-container>
-    <v-row justify="center">
+
+
+     <v-container>
+
+    <v-row >
         <v-col cols="12">
-            <h3 class="display-2 text-center purple--text font-weight-black" >Planes y Servicios de DesdecasaWeb</h3> 
+            <h3 class="display-2 cyan--text  text--darken-3 font-weight-black" >Bienvenido a la era Digital</h3> 
         </v-col>
     </v-row>
+
+     
+    <v-row>
+        <v-col xs="12" sm="12" md="6" lg="8" color="rgba(255,255,255,0.9)">
+            <p class="text-justify cyan--text  text--darken-1 title">
+                Nuestra estrategia comercial te permitirá, a través del marketing solidario, iniciarte en el mundo digital y dar a conocer nuevas herramientas para el nuevo sistema comercial que se avecina. Te brindaremos apoyo de manera gratuita y, solo cuando te sientas completamente seguro, podrás avanzar al siguiente nivel.
+            </p>
+        </v-col>
+    </v-row>
+
+    <v-row >
+        <v-col cols="12">
+            <h3 class="display-1 purple--text  text--darken-1 font-weight-black" >Planes y Servicios</h3> 
+        </v-col>
+    </v-row>
+
+
+
 
     <v-row class="mx-5">
         <v-col xs="12" sd="6" md="6" lg="4" >
@@ -366,13 +386,14 @@
             
         </v-col>
     </v-row>
-</v-container>
 
 
 
 
+
+
+ </v-container>
 </div>
-
 
 </template>
 
@@ -421,6 +442,7 @@ export default {
 .holder-servicios {
     min-height: 95vh;
     background-image: url('/images/servicios/servicios-bg.jpg');
+    background-color: var(--v-info-base);
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -428,9 +450,13 @@ export default {
 }
 
 .img-servicios{
-    width: 80%;
+    width: 60%;
     height: auto;
     margin-top: -5.7rem;
+}
+.text-servicios{
+    opacity: 0.8;
+    border-radius: 15px;
 }
 
 /**
