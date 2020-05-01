@@ -75,7 +75,7 @@ export default {
     },
     data(){
         return { 
-            fotoUrl: '/images/'
+            fotoUrl: '/images/categorias/'
         }
     },
 

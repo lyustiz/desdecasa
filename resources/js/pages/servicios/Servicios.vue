@@ -6,7 +6,10 @@
 
     <v-row >
         <v-col cols="12">
-            <h3 class="display-2 cyan--text  text--darken-3 font-weight-black" >Bienvenido a la era Digital</h3> 
+            <h3 class="display-2 cyan--text  text--darken-3 font-weight-black" >
+                <v-icon color="cyan darken-3" class="mb-3"  size="45">icon-logo-full</v-icon> 
+                BIENVENIDO A LA ERA DIGITAL
+            </h3> 
         </v-col>
     </v-row>
 
@@ -21,7 +24,10 @@
 
     <v-row >
         <v-col cols="12">
-            <h3 class="display-1 purple--text  text--darken-1 font-weight-black" >Planes y Servicios</h3> 
+            <h3 class="display-1 purple--text  text--darken-1 font-weight-black" >
+               PLANES Y SERVICIOS 
+               <v-icon color="purple darken-1" class="mb-3" size="40">icon-logo-full</v-icon>
+            </h3> 
         </v-col>
     </v-row>
 
@@ -442,7 +448,6 @@ export default {
 .holder-servicios {
     min-height: 95vh;
     background-image: url('/images/servicios/servicios-bg.jpg');
-    background-color: var(--v-info-base);
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;

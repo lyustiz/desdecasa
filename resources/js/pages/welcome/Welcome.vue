@@ -10,14 +10,7 @@
 
         <div v-if="showBarrio" transition="scale-transition" >
         
-        <!-- Title Despachos Cali -->
-        <!-- <v-row no-gutters class="mt-7">
-             <v-col cols="12" class="d-flex justify-center">
-                 <img :src="cali" alt="" srcset="" class="banner-image align-self-center">
-             </v-col>
-         </v-row> -->
-
-        <v-row no-gutters class="mb-4" >
+        <v-row no-gutters class="mb-4 mt-4" >
             <!-- Logo -->
             <v-col md="2"  class=" d-none d-xs-none d-sm-none d-md-flex d-lg-flex">  
                 <img :src="logo" alt="" srcset="" class="logo-ppal">

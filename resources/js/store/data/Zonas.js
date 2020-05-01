@@ -8,7 +8,10 @@ export default
 
 	getters:
 	{
-		getZonas: state => state.zonas,
+		getZonasAll: state => state.zonas,
+
+		getZonas:   state  => state.zonas.filter( zona => zona.id != 7 ),
+		
 	},
 
 	mutations:

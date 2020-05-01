@@ -40,7 +40,7 @@
                                 :items="getZonas"
                                 item-value="id"
                                 item-text="nb_zona"
-                                append-icon="mdi-map-search"
+                                append-icon="mdi-select-marker"
                             ></v-select>
                         </v-flex>
 

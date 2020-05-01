@@ -214,5 +214,13 @@ export default {
 #register-container{
     height: 92.8vh;
 }
+.holder {
+    min-height: 95vh;
+    background-image: url('/images/carrito-pc.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
 
 </style>

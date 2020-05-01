@@ -48,6 +48,28 @@
                     </v-text-field>
                 </v-flex>
 
+                <v-radio-group v-model="despacho" row :rules="[rules.required]">
+                    <v-radio label="Depacho Todo Cali" value="cali"></v-radio>
+                    <v-radio label="Despacho por Zonas (selecione)" value="zonas"></v-radio>
+                </v-radio-group>
+
+                <v-flex md12 v-if="despacho == 'zonas'">
+                            <v-select
+                                dense
+                                outlined
+                                :rules="rules.zonas"
+                                label="Zona"
+                                v-model="form.zonas" 
+                                :items="getZonas"
+                                item-value="id"
+                                item-text="nb_zona"
+                                append-icon="mdi-select-marker"
+                                multiple=""
+                                chips
+                                clearable
+                            ></v-select>
+                        </v-flex>
+
                 <v-divider></v-divider>
 
                 <v-flex xs12 class="mt-2" >
@@ -163,16 +185,19 @@
     
 
 </v-row>
+<pre>{{$data}}</pre>
 </div>
 
 </template>
 
 <script>
 import AppRules from '@mixins/AppRules'
+import { mapGetters } from 'vuex';
 
 export default {
     mixins: [ AppRules ],
     computed: {
+        ...mapGetters(['getZonas']),
         passwordValid()
         {
             if(this.form.password)
@@ -181,6 +206,18 @@ export default {
             }
 
             return true;
+        }
+    },
+    watch:
+    {
+        despacho(val)
+        {
+            if(val == 'cali') {
+                this.form.zonas = [7]
+            } else {
+                this.form.zonas = []
+            }
+            
         }
     },
     data () 
@@ -192,11 +229,18 @@ export default {
                 nb_usuario:  '',
                 email:       '',
                 password:    '',
-                passwordRew: ''
+                passwordRew: '',
+                zonas:       []
+            },
+            rules: {
+                zonas: [
+                    v => (this.despacho == 'zonas') ? v.length > 0 || 'indique zonas de despacho' : true
+                ],
             },
             show: false,
             loading: false,
-            valid: ''
+            valid: '',
+            despacho: ''
         }
     },
     methods: {

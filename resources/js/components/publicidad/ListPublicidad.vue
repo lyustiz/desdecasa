@@ -2,7 +2,7 @@
     <div>
     <v-carousel
         cycle
-        :height="cardHeight"
+        height="320"
         hide-delimiter-background
         show-arrows-on-hover
         class="elevation-3 list-publicidad"
@@ -24,19 +24,15 @@ export default {
     created()
     {
        this.publicidad = [ 
-                            { src: this.imgSmall             },
-                            { src: '/images/publicidad3.jpg' }
+                            { src: '/images/publicidad1' + this.imgSize },
+                            { src: '/images/publicidad3' + this.imgSize }
                         ];
     },
     computed:{
-        imgSmall()
+        imgSize()
         {
-            return ( this.$vuetify.breakpoint.xsOnly) ? '/images/publicidad1-m.jpg' : '/images/publicidad1.jpg'
+            return ( this.$vuetify.breakpoint.xsOnly) ? '-m.jpg' : '.jpg'
         },
-        cardHeight()
-        {
-            return ( this.$vuetify.breakpoint.xsOnly) ? '265' : '320'
-        }
     },
     data() {
         return{

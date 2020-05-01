@@ -9,8 +9,8 @@
     >
         <!--Titulo-->
 
-        <v-avatar size="36" v-if="resize">
-            <img :src="logo" :alt="$App.title" @click="navegateTo('/')" >
+        <v-avatar size="32" v-if="resize" tile>
+            <v-icon color="white" size="30" @click="navegateTo('/')">icon-logo-simple</v-icon>
         </v-avatar>
         
         <v-toolbar-title v-else>
@@ -143,7 +143,7 @@
         data(){
             return {
                 loading : false,
-                logo: require('~/assets/img/logo.png'), 
+                logo: require('~/assets/img/logo-mini.jpg'), 
             }
         },
         methods:{
