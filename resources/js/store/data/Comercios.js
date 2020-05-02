@@ -7,7 +7,10 @@ export default
 
 			comercios: [],
 
-			comercioById: null
+			comercioById: null,
+
+			comercioCali: false
+
 		}
 	},
 
@@ -24,6 +27,8 @@ export default
 		getComercioOpen:  state => (state.comercio) ? state.comercio.bo_abierto : null,
 	
 		getComercioById: state => state.comercioById,
+
+		getComercioCali: state => state.comercioCali,
 	},
 
 	mutations:
@@ -55,14 +60,20 @@ export default
 		
 		setComerciobyId (state, comercio)
         {
-            state.comercioById 	= comercio
+			state.comercioById 	= comercio
+			state.comercios     = [comercio]
+		},
+
+		setComercioCali (state, isCali)
+        {
+			state.comercioCali 	= isCali
 		},
 	},
 
 	actions:
 	{
 
-		apiComerciosCategoria( { commit }, categoria )
+		apiComerciosCategoria( { commit }, {categoria, tipoDespacho}  )
 		{
 			if(!categoria)
 			{
@@ -70,7 +81,7 @@ export default
 				return
 			}
 
-			axios.get('/api/v1/' + 'comercio/categoria/' + categoria)
+			axios.get('/api/v1/' + 'comercio/categoria/' + categoria + '/' + tipoDespacho )
 			.then( response =>
 			{
 				commit('setComercios', response.data)

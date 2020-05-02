@@ -86,8 +86,8 @@
 
                 <v-card color="purple" dark>
 
-                    <v-card-title primary-title>
-                        Busqueda Rapida
+                    <v-card-title class="body">
+                        Despachos en todo Cali
                     </v-card-title>
 
                     <v-card-text>
@@ -188,12 +188,14 @@ export default {
         filterCategoria:
         {
             get() {
-                return this.$store.getters['getCategoria']
+                return this.$store.getters['getCategoriaCali']
             },
             set(categoria) {
                 this.comercioIdSearch = null
-                this.$store.commit('setCategoria', categoria)
-                this.$store.dispatch('apiComerciosCategoria',  categoria )
+                this.$store.commit('setCategoria', null)
+                this.$store.commit('setCategoriaCali', categoria)
+                let tipoDespacho  = 'cali'
+                this.$store.dispatch('apiComerciosCategoria',  {categoria, tipoDespacho} )
             }
         },
         filterComercioById:
@@ -202,8 +204,9 @@ export default {
                 return this.comercioId
             },
             set(comercioId) {
-                this.$store.commit('setCategoria', null)
+                this.$store.commit('setCategoriaCali', null)
                 this.$store.dispatch('apiComercioById',  comercioId )
+                this.$store.commit('setComercioCali', false)
             }
 
         }
@@ -239,11 +242,14 @@ export default {
         {
             if(comercioId)
             {
-                this.$store.commit('setCategoria', null)
+                this.$store.commit('setCategoriaCali', null)
                 this.comercioId = null
             }
 
             this.$store.dispatch('apiComercioById',  comercioId )
+            this.$store.commit('setComercioCali', true)
+            this.$store.commit('setCategoria', null)
+            this.$store.commit('setCategoriaCali', null)
 
         }
     },

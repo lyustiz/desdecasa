@@ -25,7 +25,7 @@
         </v-slide-group>
 
     <v-expand-transition>
-        <v-sheet v-if="categoria" color="grey lighten-4" min-height="400" tile>
+        <v-sheet v-if="categoria && !getComercioCali"  color="blue lighten-5" min-height="400" tile>
 
             <v-fade-transition>
                 <list-comercio></list-comercio>
@@ -35,7 +35,7 @@
     </v-expand-transition>
 
     <v-expand-transition>
-        <v-sheet v-if="!categoria && getComercioById" color="grey lighten-4" min-height="400" tile>
+        <v-sheet v-if="!categoria && getComercioById && !getComercioCali" color="grey lighten-4" min-height="400" tile>
             
             <v-fade-transition>
                 <show-comercio></show-comercio>
@@ -61,7 +61,7 @@ export default {
         'show-comercio': ShowComercio
     },
     computed: {
-        ...mapGetters(['getCategorias', 'getNombre', 'getComercioById']),
+        ...mapGetters(['getCategorias', 'getNombre', 'getComercioById', 'getComercioCali']),
         categoria:
         {
             get() {
@@ -69,7 +69,10 @@ export default {
             },
             set(categoria) {
                 this.$store.commit('setCategoria', categoria )
-                this.$store.dispatch('apiComerciosCategoria',  categoria )
+                this.$store.commit('setCategoriaCali', null )
+                this.$store.commit('setComercioCali', false )
+                let tipoDespacho  = 'zonas'
+                this.$store.dispatch('apiComerciosCategoria',  {categoria, tipoDespacho} )
             }
         }
     },

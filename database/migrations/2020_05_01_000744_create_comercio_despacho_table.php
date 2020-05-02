@@ -23,7 +23,7 @@ class CreateComercioDespachoTable extends Migration
             $table->timestamps();
         });
 
-        //php artisan migrate --path=database\migrations\2020_05_01_000744_create_comercio_despacho_table.php
+        //php artisan migrate --path=database/migrations/2020_05_01_000744_create_comercio_despacho_table.php
 
     }
 

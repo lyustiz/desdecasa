@@ -2,11 +2,13 @@ export default
 {
 	state(){
 		return{
-			nombre:     null,
-			categoria:  null,
-            zona:       null,
-			barrio:     null,
-			filter:     true
+			nombre:     	null,
+			categoria:  	null,
+			categoriaCali: 	null,
+            zona:       	null,
+			barrio:     	null,
+			filter:     	true,
+
 		}
 	},
 
@@ -14,6 +16,7 @@ export default
 	{
 		getNombre:     state => state.nombre,
 		getCategoria:  state => state.categoria,
+		getCategoriaCali:  state => state.categoriaCali,
         getZona:       state => state.zona,
 		getBarrio:     state => state.barrio,
 		showFilter:    state => state.filter,
@@ -29,6 +32,11 @@ export default
 		setCategoria(state, categoria)
 		{
 			state.categoria  = categoria
+		},
+
+		setCategoriaCali(state, categoria)
+		{
+			state.categoriaCali  = categoria
 		},
 
 		setZona(state, zona)

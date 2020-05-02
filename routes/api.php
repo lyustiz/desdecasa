@@ -80,7 +80,7 @@ Route::group(['prefix'=>'v1'], function() {
     Route::get('/barrio/zona/{id_zona}',             'BarrioController@barrioZona');
     Route::get('/barrio/comuna/{id_comuna}',         'BarrioController@barrioComuna');
 
-    Route::get('/comercio/categoria/{id_categoria}', 'ComercioController@comercioCategoria');
+    Route::get('/comercio/categoria/{id_categoria}/{tipoDespacho}', 'ComercioController@comercioCategoria');
     Route::get('/comercio/barrio/{id_barrio}',       'ComercioController@comercioBarrio');
     Route::get('/comercio/usuario/{id_usuario}',     'ComercioController@comercioUsuario');
 

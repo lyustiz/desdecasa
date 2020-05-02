@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comercio;
 use App\Models\ComercioCategoria;
+use App\Models\Horario;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
@@ -36,55 +37,65 @@ class ComercioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function comercioCategoria($id_categoria)
+    public function comercioCategoria($id_categoria, $tipoDespacho)
     {
+  
         
         $result =  Comercio::with([
-                                    'comercioCategoria:id_comercio,id_categoria', 
-                                    'horario:nb_horario,id_comercio',
-                                    'telefono:id_comercio,tx_telefono,id_tipo_telefono,bo_whatsapp',
-                                    ])
-                                ->select('comercio.id',
-                                         'comercio.nb_comercio',
-                                         'comercio.tx_descripcion',
-                                         'comercio.tx_direccion',
-                                         'comercio.tx_foto',
-                                         'comercio.tx_longitud',
-                                         'comercio.tx_latitud',
-                                         'comercio.bo_abierto',
-                                         'comercio.id_departamento',
-                                         'departamento.nb_departamento',
-                                         'comercio.id_ciudad',
-                                         'ciudad.nb_ciudad',
-                                         'comercio.id_zona',
-                                         'zona.nb_zona',
-                                         'comercio.id_barrio',
-                                         'barrio.nb_barrio',
-                                         'contacto.tx_email',
-                                         'contacto.tx_sitio_web',
-                                         'contacto.tx_facebook',
-                                         'contacto.tx_twitter',
-                                         'contacto.tx_instagram',
-                                         'contacto.tx_youtube',
-                                        ) 
-                                ->selectRaw('(SELECT concat(count(valoracion.id), "-", sum(valoracion.nu_valoracion)/count(valoracion.id)) 
-                                                FROM valoracion 
-                                                WHERE valoracion.id_comercio = comercio.id) AS nu_pc_valoracion' 
-                                            )
-                                ->join('departamento', 'comercio.id_departamento', '=', 'departamento.id')  
-                                ->join('ciudad', 'comercio.id_ciudad', '=', 'ciudad.id')  
-                                ->join('zona', 'comercio.id_zona', '=', 'zona.id') 
-                                ->join('barrio', 'comercio.id_barrio', '=', 'barrio.id') 
-                                ->join('contacto', 'comercio.id', '=', 'contacto.id_comercio')         
-                                ->where('comercio.id_status', 1)
-                                ->whereIn('comercio.id', function($query) use ($id_categoria){
-                                        $query->select('id_comercio')
-                                        ->from(with(new ComercioCategoria)->getTable())
-                                        ->where('id_categoria', $id_categoria);
-                                })
-                                //->take(1)
-                                ->get();
-        
+                    'comercioCategoria:id_comercio,id_categoria', 
+                    'horario:nb_horario,id_comercio',
+                    'telefono:id_comercio,tx_telefono,id_tipo_telefono,bo_whatsapp',
+                    'comercioDespacho:id_comercio,id_zona',
+                    ])
+                    ->select('comercio.id',
+                                'comercio.nb_comercio',
+                                'comercio.tx_descripcion',
+                                'comercio.tx_direccion',
+                                'comercio.tx_foto',
+                                'comercio.tx_longitud',
+                                'comercio.tx_latitud',
+                                'comercio.bo_abierto',
+                                'comercio.id_departamento',
+                                'departamento.nb_departamento',
+                                'comercio.id_ciudad',
+                                'ciudad.nb_ciudad',
+                                'comercio.id_zona',
+                                'zona.nb_zona',
+                                'comercio.id_barrio',
+                                'barrio.nb_barrio',
+                                'contacto.tx_email',
+                                'contacto.tx_sitio_web',
+                                'contacto.tx_facebook',
+                                'contacto.tx_twitter',
+                                'contacto.tx_instagram',
+                                'contacto.tx_youtube',
+                            ) 
+                    ->selectRaw('(SELECT concat(count(valoracion.id), "-", sum(valoracion.nu_valoracion)/count(valoracion.id)) 
+                                    FROM valoracion 
+                                    WHERE valoracion.id_comercio = comercio.id) AS nu_pc_valoracion' 
+                                )
+                    ->join('departamento', 'comercio.id_departamento', '=', 'departamento.id')  
+                    ->join('ciudad', 'comercio.id_ciudad', '=', 'ciudad.id')  
+                    ->join('zona', 'comercio.id_zona', '=', 'zona.id') 
+                    ->join('barrio', 'comercio.id_barrio', '=', 'barrio.id') 
+                    ->join('contacto', 'comercio.id', '=', 'contacto.id_comercio')   
+                    ->where('comercio.id_status', 1)
+                    ->whereHas('comercioCategoria', function (Builder $query) use ($id_categoria) {
+                        $query->where('id_categoria', $id_categoria);
+                    })
+                    ->has('horario');
+                            
+        if($tipoDespacho == 'cali')
+        {
+            $result = $result->whereHas('comercioDespacho', function (Builder $query) {
+                        $query->where('id_zona', 7);
+                    })->get();
+        } else {
+
+            $result = $result->whereHas('comercioDespacho', function (Builder $query) {
+                        $query->where('id_zona', '<>' , 7);
+                    })->get();
+        }
 
         return $result;
     }
@@ -101,6 +112,9 @@ class ComercioController extends Controller
                         ->whereNotNull('tx_foto')
                         ->where('comercio.id_barrio', $id_barrio)
                         ->where('comercio.id_status', 1)
+                        ->whereHas('comercioDespacho', function (Builder $query) {
+                            $query->where('id_zona', '<>', 7);
+                        })
                         ->get();
     }
 
@@ -118,8 +132,13 @@ class ComercioController extends Controller
                         ->whereNotNull('tx_foto')
                         ->whereRaw('LOWER(`nb_comercio`) LIKE ? ','%'.trim(strtolower($nb_comercio)).'%')
                         ->where('comercio.id_status', 1)
+                        ->whereHas('comercioDespacho', function (Builder $query) {
+                            $query->where('id_zona', 7);
+                        })
                         ->take(20)
                         ->get();
+
+
         
     }
 

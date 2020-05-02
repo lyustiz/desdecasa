@@ -14,7 +14,7 @@ export default
 
 			let category = state.categorias.find(categoria => categoria.id === id)
 
-			return (category) ? category : {tx_icono: 'mdi-close-outline', nb_categoria: 'no-valid' + id}
+			return (category) ? category : {tx_icono: 'mdi-close-outline', nb_categoria: 'No seleccionado'}
 		}
 	},
 

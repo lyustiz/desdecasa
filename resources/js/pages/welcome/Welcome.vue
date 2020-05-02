@@ -37,6 +37,20 @@
             </v-col>
         </v-row>
 
+        <!-- Title Despachos Cali -->
+        <v-row no-gutters class="mt-6">
+             <v-col cols="12" class="d-flex justify-center">
+                 <img :src="cali" alt="" srcset="" class="banner-image align-self-center">
+             </v-col>
+         </v-row>
+        
+        <!-- Comercios Despacho todo Cali -->
+        <v-row class="mt-2">
+            <v-col>
+                <list-comercios-cali></list-comercios-cali>
+            </v-col>
+        </v-row>
+
     </v-container>
 
     <!-- Contenedor de  Filtros -->
@@ -50,6 +64,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import ListCategoria from '@components/categoria/ListCategoria';
+import ListComerciosCali from '@components/comercio/ListComerciosCali';
 import ListPublicidad from '@components/publicidad/ListPublicidad';
 
 import AppData from '@mixins/AppData';
@@ -59,8 +74,9 @@ export default {
     mixins: [AppData, AppMessage],
     components: 
     { 
-        'list-categoria': ListCategoria,
-        'list-publicidad': ListPublicidad,
+        'list-categoria':     ListCategoria,
+        'list-publicidad':    ListPublicidad,
+        'list-comercios-cali': ListComerciosCali
     },
     computed: 
     { 
@@ -73,7 +89,7 @@ export default {
     data () 
 	{
         return {
-            logo: require('~/assets/img/logo.png'),
+            logo:   require('~/assets/img/logo.png'),
             barrio: require('~/assets/img/welcome/despacho-barrio.png'), 
             cali:   require('~/assets/img/welcome/despacho-cali.png'),
             showBarrio: true

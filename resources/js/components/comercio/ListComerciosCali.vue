@@ -1,17 +1,27 @@
 <template>
-<div>
+<div id="listComerciosCali">
+
+<v-sheet v-if="!categoria && getComercioById && getComercioCali" color="purple lighten-5" min-height="400" tile >
+            
+            <v-fade-transition>
+                <show-comercio></show-comercio>
+            </v-fade-transition>
+
+</v-sheet>
+
+<v-sheet color="purple lighten-5" v-else > 
 
     <v-row>
 
-        <v-col xs="2" class="mx-3" id="listComercios"> 
-            <v-chip label class="cyan--text mr-1">
-                <v-icon class="cyan--text mr-1">mdi-storefront</v-icon> 
-                 {{countComercios}} Comercios Listados 
+        <v-col xs="2" class="mx-3" id="listComerciosCali"> 
+            <v-chip label class="purple--text mr-1">
+                <v-icon class="purple--text mr-1">mdi-storefront</v-icon> 
+                 {{ (categoria) ? countComercios: 0 }} Comercios Listados 
             </v-chip>
         </v-col>
 
-        <v-col xs="10" >
-            <v-chip class="my-1" close small dark color="cyan" @click:close="categoria = null">
+        <v-col xs="10" v-if="!getComercioById">
+            <v-chip class="my-1" close small dark color="purple" @click:close="clearCategoria()">
                 <v-avatar left>
                     <v-icon class="mx-2">{{ getCategoriaById(categoria).tx_icono }}</v-icon>
                 </v-avatar>
@@ -23,7 +33,7 @@
 
     <v-divider></v-divider>
 
-    <v-row no-gutters> 
+    <v-row no-gutters v-if="categoria"> 
         
         
         <template v-if="countComercios < 1">
@@ -41,6 +51,7 @@
 
     </v-row>
 
+</v-sheet>
 </div>
 </template>
 
@@ -48,11 +59,13 @@
 
 import { mapGetters } from 'vuex';
 import AppComercio from '@components/comercio/AppComercio';
+import ShowComercio from '@components/comercio/ShowComercio';
 
 export default 
 {
     components: { 
         'app-comercio': AppComercio, 
+        'show-comercio': ShowComercio
     },
     props:
     {
@@ -63,23 +76,23 @@ export default
     },
     mounted()
     {
-        this.$vuetify.goTo('#listComercios', { duration: 2000, offset: 5 } )
+        this.$vuetify.goTo('#listComerciosCali', { duration: 2000, offset: 5 } )
       
 
     },
   
     computed: 
     {
-        ...mapGetters(['getCategoriaById']),
+        ...mapGetters(['getCategoriaById', 'getComercioById', 'getComercioCali']),
 
         categoria:
         {
             get() {
-                return this.$store.getters['getCategoria']
+                return this.$store.getters['getCategoriaCali']
             },
             set(categoria) {
-                this.$store.commit('setCategoria', categoria )
-                this.$store.commit('setCategoriaCali', null )
+                this.$store.commit('setCategoriaCali', categoria )
+                this.$store.commit('setCategoria', null )
             }
         },
 
@@ -93,6 +106,14 @@ export default
             return this.$store.getters['countComercios'];
         }
     },
+
+    methods:
+    {
+        clearCategoria()
+        {
+            this.$store.commit('setCategoriaCali', null) 
+        }
+    }
 
 }
 </script>

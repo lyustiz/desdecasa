@@ -54,21 +54,21 @@
                 </v-radio-group>
 
                 <v-flex md12 v-if="despacho == 'zonas'">
-                            <v-select
-                                dense
-                                outlined
-                                :rules="rules.zonas"
-                                label="Zona"
-                                v-model="form.zonas" 
-                                :items="getZonas"
-                                item-value="id"
-                                item-text="nb_zona"
-                                append-icon="mdi-select-marker"
-                                multiple=""
-                                chips
-                                clearable
-                            ></v-select>
-                        </v-flex>
+                    <v-select
+                        dense
+                        outlined
+                        :rules="rules.zonas"
+                        label="Zona"
+                        v-model="form.zonas" 
+                        :items="getZonas"
+                        item-value="id"
+                        item-text="nb_zona"
+                        append-icon="mdi-select-marker"
+                        multiple=""
+                        chips
+                        clearable
+                    ></v-select>
+                </v-flex>
 
                 <v-divider></v-divider>
 

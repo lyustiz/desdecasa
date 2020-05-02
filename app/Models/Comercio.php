@@ -134,4 +134,10 @@ class Comercio extends Model
         return $this->HasMany('App\Models\ComercioCategoria', 'id_comercio');
 
     }
+
+    public function comercioDespacho(){
+
+        return $this->HasMany('App\Models\ComercioDespacho', 'id_comercio');
+
+    }
 }
