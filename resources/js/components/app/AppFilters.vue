@@ -250,7 +250,6 @@ export default {
             this.$store.commit('setComercioCali', true)
             this.$store.commit('setCategoria', null)
             this.$store.commit('setCategoriaCali', null)
-
         }
     },
 

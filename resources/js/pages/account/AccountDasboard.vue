@@ -32,11 +32,20 @@
                 :component="card.component"
                 @expand="expand(card.id)"
                 @minimize="minimize(card.id)"
+                @onMenu="onMenu($event)"
             ></card-sections>
 
         </v-col>
 
       </template>
+
+    </v-row>
+
+    <v-row>
+
+        <v-col cols="12" md="6" v-if="!expander">
+            <status-card></status-card>
+        </v-col>
 
     </v-row>
 
@@ -49,11 +58,13 @@
 
 import { mapActions } from 'vuex';
 import CardSection from './CardSections';
+import StatusCard  from './StatusCard';
 
 export default {
     components: 
     {
-        'card-sections': CardSection
+        'card-sections': CardSection,
+        'status-card': StatusCard
     },
     created()
     {
@@ -76,7 +87,7 @@ export default {
             cardCols: 3,
             cardHeight: 180,
             display: 'd-block',
-            expander: true,
+            expander: false,
             cardSections: []
         }
     },
@@ -101,6 +112,8 @@ export default {
 
             }, this);
 
+           this.expander = true
+
 
         },
 
@@ -120,7 +133,7 @@ export default {
                 }
 
             }, this);
-            
+            this.expander = false
         },
 
         sectionsByUser(tipoUsuario)
@@ -137,7 +150,10 @@ export default {
                         icon: 'mdi-account-box',
                         visible: true,
                         expand: false,
-                        menuItems: [],
+                        menuItems: [
+                            {title: 'Minimizar', icon: 'mdi-close-circle', action: { name: 'minimize', data: 1 }},
+                            {title: 'Ampliar', icon: 'mdi-unfold-more-vertical', action: { name: 'expand', data: 1 }},
+                        ],
                         component: 'account', 
                         cols: 3
                     }
@@ -155,7 +171,10 @@ export default {
                         icon: 'mdi-account-box',
                         visible: true,
                         expand: false,
-                        menuItems: [],
+                        menuItems:  [
+                            {title: 'Minimizar', icon: 'mdi-close-circle', action: { name: 'minimize', data: 1 }},
+                            {title: 'Ampliar', icon: 'mdi-unfold-more-vertical', action: { name: 'expand', data: 1 }},
+                        ],
                         component: 'account', 
                         cols: 3
                     },
@@ -167,7 +186,10 @@ export default {
                         icon: 'mdi-storefront',
                         visible: true,
                         expand: false,
-                        menuItems: [],
+                        menuItems:  [
+                            {title: 'Minimizar', icon: 'mdi-close-circle', action: { name: 'minimize', data: 2 }},
+                            {title: 'Ampliar', icon: 'mdi-unfold-more-vertical', action: { name: 'expand', data: 2 }},
+                        ],
                         component: 'commerce', 
                         cols: 3
                     }
@@ -185,7 +207,10 @@ export default {
                     icon: 'mdi-account-box',
                     visible: true,
                     expand: false,
-                    menuItems: [],
+                    menuItems:  [
+                            {title: 'Minimizar', icon: 'mdi-close-circle', action: { name: 'minimize', data: 1 }},
+                            {title: 'Ampliar', icon: 'mdi-unfold-more-vertical', action: { name: 'expand', data: 1 }},
+                        ],
                     component: 'account', 
                     cols: 3
                 },
@@ -197,7 +222,10 @@ export default {
                     icon: 'mdi-storefront',
                     visible: true,
                     expand: false,
-                    menuItems: [],
+                    menuItems:  [
+                            {title: 'Minimizar', icon: 'mdi-close-circle', action: { name: 'minimize', data: 2 }},
+                            {title: 'Ampliar', icon: 'mdi-unfold-more-vertical', action: { name: 'expand', data: 2 }},
+                        ],
                     component: 'commerce', 
                     cols: 3
                 },
@@ -209,7 +237,10 @@ export default {
                     icon: 'mdi-image',
                     visible: true,
                     expand: false,
-                    menuItems: [],
+                    menuItems:  [
+                            {title: 'Minimizar', icon: 'mdi-close-circle', action: { name: 'minimize', data: 3 }},
+                            {title: 'Ampliar', icon: 'mdi-unfold-more-vertical', action: { name: 'expand', data: 3 }},
+                        ],
                     component: 'images', 
                     cols: 3
                 },
@@ -221,12 +252,32 @@ export default {
                     icon: 'mdi-tablet-dashboard',
                     visible: true,
                     expand: false,
-                    menuItems: [],
+                    menuItems:  [
+                            {title: 'Minimizar', icon: 'mdi-close-circle', action: { name: 'minimize', data: 4 }},
+                            {title: 'Ampliar', icon: 'mdi-unfold-more-vertical', action: { name: 'expand', data: 4 }},
+                        ],
                     component: 'webpage', 
                     cols: 3
                 },
                 ]
             }
+        },
+
+        onMenu(action)
+        {
+            switch (action.name) {
+                case 'minimize':
+                    this.minimize(action.data)
+                    break;
+                case 'expand':
+                    this.expand(action.data)
+                    break;
+            
+                default:
+                    break;
+            }
+
+            
         }
     }
 }
@@ -234,48 +285,11 @@ export default {
 
 <style>
 #full-container{
-    height: 100%;
-    min-height: 100vh;
-    width: 100%;
+    min-height: 200%;
+    background-color: blue;
+    background-attachment: fixed;
+    background-size: 100% 100%; 
 }
 </style>
-
-<!--  <v-divider dark :class="display"></v-divider>
-
-        <v-col md12>
-            <v-card color="ligth" :class="display">
-                <v-card-title primary-title >
-                    Estado de la Cuenta
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-card-text>
-                    <v-list>
-                        <v-list-tile avatar>
-                            Numero de Visitas <v-chip >53.000</v-chip>
-                        </v-list-tile>
-                    </v-list>
-                    <v-list>
-                        <v-list-tile avatar>
-                            Reseñas <v-chip >255</v-chip>
-                        </v-list-tile>
-                    </v-list>
-
-                    <v-list>
-                        <v-list-tile avatar>
-                            Valoracion 
-                            <v-chip >255</v-chip> 
-                            <v-rating
-                                value="5"
-                                color="amber"
-                                background-color="amber"
-                                dense
-                                hover
-                                ripple
-                            ></v-rating>
-                        </v-list-tile>
-                    </v-list>
-                </v-card-text>
-            </v-card>
-        </v-col>  -->
 
 

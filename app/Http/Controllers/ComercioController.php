@@ -217,7 +217,7 @@ class ComercioController extends Controller
 
             'nb_comercio'       => 'bail|required|max:100',
             'nb_fiscal'         => 'bail|required|max:100',
-            'tx_nit'            => 'bail|required|unique:comercio,tx_nit|max:12|regex:/(^[0-9]+-{1}[0-9]{1})/',
+            'tx_nit'            => 'bail|required|max:12|regex:/(^[0-9]+-{1}[0-9]{1})/',
             'tx_descripcion'    => 'bail|required|max:200',
             'id_tipo_comercio'  => 'bail|required',
             'categorias'        => 'bail|required|array',

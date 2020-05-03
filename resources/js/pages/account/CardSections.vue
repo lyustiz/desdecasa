@@ -22,12 +22,23 @@
                         <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
                     </template>
-                    <v-list>
+                    <v-list dense nav>
                     <v-list-item
                         v-for="(item, i) in menuItems"
                         :key="i"
+                        tile
+                        @click="$emit('onMenu', item.action)"
                     >
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        <v-list-item-action>
+                            <v-btn class="grey lighten-4" icon >
+                                <v-icon :color="setColor">{{item.icon}}</v-icon>
+                            </v-btn>
+                        </v-list-item-action>
+
+                        <v-list-item-title>
+                            {{ item.title }}
+                        </v-list-item-title>
+                        
                     </v-list-item>
                     </v-list>
                 </v-menu>

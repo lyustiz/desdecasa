@@ -20,7 +20,7 @@
             </v-chip>
         </v-col>
 
-        <v-col xs="10" v-if="!getComercioById">
+        <v-col xs="10" v-if="!getComercioById && categoria">
             <v-chip class="my-1" close small dark color="purple" @click:close="clearCategoria()">
                 <v-avatar left>
                     <v-icon class="mx-2">{{ getCategoriaById(categoria).tx_icono }}</v-icon>
