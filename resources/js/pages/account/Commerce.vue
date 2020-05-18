@@ -16,7 +16,7 @@
         </v-tab>
         
         <v-tab-item class="my-3">
-            <info-form></info-form>
+           <info-form></info-form>
         </v-tab-item>
         
         <v-tab-item class="my-3">

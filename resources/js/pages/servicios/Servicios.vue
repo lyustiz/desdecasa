@@ -32,8 +32,6 @@
     </v-row>
 
 
-
-
     <v-row class="mx-5">
         <v-col xs="12" sd="6" md="6" lg="4" >
             <v-card color="rgba(255,255,255,0.9)"> 
@@ -118,7 +116,7 @@
 
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn class="mx-auto"  dark color="grey darken-3">Adquirir</v-btn>
+                    <v-btn class="mx-auto mb-3"  dark color="success darken-1" @click="navegateTo('login')">Adquirir</v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -241,7 +239,7 @@
                     
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn class="mx-auto"  dark color="grey darken-3">Adquirir</v-btn>
+                    <v-btn class="mx-auto mb-3"  dark color="amber darken-3">Proximamente</v-btn>
                 </v-card-actions>
                   
                
@@ -385,7 +383,7 @@
                  
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn class="mx-auto"  dark color="grey darken-3">Adquirir</v-btn>
+                    <v-btn class="mx-auto mb-3"  dark color="amber darken-3">Proximamente</v-btn>
                 </v-card-actions>
                
             </v-card>
@@ -460,7 +458,7 @@ export default {
     margin-top: -5.7rem;
 }
 .text-servicios{
-    opacity: 0.8;
+    opacity: 0.5;
     border-radius: 15px;
 }
 

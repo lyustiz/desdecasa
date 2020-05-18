@@ -14,6 +14,8 @@ export default
                 select: v => !!v || 'Seleccione una Opcion (Dato Requerido)',
                 
                 mutiple: v =>  v.length > 0 || 'Seleccione una Opcion (Dato Requerido)',
+
+                multiple: v =>  v.length > 0 || 'Seleccione una Opcion (Dato Requerido)',
                 
                 required: v => (!!v) || 'Dato Requerido',
                 
@@ -36,6 +38,8 @@ export default
                 ],
 
                 email_confirmation: v => this.form.tx_new_email === v || 'Los correos no coinciden',
+
+                imageReq: v =>  v.length > 0 || 'Imagen Requerida',
                 
                 image:  v => !v || v.size < 2000000 || 'Imagen debe tener menos de 2 MB!',
             

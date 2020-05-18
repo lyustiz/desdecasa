@@ -1,8 +1,25 @@
 <template>
 
-   <v-card shaped class="ma-3">
+   <v-card class="ma-3">
 
-        <v-img class="white--text align-end" height="200px" :src="`/storage/commerce/${comercio.tx_foto}`"></v-img>
+        <v-carousel
+            cycle
+            height="200px"
+            hide-delimiter-background
+            show-arrows-on-hover
+            class="elevation-3">
+        <v-carousel-item
+            :src="`/storage/commerce/${comercio.tx_foto}`"
+        ></v-carousel-item>
+
+        <v-carousel-item
+            :src="`/storage/commerce/${comercio.tx_foto}`"
+        ></v-carousel-item>
+
+    </v-carousel>
+        
+        
+        
         
         <v-card-title class="pl-7">
 
@@ -62,8 +79,6 @@
         
         <v-card-text>
             
-            
-
                 <v-row no-gutters>
                     <v-col>
                         <v-menu offset-y >

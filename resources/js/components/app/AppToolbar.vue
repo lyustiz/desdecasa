@@ -163,10 +163,7 @@
                 })
             },
 
-            navegateTo(route)
-            {
-                this.$router.push(route).catch(err => {})
-            }
+            
         }
     }
 </script>

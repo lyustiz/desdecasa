@@ -1,19 +1,23 @@
 <template>
 
-  <div id="full-container" class="cyan px-3">
-  <v-container fluid>
+  <div id="full-container" class="cyan px-3"> 
       
-  <v-row >
+      <v-row class="cyan darken-1">
       
-      <v-col>
-        <v-btn text dark>
-            Administracion de la Cuenta
+      <v-col >
+        <v-btn small text dark >
+            Administrar Cuenta
         </v-btn>
+        
       </v-col>
       
   </v-row>
-
   <v-divider dark></v-divider>
+  <v-container fluid>
+      
+ 
+
+  
 
   <v-row>
       
@@ -41,13 +45,9 @@
 
     </v-row>
 
-    <v-row>
-
-        <v-col cols="12" md="6" v-if="!expander">
-            <status-card></status-card>
-        </v-col>
-
-    </v-row>
+    <template v-if="!expander">
+        <status-card></status-card>
+    </template>
 
 </v-container>
 </div>
@@ -77,6 +77,8 @@ export default {
         let user = this.$store.getters['getUser']
 
         this.cardSections = this.sectionsByUser(user.id_tipo_usuario)
+
+        this.expand(2)
 
     },
 
@@ -144,10 +146,10 @@ export default {
                 return [
                     {
                         id: 1,
-                        color: 'amber',
+                        color: 'purple',
                         title: 'Cuenta',
                         subtitle: 'Configurar',
-                        icon: 'mdi-account-box',
+                        icon: 'mdi-account-circle',
                         visible: true,
                         expand: false,
                         menuItems: [
@@ -165,10 +167,10 @@ export default {
                 return  [
                     {
                         id: 1,
-                        color: 'amber',
+                        color: 'purple',
                         title: 'Cuenta',
                         subtitle: 'Configurar',
-                        icon: 'mdi-account-box',
+                        icon: 'mdi-account-circle',
                         visible: true,
                         expand: false,
                         menuItems:  [
@@ -180,7 +182,7 @@ export default {
                     },
                     {
                         id: 2,
-                        color: 'success',
+                        color: 'lime',
                         title: 'Comercio',
                         subtitle: 'Configurar',
                         icon: 'mdi-storefront',
@@ -201,10 +203,10 @@ export default {
                 return  [
                     {
                     id: 1,
-                    color: 'amber',
+                    color: 'purple',
                     title: 'Cuenta',
                     subtitle: 'Configurar',
-                    icon: 'mdi-account-box',
+                    icon: 'mdi-account-circle',
                     visible: true,
                     expand: false,
                     menuItems:  [
@@ -216,7 +218,7 @@ export default {
                 },
                 {
                     id: 2,
-                    color: 'success',
+                    color: 'lime',
                     title: 'Comercio',
                     subtitle: 'Configurar',
                     icon: 'mdi-storefront',

@@ -18,8 +18,8 @@
 
                 <v-menu bottom left>
                     <template v-slot:activator="{ on }">
-                    <v-btn dark icon v-on="on">
-                        <v-icon>mdi-dots-vertical</v-icon>
+                    <v-btn dark icon v-on="on" >
+                        <v-icon >mdi-dots-vertical</v-icon>
                     </v-btn>
                     </template>
                     <v-list dense nav>
@@ -31,7 +31,7 @@
                     >
                         <v-list-item-action>
                             <v-btn class="grey lighten-4" icon >
-                                <v-icon :color="setColor">{{item.icon}}</v-icon>
+                                <v-icon :color="color">{{item.icon}}</v-icon>
                             </v-btn>
                         </v-list-item-action>
 

@@ -1,12 +1,17 @@
 <template>
     <v-form v-model="valid" ref="form" >
     <v-row no-gutters="">
-        <v-col md="6" sm="12" xs="12">
-            <v-card class="ml-auto" max-width="400" :loading="loading">
+
+        <v-col md="10" sm="12" xs="12">
+            <v-card class="mx-auto" max-width="580" :loading="loading">
             <v-card-title >
                 Informacion del Comercio
             </v-card-title>
             <v-card-text>
+
+                <v-flex xs12 class="mb-2">
+                    <image-load  :nroItems="3"></image-load>
+                </v-flex>
 
                 <v-flex xs12 >
                     <v-text-field
@@ -141,8 +146,7 @@
 
         </v-col >
 
-
-        <v-col cols="12" md="6" lg="6">
+        <!-- <v-col cols="12" md="6" lg="6">
 
             <v-card class="mx-rigth pa-2" max-width="300">
             
@@ -179,7 +183,7 @@
                 </v-img>
 
             </v-card>
-        </v-col>
+        </v-col> -->
     
     </v-row>
     
@@ -190,8 +194,13 @@
 <script>
 
 import AppForm from '@mixins/AppForm'
+import ImageLoad from './ImageLoad';
 
 export default {
+
+    components: {
+        'image-load':  ImageLoad
+    },
     
     mixins: [ AppForm ],
 
