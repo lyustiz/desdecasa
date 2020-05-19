@@ -1,56 +1,49 @@
 <template>
 
-  <div id="full-container" class="cyan px-3"> 
+<v-container fluid id="full-container" class="cyan px-6"> 
       
-      <v-row class="cyan darken-1">
+    <v-row class="cyan lighten-1">
       
-      <v-col >
-        <v-btn small text dark >
-            Administrar Cuenta
-        </v-btn>
-        
-      </v-col>
-      
-  </v-row>
-  <v-divider dark></v-divider>
-  <v-container fluid>
-      
- 
-
-  
-
-  <v-row>
-      
-      <template v-for="(card, i) in cardSections" >
-     
-        <v-col :md="card.cols" :key="i" v-if="card.visible" >
-
-            <card-sections 
-                :visible="card.visible"
-                :expand="card.expand"
-                :color="card.color"
-                :title="card.title"
-                :subtitle="card.subtitle"
-                :icon="card.icon"
-                :menuItems="card.menuItems"
-                :component="card.component"
-                @expand="expand(card.id)"
-                @minimize="minimize(card.id)"
-                @onMenu="onMenu($event)"
-            ></card-sections>
-
+        <v-col>
+            <v-btn small text dark >Administrar Cuenta</v-btn>
         </v-col>
+      
+    </v-row>
+      
+    <v-row>
+      
+        <template v-for="(card, i) in cardSections" >
+        
+            <v-col :md="card.cols" :key="i" v-if="card.visible" >
 
-      </template>
+                <card-sections 
+                    :visible="card.visible"
+                    :expand="card.expand"
+                    :color="card.color"
+                    :title="card.title"
+                    :subtitle="card.subtitle"
+                    :icon="card.icon"
+                    :menuItems="card.menuItems"
+                    :component="card.component"
+                    @expand="expand(card.id)"
+                    @minimize="minimize(card.id)"
+                    @onMenu="onMenu($event)"
+                ></card-sections>
+
+            </v-col>
+
+        </template>
 
     </v-row>
 
     <template v-if="!expander">
+
         <status-card></status-card>
+
     </template>
 
 </v-container>
-</div>
+
 
 </template>
 
@@ -61,24 +54,23 @@ import CardSection from './CardSections';
 import StatusCard  from './StatusCard';
 
 export default {
+
     components: 
     {
         'card-sections': CardSection,
         'status-card': StatusCard
     },
+
     created()
     {
-
         if(!this.$store.getters['getAuth'])
         {
-            this.$router.push('login').catch(err => {})
+            this.navigateTo('login')
         }
 
         let user = this.$store.getters['getUser']
 
         this.cardSections = this.sectionsByUser(user.id_tipo_usuario)
-
-        this.expand(2)
 
     },
 
@@ -86,20 +78,20 @@ export default {
     {
         return {
 
-            cardCols: 3,
-            cardHeight: 180,
-            display: 'd-block',
-            expander: false,
-            cardSections: []
+            cardCols:       3,
+            cardHeight:     180,
+            display:        'd-block',
+            expander:       false,
+            cardSections:   []
         }
     },
-    methods: {
 
+    methods: 
+    {
         ...mapActions(['apiComercioUsuario']),
 
         expand(cardId)
         {
-            
             this.cardSections.forEach((card, index) => {
                 
                 if(card.id == cardId)
@@ -115,13 +107,10 @@ export default {
             }, this);
 
            this.expander = true
-
-
         },
 
         minimize(cardId)
         {
-
             this.cardSections.forEach((card, index) => {
                 
                 if(card.id == cardId)
@@ -135,12 +124,12 @@ export default {
                 }
 
             }, this);
+            
             this.expander = false
         },
 
         sectionsByUser(tipoUsuario)
         {
-            
             if(tipoUsuario == 2)
             {
                 return [
@@ -201,7 +190,7 @@ export default {
             if(tipoUsuario == 1)
             {
                 return  [
-                    {
+                {
                     id: 1,
                     color: 'purple',
                     title: 'Cuenta',
@@ -267,7 +256,8 @@ export default {
 
         onMenu(action)
         {
-            switch (action.name) {
+            switch (action.name) 
+            {
                 case 'minimize':
                     this.minimize(action.data)
                     break;
@@ -278,8 +268,6 @@ export default {
                 default:
                     break;
             }
-
-            
         }
     }
 }

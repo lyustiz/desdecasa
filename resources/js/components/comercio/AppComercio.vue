@@ -2,24 +2,20 @@
 
    <v-card class="ma-3">
 
-        <v-carousel
+    <v-carousel
             cycle
             height="200px"
             hide-delimiter-background
             show-arrows-on-hover
             class="elevation-3">
-        <v-carousel-item
-            :src="`/storage/commerce/${comercio.tx_foto}`"
-        ></v-carousel-item>
 
-        <v-carousel-item
-            :src="`/storage/commerce/${comercio.tx_foto}`"
+        <v-carousel-item 
+            v-for="(foto, i) in comercio.foto" 
+            :key="i" 
+            :src="`/storage/commerce/${foto.tx_src}`"
         ></v-carousel-item>
 
     </v-carousel>
-        
-        
-        
         
         <v-card-title class="pl-7">
 

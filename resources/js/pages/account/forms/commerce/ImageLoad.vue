@@ -1,11 +1,12 @@
 <template>
 
-        <v-card class="mx-rigth pa-2" outlined >
+    <v-card class="mx-rigth pa-2 image-container" outlined ref="imageContainer">
             
-        <v-sheet color="grey lighten-5 py-2 px-1 ">
+        <v-sheet color="grey lighten-5" class="py-2 px-1 " :height="height+18" :width="( width *(images.length + 1) ) + ((images.length + 1) * 8 )">
             
-            <template v-for="(image, idx) in images">
-                <v-hover v-slot:default="{ hover }" :key="idx">
+            <!-- Image Item -->
+            <template v-for="(image, idx) in images" >
+                <v-hover v-slot:default="{ hover }" :key="idx" >
                 <v-expand-x-transition>
                 <v-avatar  :width="width" :height="height" tile class="ml-1">
                     <v-img :src="image">
@@ -16,28 +17,27 @@
                 </v-avatar>
                 </v-expand-x-transition>
                 </v-hover>
-
             </template>
 
-            <v-avatar color="grey lighten-2" :width="width" :height="height" tile v-if="!topItems">
-
+            <!-- Image Add -->
+            <v-avatar color="grey lighten-2" :width="width" :height="height" tile v-if="!topItems" id="addImage">
                 <v-file-input 
                     accept="image/*" 
-                    capture="camera" 
+                    :capture="capture" 
                     v-model="files" 
                     color="purple"
                     prepend-icon="mdi-image-search" 
                     class="col-1 mr-5 mb-2">
                     <template v-slot:selection></template>
                 </v-file-input>
-                
             </v-avatar>
 
+            <!-- input (permite valiar Imagenes) -->
             <v-input readonly dense :rules="[rules.imageReq]" :value="images" hide-details="auto"></v-input>
-            
+        
         </v-sheet>
 
-
+        <!-- Cropper Tool -->
         <v-dialog
             v-model="crop"
             fullscreen 
@@ -45,7 +45,7 @@
             transition="dialog-transition"
             overlay-color="grey"
         >
-            <v-container class="">
+            <v-container>
 
                 <v-card class="col-10 mx-auto">
 
@@ -53,7 +53,7 @@
                         
                         v-if="crop"
                         classname="cropper"
-                        :src="ImgCroppable"
+                        :src="rawImg"
                         :stencil-props="{
                             aspectRatio: aspectRatio
                         }"
@@ -71,11 +71,10 @@
                 </v-card>
                 
             </v-container>
-        
             
         </v-dialog>
             
-        </v-card> 
+    </v-card> 
     
 </template>
 
@@ -93,7 +92,7 @@ export default {
 
     props: {
 
-        nroItems:{
+        nroImages:{
             type:      Number,
             default:    1
         },
@@ -111,16 +110,43 @@ export default {
         aspectRatio: {
             type:       Number,
             default:    333/200
-        }
+        },
+
+        capture: {
+            type:       Boolean,
+            default:    false
+        },
+
+        imagesIn: {
+            type:       Array,
+            default:    () => []
+        },
+
+        imagePath: {
+            type:       String,
+            default:    false
+        },
 
     },
 
+    created()
+    {
+        if( this.imagesIn.length > 0 )
+        {
+            this.images = []
+
+            for (const image of this.imagesIn) 
+            {
+                this.images.push( this.imagePath + image )
+            }
+        }
+    },
 
     computed: 
     {
         topItems()
         {
-            return this.images.length >= this.nroItems
+            return this.images.length >= this.nroImages
         }
     },
 
@@ -143,7 +169,7 @@ export default {
                 {
                     this.loading = false
                     
-                    this.ImgCroppable = reader.result;
+                    this.rawImg = reader.result;
                     
                     this.crop = true
 
@@ -161,32 +187,48 @@ export default {
     data() 
     {
         return {
-            files:          null,
-            images:         [],
-            ImgCroppable:   null,
-            crop:           false,
-            loading:        true,
+            files:    null,
+            images:   [],
+            rawImg:   null,
+            crop:     false,
+            loading:  true,
         }
     },
     methods:
     {
         removeImage(index)
         {
-            this.images = this.images.filter(function (item, idx) {
-                return (idx != index)
-            })
-        } , 
-        
-        cropImage() {
+            this.images = this.images.filter( (item, idx) => (idx != index))
 
-            const {coordinates, canvas} = this.$refs.cropper.getResult()
+            this.$emit('updateImages', this.images)
+
+            this.focusAdd()
+        }, 
+        
+        cropImage() 
+        {
+            const { canvas } = this.$refs.cropper.getResult()
             this.images.push(canvas.toDataURL('image/jpeg', 0.92))
-            this.$refs.cropper.clearImage();
-            this.crop = false
-            this.ImgCroppable = null
+            this.$emit('updateImages', this.images)
+
+            this.crop   = false
+            this.rawImg = null
+            this.focusAdd()
         },
 
-
+        focusAdd()
+        {
+            var container = this.$refs.imageContainer.$el;
+            
+            if(this.images.length == 0 )
+            {
+                container.scrollLeft  = 0
+            } else
+            {
+                container.scrollLeft  += this.width;
+            }
+        },
+        
         validImage(image)
         {
             let size = image.size / 1024  ; //kilobites
@@ -226,48 +268,6 @@ export default {
         return true;
         },
 
-
-
-        setSrc()
-        {
-            let fullSrc = '/storage/account/' + this.form.tx_foto
-            
-            if(this.form.tx_foto)
-            {
-                if(this.form.tx_foto.length > 0)
-                {
-                    this.file = { size: 10, type: 'image/jpeg', src: fullSrc, name:this.form.tx_foto }                
-                }
-            }
-        },
-
-        
-        fileSrc()
-        {
-        if(this.file) {
-
-                if(this.validImage(this.file))
-                {
-                    this.form.tx_foto = this.file.name;
-                    let src = (this.file.src) ? this.file.src : URL.createObjectURL(this.file);
-
-                    if(!this.file.src)
-                    {
-                        this.fileToSrc()
-                    }
-
-                    return  src;
-                }
-            }
-
-            this.form.tx_foto = '';
-            this.form.tx_src  = '';
-            return 'images/account.png';
-        },
-
-    
-
-
     }
  
 }
@@ -280,5 +280,9 @@ export default {
  .cropper {
 	height: 600px;
 	background: #DDD;
+}
+.image-container{
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 </style>

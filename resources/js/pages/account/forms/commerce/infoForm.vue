@@ -1,16 +1,16 @@
 <template>
     <v-form v-model="valid" ref="form" >
-    <v-row no-gutters="">
-
-        <v-col md="10" sm="12" xs="12">
-            <v-card class="mx-auto" max-width="580" :loading="loading">
-            <v-card-title >
+    
+            <v-card class="mx-auto" max-width="480" :loading="loading">
+            
+            <v-card-title class="lime white--text mb-3 py-2">
                 Informacion del Comercio
             </v-card-title>
+
             <v-card-text>
 
                 <v-flex xs12 class="mb-2">
-                    <image-load  :nroItems="3"></image-load>
+                    <image-load :nroImages="3" :imagesIn="images" :imagePath="imagePath" @updateImages="updateImages($event)"></image-load>
                 </v-flex>
 
                 <v-flex xs12 >
@@ -18,7 +18,7 @@
                         color="cyan darken-3"
                         prepend-inner-icon="mdi-gavel"
                         label="Nit"
-                        hint="NIT del Comercio Ej: 123123123-1"
+                        hint="NIT del Comercio                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             Ej: 123123123-1"
                         :rules="rules.nit"
                         v-model="form.tx_nit"
                         dense
@@ -142,52 +142,7 @@
                     <v-btn small dark fab color="amber" @click="cancel()" :loading="loading"> <v-icon>mdi-restore</v-icon></v-btn>
                     <v-btn small dark fab color="success" @click="update()" :loading="loading"> <v-icon>mdi-content-save-edit</v-icon></v-btn>
             </v-card-actions>
-        </v-card>
-
-        </v-col >
-
-        <!-- <v-col cols="12" md="6" lg="6">
-
-            <v-card class="mx-rigth pa-2" max-width="300">
-            
-                <v-img
-                :src="fileSrc"
-                lazy-src="images/store.png"
-                aspect-ratio="1"
-                class="grey lighten-2"
-                max-width="300"
-                max-height="200"
-                >
-                    <template  >
-                        <v-row
-                        class="fill-height"
-                        align="center"
-                        justify="center"
-                        >
-                        <v-file-input 
-                            id="inputImage" 
-                            color="red" 
-                            accept="image/*" 
-                            capture="camera" 
-                            v-model="file" 
-                            prepend-icon="mdi-image-search" 
-                            class="col-1" 
-                            ref="inputImage"
-                        >
-                            <template v-slot:selection="{  }">
-                                <div></div>
-                            </template>
-                        </v-file-input>
-                        </v-row>
-                    </template>
-                </v-img>
-
-            </v-card>
-        </v-col> -->
-    
-    </v-row>
-    
-    
+        </v-card>    
     </v-form>
 </template>
 
@@ -209,17 +164,12 @@ export default {
         this.item = this.$store.getters['getComercio']
         this.mapForm()
         this.setRelations()
-        this.setSrc()
+        this.setImages(this.item.foto)
         this.loading = false
     },
 
     computed: 
     {
-        getComercio()
-        {
-            return this.$store.getters['getComercio']
-        },
-        
         getIduser()
         {
             return this.$store.getters['getUserid']
@@ -230,33 +180,16 @@ export default {
             return this.$store.getters['getCategorias']
         },
 
-        fileSrc()
+        images()
         {
-           if(this.file) {
-
-                if(this.validImage(this.file))
-                {
-                    this.form.tx_foto = this.file.name;
-                    let src = (this.file.src) ? this.file.src : URL.createObjectURL(this.file);
-
-                    if(!this.file.src)
-                    {
-                        this.fileToSrc()
-                    }
-
-                    return  src;
-                }
-            }
-
-            this.form.tx_foto = '';
-            this.form.tx_src  = '';
-            return 'images/store.png';
-        },
+            return (this.form.fotos) ? this.form.fotos : [] 
+        }
     },
 
     data(){
         return{
-            resource: 'comercio', 
+            resource:   'comercio', 
+            imagePath:  '/storage/commerce/',
             form: {
                 id:               null,
                 nb_comercio:      null,
@@ -264,13 +197,12 @@ export default {
                 tx_nit:           null,
                 tx_descripcion:   null,
                 id_tipo_comercio: null,
-                categorias:       null,
+                categorias:       [],
                 id_tipo_pago:     null,
-                horarios:         null,
+                horarios:         [],
                 id_usuario:       null,
-                tx_foto:          null
+                fotos:            []
             },
-            file: null,
             selects: {
                 tipoComercio: [
                     { id: 1, nb_tipo_comercio: 'Sede Física'},
@@ -291,7 +223,6 @@ export default {
     },
     methods:
     {
-
         update()
         {
             if (!this.$refs.form.validate())  return 
@@ -304,19 +235,16 @@ export default {
 			{
                 this.showMessage(response.data.msj)
                 this.item = this.form
+                this.setImages(response.data.comercio.fotos)
 			})
             .catch( error =>
             {
                 this.showError(error);
             })
-            .finally( () =>
-            {
-                this.loading = false
-            }); 
-    
+            .finally( () => this.loading = false ); 
         },
 
-        setRelations()
+        setRelations() 
         {
             if(this.item)
             {
@@ -327,93 +255,50 @@ export default {
             }
         },
 
-        validImage(image)
+        setImages(images)
         {
-            let size = image.size / 1024  ; //kilobites
-            let type = image.type.split('/');
-            let imageType = ['jpeg', 'png', 'bmp'];
-
-            const fileTypes = [
-                "image/apng",
-                "image/bmp",
-                "image/gif",
-                "image/jpeg",
-                "image/pjpeg",
-                "image/png",
-                "image/svg+xml",
-                "image/tiff",
-                "image/webp",
-                "image/x-icon"
-                ];
-
-            if(size > 0)
-            {
-                if(size > 2048)
-                {
-                    let msj = 'archivo debe ser menor de 2 MB. (Actual: '+ (size / 1024).toFixed(2) +' MB)';
-                    this.showError(msj)
-                    return false;
-                }
-            }
-
-            if( (type[0] != 'image') || ( !imageType.includes(type[1]) ) )
-            {
-                let msj = 'solo se permiten imagenes con los formatos: ' + imageType;
-                this.showError(msj)
-                return false;
-            }
-
-           return true;
-        },
-
-        setSrc()
-        {
-            let fullSrc = '/storage/commerce/' + this.form.tx_foto
             
-            if(this.form.tx_foto)
+            this.form.fotos = [];
+
+            if(images) 
             {
-                if(this.form.tx_foto.length > 0)
+                for (const image of images)
                 {
-                    this.file = { size: 10, type: 'image/jpeg', src: fullSrc, name:this.form.tx_foto }                
+                    this.form.fotos.push(image.tx_src)
                 }
             }
         },
 
-        fileToSrc()
+        updateImages(images)
         {
-        
-            let reader = new FileReader();
-
-            reader.readAsDataURL(this.file);
-
-            reader.onload = () => {
-                this.form.tx_src = reader.result;
-            };
-
-            reader.onerror = () => {
-                this.form.tx_src=null;
-            };
-
+            this.form.fotos = [];
+            
+            for (let image of images) 
+            {
+                this.form.fotos.push(image.replace(this.imagePath, ''))
+            }
         },
 
         cancel()
         {
-            this.$refs.form.resetValidation()
+            this.$refs.form.resetValidation() 
             this.mapForm()
             this.setRelations()
+            this.setImages(this.item.foto)
         }
     }
 }
 </script>
 
 <style>
- .v-file-input .v-icon{
-     font-size: 60px !important;
-     color: var(--v-info-base);
-     margin: 8px;
-     opacity: 0.8;
- }
-  .v-file-input .v-icon:hover{
-     opacity: 1;
- }
+    .v-file-input .v-icon {
+        font-size: 60px !important;
+        color: var(--v-info-base);
+        margin: 8px;
+        opacity: 0.8;
+    }
+
+    .v-file-input .v-icon:hover {
+        opacity: 1;
+    }
 </style>

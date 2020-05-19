@@ -27,8 +27,32 @@
                 </span>
 
                 <map-popup>
+
+                    <template v-if="auth">  
                     
-                    <card-comercio :comercio="comercio"></card-comercio>
+                        <card-comercio :comercio="comercio"></card-comercio>
+
+                    </template>
+
+                    <template v-else>
+
+                        <v-card class="mx-auto elevation-8" color="rgba(255,255,255,0.9)">
+                                      
+                            <v-card-text class="pa-1">
+                    
+                                <v-alert type="warning" icon="mdi-account-cancel">
+                                    Favor Ingresar seguir usando nuestros servicios
+                                </v-alert>
+
+                                <v-btn dark  block color="cyan darken-3" @click="$router.push('login')">
+                                    Ingresar
+                                </v-btn>
+
+                            </v-card-text>
+
+                        </v-card>
+
+                    </template>
 
                 </map-popup>
             </map-marker>
@@ -92,7 +116,14 @@ export default {
         countComercios()  
         {
             return  this.$store.getters['countComercios'];
+        },
+        
+        auth()  
+        {
+            return  this.$store.getters['getAuth'];
         }
+
+        
     },
 
     data() 
@@ -120,7 +151,6 @@ export default {
         },
         centered(mark)
         {
-            
             this.mapScope.easeTo({ center: mark.marker._lngLat, zoom: 13 }) 
         }
     }

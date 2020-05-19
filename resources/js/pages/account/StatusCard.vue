@@ -67,7 +67,7 @@
             <v-card-text>
                 <v-row no-gutters>
                     <v-col cols="12"><v-icon :color="dataColor(commercio.tx_nit)">{{ dataIcon(commercio.tx_nit)}} </v-icon> Informacion General</v-col >
-                    <v-col cols="12"><v-icon :color="dataColor(commercio.tx_foto)">{{ dataIcon(commercio.tx_foto)}} </v-icon> Foto del Comercio</v-col >
+                    <v-col cols="12"><v-icon :color="dataColor(commercio.foto)">{{ dataIcon(commercio.foto)}} </v-icon> Foto del Comercio</v-col >
                     <v-col cols="12"><v-icon :color="dataColor(commercio.id_zona)">{{ dataIcon(commercio.id_zona)}} </v-icon> Ubicacion</v-col >
                     <v-col cols="12"><v-icon :color="dataColor(commercio.contacto)">{{ dataIcon(commercio.contacto)}} </v-icon> Contacto</v-col >
                     <v-col cols="12"><v-icon :color="dataColor(commercio.horario)">{{ dataIcon(commercio.horario)}} </v-icon> Horarios</v-col >
@@ -140,7 +140,7 @@ export default {
         comercioAll()
         {
             return  this.commercio &&
-                    this.commercio.tx_foto  &&
+                    this.commercio.foto.length  > 0  &&
                     this.commercio.horario.length  > 0  &&
                     this.commercio.zona != null  &&
                     this.commercio.contacto != null  &&

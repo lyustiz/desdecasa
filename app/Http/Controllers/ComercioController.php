@@ -7,9 +7,9 @@ use App\Models\ComercioCategoria;
 use App\Models\Horario;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Traits\ComercioCategoriaTrait;
 use App\Http\Controllers\Traits\HorarioTrait;
+use App\Http\Controllers\Traits\FotoTrait;
 
 class ComercioController extends Controller
 {
@@ -39,11 +39,10 @@ class ComercioController extends Controller
      */
     public function comercioCategoria($id_categoria, $tipoDespacho)
     {
-  
-        
         $result =  Comercio::with([
                     'comercioCategoria:id_comercio,id_categoria', 
                     'horario:nb_horario,id_comercio',
+                    'foto:tx_src,id_comercio',
                     'telefono:id_comercio,tx_telefono,id_tipo_telefono,bo_whatsapp',
                     'comercioDespacho:id_comercio,id_zona',
                     ])
@@ -78,12 +77,13 @@ class ComercioController extends Controller
                     ->join('ciudad', 'comercio.id_ciudad', '=', 'ciudad.id')  
                     ->join('zona', 'comercio.id_zona', '=', 'zona.id') 
                     ->join('barrio', 'comercio.id_barrio', '=', 'barrio.id') 
-                    ->join('contacto', 'comercio.id', '=', 'contacto.id_comercio')   
+                    ->join('contacto', 'comercio.id', '=', 'contacto.id_comercio') 
                     ->where('comercio.id_status', 1)
                     ->whereHas('comercioCategoria', function (Builder $query) use ($id_categoria) {
                         $query->where('id_categoria', $id_categoria);
                     })
-                    ->has('horario');
+                    ->has('horario')
+                    ->has('foto');
                             
         if($tipoDespacho == 'cali')
         {
@@ -109,12 +109,12 @@ class ComercioController extends Controller
     {
         return  Comercio::select('comercio.id', 'comercio.nb_comercio') 
                         ->join('contacto', 'comercio.id', '=', 'contacto.id_comercio')  
-                        ->whereNotNull('tx_foto')
                         ->where('comercio.id_barrio', $id_barrio)
                         ->where('comercio.id_status', 1)
                         ->whereHas('comercioDespacho', function (Builder $query) {
                             $query->where('id_zona', '<>', 7);
                         })
+                        ->has('foto')
                         ->get();
     }
 
@@ -129,7 +129,6 @@ class ComercioController extends Controller
         
         return  Comercio::select('comercio.id', 'comercio.nb_comercio') 
                         ->join('contacto', 'comercio.id', '=', 'contacto.id_comercio')  
-                        ->whereNotNull('tx_foto')
                         ->whereRaw('LOWER(`nb_comercio`) LIKE ? ','%'.trim(strtolower($nb_comercio)).'%')
                         ->where('comercio.id_status', 1)
                         ->whereHas('comercioDespacho', function (Builder $query) {
@@ -137,9 +136,6 @@ class ComercioController extends Controller
                         })
                         ->take(20)
                         ->get();
-
-
-        
     }
 
     /**
@@ -159,6 +155,7 @@ class ComercioController extends Controller
                         'comuna:id,nb_comuna,tx_latitud,tx_longitud',
                         'barrio:id,nb_barrio,tx_latitud,tx_longitud', 
                         'horario:nb_horario,id_comercio',
+                        'foto:tx_src,id_comercio',
                     ])
                     ->where('id_usuario', $id_usuario)
                     ->where('id_status', 1)
@@ -178,7 +175,7 @@ class ComercioController extends Controller
     {
         $validate = request()->validate([
 
-            'nb_comercio'       => 'required',
+            'nb_comercio'      => 'required',
             'nb_fiscal'        => 'required',
             'tx_nit'           => 'required',
             'tx_descripcion'   => 'required',
@@ -223,16 +220,14 @@ class ComercioController extends Controller
             'categorias'        => 'bail|required|array',
             'id_tipo_pago'      => 'bail|required',
             'horarios'          => 'bail|required|array',
-            'tx_foto'           => 'bail|required|max:100',
-            'tx_src'            => 'bail|nullable',
+            'fotos'             => 'bail|required|array',
             'id_usuario'        => 'bail|required',
             
         ],
         [
-            'tx_foto.required'   => 'La Foto es requerida',
-            'tx_foto.max'        => 'El nombre de la imagen es muy largo max: 100',
-            'tx_nit.unique'      => 'El nit del Comercio ya esta en uso',
-            'tx_nit.regex'       => 'Formato de NIT incorrecto Ej. 123123123-1',
+            'tx_foto.required'  => 'La Foto es requerida',
+            'tx_nit.unique'     => 'El nit del Comercio ya esta en uso',
+            'tx_nit.regex'      => 'Formato de NIT incorrecto Ej. 123123123-1',
         ]
         );
     }
@@ -268,8 +263,14 @@ class ComercioController extends Controller
                 'id_usuario'    => $request->input('id_usuario'),
             ]);
 
-            $horarios  = HorarioTrait::storeAll([
+            $horarios   = HorarioTrait::storeAll([
                 'horarios'      => $request->input('horarios'),
+                'id_comercio'   => $comercio->id,
+                'id_usuario'    => $request->input('id_usuario'),
+            ]);
+
+            $fotos      = FotoTrait::storeAll([
+                'fotos'         => $request->input('fotos'),
                 'id_comercio'   => $comercio->id,
                 'id_usuario'    => $request->input('id_usuario'),
             ]);
@@ -277,6 +278,8 @@ class ComercioController extends Controller
             $comercio['categorias'] = $categorias;
 
             $comercio['horarios']   = $horarios;
+
+            $comercio['fotos']      = $fotos;
 
             return $comercio;
         
@@ -286,21 +289,7 @@ class ComercioController extends Controller
     
     }
 
-    private function storePhoto($fileSrc, $filename)
-	{
-        $srcFoto  = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $fileSrc));
-
-        $stored = Storage::disk('commerce')->put($filename, $srcFoto);
-
-        return $stored;
-    }
-
-    private function getFilename($file, $id_comercio)
-    {
-        $extension = explode(".", $file)[1];
-
-        return "$id_comercio.$extension"; 
-    }
+   
 
     /**
      * Store a newly created resource in storage.
@@ -314,17 +303,10 @@ class ComercioController extends Controller
 
         $comercio = Comercio::where('id', $request->input('id'));
 
+        $request->merge(['id_tipo_foto' => 1]);
+
         $response = \DB::transaction(function ()  use($request, $comercio) {
             
-            $filename = $this->getFilename($request->input('tx_foto'), $request->input('id'));
-        
-            if($request->filled('tx_src'))
-            {
-                $photo    = $this->storePhoto($request->input('tx_src'), $filename);
-            }
-           
-            $request->merge(['tx_foto' => $filename]);
-
             $update = $comercio->update($request->only(
                 'nb_comercio',
                 'nb_fiscal',
@@ -332,7 +314,6 @@ class ComercioController extends Controller
                 'tx_descripcion',
                 'id_tipo_comercio',
                 'id_tipo_pago',
-                'tx_foto',
                 'id_usuario',
             ));
 
@@ -348,11 +329,17 @@ class ComercioController extends Controller
                 'id_usuario'    => $request->input('id_usuario'),
             ]);
 
-            return [ 'categorias' => $categorias, 'horarios' => $horarios ];
+            $fotos     = FotoTrait::replaceAll([
+                'fotos'         => $request->input('fotos'),
+                'id_comercio'   => $request->input('id'),
+                'id_usuario'    => $request->input('id_usuario'),
+            ]);
+
+            return [ 'categorias' => $categorias, 'horarios' => $horarios, 'fotos' => $fotos ];
 
         });
         
-        return [ 'msj' => 'Comercio Actualizado Correctamente',  $response];
+        return [ 'msj' => 'Comercio Actualizado Correctamente', 'comercio' => $response];
     }
 
 
@@ -422,6 +409,7 @@ class ComercioController extends Controller
                             'comercioCategoria:id_comercio,id_categoria', 
                             'horario:nb_horario,id_comercio',
                             'telefono:id_comercio,tx_telefono,id_tipo_telefono,bo_whatsapp',
+                            'foto:id_comercio,tx_src'
                             ])
                         ->select('comercio.id',
                                 'comercio.nb_comercio',
